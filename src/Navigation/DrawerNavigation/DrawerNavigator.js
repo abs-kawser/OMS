@@ -6,9 +6,11 @@ import OrderCollection from "../../OrderCollection";
 import NoOrder from "../../NoOrder";
 import CustomerList from "../../CustomerList";
 import ProductList from "../../ProductList";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerItems from "./DrawerItems";
-
+import LoginPage from "../../LoginPage";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import OrderStatus from "../../OrderStatus";
+import RegistrationPage from "../../RegistrationPage";
 
 const Drawer = createDrawerNavigator();
 
@@ -28,12 +30,16 @@ const DrawerNavigator = () => {
         },
       }}
     >
+      <Drawer.Screen name="Login " component={LoginPage} />
+      <Drawer.Screen name="RegistrationPage" component={RegistrationPage} />
       <Drawer.Screen name="Home" component={Home} />
+
       <Drawer.Screen name="Create Order" component={CreateOrder} />
       <Drawer.Screen name="Order Collection" component={OrderCollection} />
       <Drawer.Screen name="No Order" component={NoOrder} />
       <Drawer.Screen name="Customer List" component={CustomerList} />
       <Drawer.Screen name="Product List" component={ProductList} />
+      <Drawer.Screen name="Order Status" component={OrderStatus} />
     </Drawer.Navigator>
   );
 };

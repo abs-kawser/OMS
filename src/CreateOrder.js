@@ -1,7 +1,13 @@
 import { Button } from "@rneui/base";
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 
 export default function CreateOrder() {
   const [client, setClient] = useState("");
@@ -10,45 +16,47 @@ export default function CreateOrder() {
   const [note, setNote] = useState("");
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Client:Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter client name"
-        value={client}
-        onChangeText={(text) => setClient(text)}
-      />
+      <ScrollView>
+        <Text style={styles.label}>Client:Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter client name"
+          value={client}
+          onChangeText={(text) => setClient(text)}
+        />
 
-      <Text style={styles.label}>Order Date:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter order date"
-        value={orderDate}
-        onChangeText={(text) => setOrderDate(text)}
-      />
+        <Text style={styles.label}>Order Date:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter order date"
+          value={orderDate}
+          onChangeText={(text) => setOrderDate(text)}
+        />
 
-      <Text style={styles.label}>Delivery Date:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter delivery date"
-        value={deliveryDate}
-        onChangeText={(text) => setDeliveryDate(text)}
-      />
+        <Text style={styles.label}>Delivery Date:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter delivery date"
+          value={deliveryDate}
+          onChangeText={(text) => setDeliveryDate(text)}
+        />
 
-      <Text style={styles.label}>Note:</Text>
-      <TextInput
-        style={[styles.input, { height: 100 }]}
-        multiline
-        placeholder="Enter notes"
-        value={note}
-        onChangeText={(text) => setNote(text)}
-      />
+        <Text style={styles.label}>Note:</Text>
+        <TextInput
+          style={[styles.input, { height: 100 }]}
+          multiline
+          placeholder="Enter notes"
+          value={note}
+          onChangeText={(text) => setNote(text)}
+        />
 
-      <TouchableOpacity
-        style={styles.nextButton}
-        //onPress={handleNextButtonPress}
-      >
-        <Text style={styles.nextButtonText}>Next</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.nextButton}
+          //onPress={handleNextButtonPress}
+        >
+          <Text style={styles.nextButtonText}>Nextt</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
@@ -81,7 +89,7 @@ const styles = StyleSheet.create({
     marginTop: "auto",
   },
   nextButtonText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "white", // Text color
   },

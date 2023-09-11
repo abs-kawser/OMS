@@ -1,17 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import DrawerNavigator from './src/Navigation/DrawerNavigation/DrawerNavigator'
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import DrawerNavigator from "./src/Navigation/DrawerNavigation/DrawerNavigator";
+import { PaperProvider } from "react-native-paper";
+import { AppRegistry } from 'react-native';
 
 const App = () => {
   return (
-    <NavigationContainer>
-    <DrawerNavigator />
-    
-  </NavigationContainer>
-  )
-}
+    <PaperProvider>
+      <NavigationContainer>
+        <DrawerNavigator />
+      </NavigationContainer>
+    </PaperProvider>
+  );
+};
 
-export default App
+export default App;
 
-const styles = StyleSheet.create({})
+
+const styles = StyleSheet.create({});
