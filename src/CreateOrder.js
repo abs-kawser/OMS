@@ -1,4 +1,4 @@
-import { Button } from "@rneui/base";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   View,
@@ -8,16 +8,39 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function CreateOrder() {
   const [client, setClient] = useState("");
   const [orderDate, setOrderDate] = useState("");
   const [deliveryDate, setDeliveryDate] = useState("");
   const [note, setNote] = useState("");
+
+  const navigation = useNavigation();
+
+  const handleNextButtonPress = () => {
+    // Add navigation to the registration page or any other action
+    navigation.navigate("CreateOrderDetails");
+  };
+
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+  };
+
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.label}>Client:Name</Text>
+        <Text style={styles.label}>Client Name:</Text>
+
         <TextInput
           style={styles.input}
           placeholder="Enter client name"
@@ -26,20 +49,36 @@ export default function CreateOrder() {
         />
 
         <Text style={styles.label}>Order Date:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter order date"
-          value={orderDate}
-          onChangeText={(text) => setOrderDate(text)}
-        />
+
+      
+
+        <TouchableOpacity style={styles.button} onPress={showDatepicker}>
+          {showDatePicker && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={onChange}
+            />
+          )}
+          <Text>Order Date: {date.toLocaleDateString()}</Text>
+        </TouchableOpacity>
 
         <Text style={styles.label}>Delivery Date:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter delivery date"
-          value={deliveryDate}
-          onChangeText={(text) => setDeliveryDate(text)}
-        />
+
+      
+
+        <TouchableOpacity style={styles.button} onPress={showDatepicker}>
+          {showDatePicker && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={onChange}
+            />
+          )}
+          <Text>Delivery Date: {date.toLocaleDateString()}</Text>
+        </TouchableOpacity>
 
         <Text style={styles.label}>Note:</Text>
         <TextInput
@@ -52,7 +91,7 @@ export default function CreateOrder() {
 
         <TouchableOpacity
           style={styles.nextButton}
-          //onPress={handleNextButtonPress}
+          onPress={handleNextButtonPress}
         >
           <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity>
@@ -92,5 +131,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "white", // Text color
+  },
+
+  button: {
+    borderWidth: 1,
+    borderColor: "#0096c7",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 16,
+    fontSize: 16,
   },
 });

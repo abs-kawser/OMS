@@ -35,8 +35,12 @@ const DrawerItems = (props) => {
             }}
           />
           <View style={styles.container}>
-            <Text style={[styles.boldWhiteText , styles.italicText]}>Hello, this is user name </Text>
-            <Text style={[styles.grayText, styles.italicText]}>This is email field </Text>
+            <Text style={[styles.boldWhiteText, styles.italicText]}>
+              Hello, this is user name{" "}
+            </Text>
+            <Text style={[styles.grayText, styles.italicText]}>
+              This is email field{" "}
+            </Text>
           </View>
         </View>
 
@@ -62,7 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   italicText: {
-    fontStyle: 'italic',
+    fontStyle: "italic",
     fontSize: 18,
   },
 });

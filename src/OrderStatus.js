@@ -3,6 +3,9 @@ import { View, StyleSheet } from "react-native";
 import { TextInput as PaperTextInput, Button } from "react-native-paper";
 import { Text } from "react-native-paper";
 
+
+
+
 const OrderStatus = () => {
   return (
     <View style={styles.container}>
@@ -56,11 +59,12 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     marginBottom: 20,
+    borderColor: "#0096c7",
   },
   button: {
     width: "50%",
 
     marginTop: 10,
-    backgroundColor: "#219ebc", // Customize the button color
+    backgroundColor: "#0096c7", // Customize the button color
   },
 });

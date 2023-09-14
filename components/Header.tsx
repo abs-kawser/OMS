@@ -11,7 +11,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'blue', // You can change the background color to your preference
+    backgroundColor: '#457b9d', // You can change the background color to your preference
     height: 60, // You can adjust the height as needed
     justifyContent: 'center',
    

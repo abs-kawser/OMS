@@ -1,21 +1,23 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import DrawerNavigator from "./src/Navigation/DrawerNavigation/DrawerNavigator";
 import { PaperProvider } from "react-native-paper";
-import { AppRegistry } from 'react-native';
+import StackNavigator from "./src/Navigation/Stack/StackNavigator";
+import LoginProvider from "./src/Context/LoginProvider";
+import AppNav from "./src/Auth/AppNav";
 
 const App = () => {
   return (
+
+    <LoginProvider> 
     <PaperProvider>
-      <NavigationContainer>
-        <DrawerNavigator />
-      </NavigationContainer>
+        <AppNav />
+      
     </PaperProvider>
+    </LoginProvider>
   );
 };
 
 export default App;
-
 
 const styles = StyleSheet.create({});

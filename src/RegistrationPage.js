@@ -8,56 +8,55 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
+import Header from "../components/Header";
+
+
+
+
+
+
 
 const RegistrationPage = () => {
   return (
-    <ImageBackground
-      source={{ uri: "https://example.com/your-background-image.jpg" }} // Replace with your image URL or local path
-      style={styles.container}
-    >
-      <View style={styles.header}>
-        <Text style={styles.headerText}>OMSS</Text>
-      </View>
+    <>
+      <Header />
 
-      <View style={styles.content}>
-        {/* <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: 'https://example.com/your-image.jpg' }} // Replace with your image URL or local path
-            style={styles.image}
-          />
-        </View> */}
+      <ImageBackground
+        style={styles.container}
+      >
+        <View style={styles.content}>
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder="User ID"
+              placeholderTextColor="gray"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Mobile"
+              placeholderTextColor="gray"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="gray"
+              secureTextEntry
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              placeholderTextColor="gray"
+              secureTextEntry
+            />
+            <TouchableOpacity style={styles.registerButton}>
+              <Text style={styles.registerButtonText}>Registerr</Text>
+            </TouchableOpacity>
 
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="User ID"
-            placeholderTextColor="gray"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Mobile"
-            placeholderTextColor="gray"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="gray"
-            secureTextEntry
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm Password"
-            placeholderTextColor="gray"
-            secureTextEntry
-          />
-          <TouchableOpacity style={styles.registerButton}>
-            <Text style={styles.registerButtonText}>Register</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.alredy}>Alredy have an account </Text>
+            <Text style={styles.alredy}>Alredy have an account </Text>
+          </View>
         </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </>
   );
 };
 
@@ -125,10 +124,10 @@ const styles = StyleSheet.create({
   alredy: {
     marginTop: 20, // Adjust the margin as needed
     fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
-    textAlign:"center",
-    color:"black"
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
+    color: "black",
   },
 });
 

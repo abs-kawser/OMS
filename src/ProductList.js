@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, TextInput } from "react-native";
 import React, { useState, useEffect } from "react";
-import SearchBar from "./SearchBar";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 export default function ProductList() {
@@ -60,7 +59,6 @@ export default function ProductList() {
   //implement search logic 
   const [filteredData, setFilteredData] = useState(products);
   const [searchTerm, setSearchTerm] = useState("");
-
   useEffect(() => {
     // Filter data based on the search term
     const filtered = products.filter((item) =>

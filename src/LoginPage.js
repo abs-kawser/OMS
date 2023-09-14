@@ -8,64 +8,75 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
+import Header from "../components/Header";
+import { useNavigation } from "@react-navigation/native";
+import { useLogin } from "./Context/LoginProvider";
 
 const LoginPage = () => {
+  const navigation = useNavigation();
+
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
+  //useContext api
+  const { isLoggedIn, setIsLoggedIn } = useLogin();
   const handleLogin = () => {
     // Add your login logic here
+    //setIsLoggedIn(true);
+    //navigation.navigate("DrawerNavigato");
+
+    console.log(userId);
+    console.log(password);
   };
 
   const handleRegisterNow = () => {
     // Add navigation to the registration page or any other action
+    //navigation.navigate("Register");
   };
 
   return (
-   
+    <>
+      <Header />
+
       <View style={styles.container}>
-         <SafeAreaView> 
-        <View style={styles.header}>
-          <Text style={styles.headerText}>OMSS</Text>
-        </View>
+        <SafeAreaView>
+          <View style={styles.imageContainer}>
+            <Image
+              source={{
+                uri: "https://i.postimg.cc/brxvykCD/login.png",
+              }}
+              style={styles.image}
+            />
+          </View>
 
-        <View style={styles.imageContainer}>
-          <Image
-            source={{
-              uri: "https://i.postimg.cc/brxvykCD/login.png",
-            }}
-            style={styles.image}
+          <TextInput
+            style={styles.input}
+            placeholder="User ID"
+            onChangeText={(text) => setUserId(text)}
+            value={userId}
           />
-        </View>
 
-        <TextInput
-          style={styles.input}
-          placeholder="User ID"
-          onChangeText={(text) => setUserId(text)}
-          value={userId}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+          />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-        />
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <Text style={styles.loginButtonTextX}>Loginn</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonTextX}>Loginn</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.registerNow}
-          onPress={handleRegisterNow}
-        >
-          <Text style={styles.registerNowText}>Register Now</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.registerNow}
+            onPress={handleRegisterNow}
+          >
+            <Text style={styles.registerNowText}>Register Now</Text>
+          </TouchableOpacity>
         </SafeAreaView>
       </View>
-    
+    </>
   );
 };
 
@@ -74,6 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: "center",
+    backgroundColor: "lightblue",
   },
   header: {
     alignItems: "center",
@@ -92,15 +104,20 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   input: {
-  
+    // borderWidth: 1,
+    // borderColor: "#ccc",
+    // borderRadius: 5,
+    // padding: 10,
+    // marginBottom: 16,
+    // fontSize: 16,
 
-
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: "white",
+    marginBottom: 10,
+    color: "black",
+    paddingHorizontal: 10,
     borderRadius: 5,
-    padding: 10,
-    marginBottom: 16,
-    fontSize: 16,
+    width: 350,
+    alignSelf: "center",
   },
   loginButton: {
     backgroundColor: "blue",
@@ -128,4 +145,4 @@ const styles = StyleSheet.create({
 });
 
 export default LoginPage;
-//check 
+//check
