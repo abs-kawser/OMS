@@ -1,1 +1,12 @@
 rnfes
+
+http://184.168.127.174:6565//api/HomeApi/Registration
+data:
+
+    {
+    "NetworkId": "U21080273",
+    "MobileNo": "01734461400",
+    "Password": "123456"
+}
+
+http://184.168.127.174:6565/api/HomeApi/Login?networkId=U21080273 &password=123456
