@@ -1,18 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import Home from "../../Home";
-import CreateOrder from "../../CreateOrder";
-import OrderCollection from "../../OrderCollection";
-import NoOrder from "../../NoOrder";
-import CustomerList from "../../CustomerList";
-import ProductList from "../../ProductList";
-import DrawerItems from "./DrawerItems";
-import LoginPage from "../../LoginPage";
+
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import OrderStatus from "../../OrderStatus";
+import Home from "../../Screen/Home";
+import CreateOrder from "../../Screen/CreateOrder";
+import OrderCollection from "../../Screen/OrderCollection";
+import CustomerList from "../../Screen/CustomerList";
+import ProductList from "../../Screen/ProductList";
+import NoOrder from "../../Screen/NoOrder";
+import OrderStatus from "../../Screen/OrderStatus";
+import DrawerItems from "./DrawerItems";
 
 const Drawer = createDrawerNavigator();
 
+//Drawer navigation total screen
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator

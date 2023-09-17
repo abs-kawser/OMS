@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import { Checkbox } from "react-native-paper";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 
 const CreateOrderDetails = () => {
   const [showProductData, setShowProductData] = useState(false);
@@ -50,33 +50,20 @@ const CreateOrderDetails = () => {
   };
 
 
-  const [checkedProductIndex, setCheckedProductIndex] = useState();
+  const [checkedProducts, setCheckedProducts] = useState([]);
 
-  // const handleCheckBoxToggle = (index) => {
-  //   if (index === checkedProductIndex) {
-  //     // Clicked on the already checked product, uncheck it
-  //     setCheckedProductIndex(null);
-  //   } else {
-  //     // Clicked on a different product, check it
-  //     setCheckedProductIndex(index);
-  //   }
-  // };
-
-
-  const handleCheckBoxToggle = (index) => {
-    // Create a copy of the checkedProducts array
+  const toggleProductCheckbox = (name) => {
+    
     const updatedCheckedProducts = [...checkedProducts];
 
-    // Toggle the checked state for the clicked checkbox
-    if (updatedCheckedProducts.includes(index)) {
-      // If it's already checked, uncheck it
-      updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(index), 1);
+    if (updatedCheckedProducts.includes(name)) {
+      // Product is already checked, uncheck it
+      updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
     } else {
-      // If it's not checked, check it
-      updatedCheckedProducts.push(index);
+      // Product is not checked, check it
+      updatedCheckedProducts.push(name);
     }
 
-    // Update the state with the new checkedProducts array
     setCheckedProducts(updatedCheckedProducts);
   };
 
@@ -91,9 +78,8 @@ const CreateOrderDetails = () => {
   }, [data]);
 
   return (
-
     <View style={styles.container}>
-      <Header/>
+      <Header />
       <View style={styles.buttonContainer}>
         <Button
           title="Product List"
@@ -110,7 +96,7 @@ const CreateOrderDetails = () => {
       <ScrollView>
         {showProductData && (
           <View style={styles.dataContainer} key={data.id}>
-            {filteredProductData.map((product,index) => (
+            {filteredProductData.map((product, index) => (
               <View style={styles.row}>
                 <View style={styles.infoContainer}>
                   <Text style={styles.name}>{product.name}name</Text>
@@ -120,15 +106,16 @@ const CreateOrderDetails = () => {
                   <Text style={styles.underline}>{product.quantity}10</Text>
                 </View>
 
-                <View style={styles.checkboxContainer}>
-                  <Checkbox.Android
-                    status={
-                      index === checkedProductIndex ? "checked" : "unchecked"
-                    }
-                    onPress={() => handleCheckBoxToggle(index)}
-                    color="blue"
-                  />
-                </View>
+              <View style={styles.checkboxContainer}>
+
+                
+                
+                <Checkbox.Android
+                   status={checkedProducts.includes(product.name) ? 'checked' : 'unchecked'}
+                   onPress={() => toggleProductCheckbox(product.name)}
+                  color="blue"
+                />
+              </View>
               </View>
             ))}
           </View>
@@ -161,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between", // Center the buttons vertically
     gap: 5,
     top: 15,
-    padding:20
+    padding: 20,
   },
   dataContainer: {
     marginTop: 20,

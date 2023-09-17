@@ -7,10 +7,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  ToastAndroid,
+  ActivityIndicator,
 } from "react-native";
-import Header from "../components/Header";
 import { useNavigation } from "@react-navigation/native";
-import { useLogin } from "./Context/LoginProvider";
+
+import base64 from "base-64";
+import Header from "../../components/Header";
+import { useLogin } from "../Context/LoginProvider";
+import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 
 const LoginPage = () => {
   const navigation = useNavigation();
@@ -18,20 +23,58 @@ const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
+  //error handleing
+  const [error, setError] = useState("");
+
   //useContext api
   const { isLoggedIn, setIsLoggedIn } = useLogin();
-  const handleLogin = () => {
-    // Add your login logic here
-    //setIsLoggedIn(true);
-    //navigation.navigate("DrawerNavigato");
 
-    console.log(userId);
-    console.log(password);
+  //loading
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setIsLoading(true); // Start loading
+
+    const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+
+    const response = await fetch(
+      `${BASE_URL}/api/HomeApi/Login?networkId=${userId}&password=${password}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader,
+        },
+      }
+    );
+
+    const result = await response.json();
+
+    setIsLoading(false); // Stop loading
+
+    // console.log('this is login details', result.EmployeeId);
+
+    if (result.EmpId) {
+      setIsLoggedIn((prevUserDetails) => ({
+        ...prevUserDetails,
+        login: true,
+        userDetails: result,
+      }));
+
+      navigation.navigate("DrawerNavigator");
+
+      ToastAndroid.show(
+        result.EmpId && "Login Successfully",
+        ToastAndroid.SHORT
+      );
+    } else {
+      const errorMessage = result;
+      setError(errorMessage);
+    }
   };
 
   const handleRegisterNow = () => {
-    // Add navigation to the registration page or any other action
-    //navigation.navigate("Register");
+    navigation.navigate("Register");
   };
 
   return (
@@ -51,7 +94,7 @@ const LoginPage = () => {
 
           <TextInput
             style={styles.input}
-            placeholder="User ID"
+            placeholder="network Id"
             onChangeText={(text) => setUserId(text)}
             value={userId}
           />
@@ -64,7 +107,10 @@ const LoginPage = () => {
             value={password}
           />
 
+          {error && <Text style={styles.warning}>{error}</Text>}
+
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            {isLoading && <ActivityIndicator size="small" color="red" />}
             <Text style={styles.loginButtonTextX}>Loginn</Text>
           </TouchableOpacity>
 
@@ -120,6 +166,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   loginButton: {
+    flexDirection: "row",
+    padding: 12,
+    alignItems: "center",
+    justifyContent: "center",
+
     backgroundColor: "blue",
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -142,7 +193,38 @@ const styles = StyleSheet.create({
     color: "blue",
     textDecorationLine: "underline",
   },
+  warning: {
+    color: "red",
+  },
 });
 
 export default LoginPage;
 //check
+
+//basic authentication
+// const authHeader = "Basic" + base64.encode(USERNAME + ":" + PASSWORD);
+// const fetchData = fetch(
+//   // `http://184.168.127.174:6565/api/HomeApi/Login?networkId=${userId}&password=${password}`,
+//    `${BASE_URL}/api/HomeApi/Login?networkId=${userId}&password=${password}`,
+//   {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: authHeader,
+//     },
+//   }
+// )
+//   .then((response) => {
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+//     return response.json();
+//   })
+//   .then((data) => {
+//     console.log(data); // This will log the JSON data from the response.
+//   })
+//   .catch((error) => {
+//     console.error("Fetch error:", error);
+//   });
+
+// console.log(fetchData);

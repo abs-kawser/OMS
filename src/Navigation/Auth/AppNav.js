@@ -1,16 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useContext } from "react";
-import { useLogin } from "../Context/LoginProvider";
+import { useLogin } from "../../Context/LoginProvider";
 import { NavigationContainer } from "@react-navigation/native";
-import StackNavigator from "../Navigation/Stack/StackNavigator";
+import StackNavigator from "../Stack/StackNavigator";
 import AuthNavigator from "./AuthNavigator";
 
 const AppNav = () => {
   const { isLoggedIn, setIsLoggedIn } = useLogin();
+  const { login,userDetails}= isLoggedIn
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? <StackNavigator /> : <AuthNavigator />}
+      {isLoggedIn.login ? <StackNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };
