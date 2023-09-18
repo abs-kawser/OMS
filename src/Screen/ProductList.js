@@ -1,76 +1,62 @@
 import { StyleSheet, Text, View, ScrollView, TextInput } from "react-native";
 import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
+import base64 from "base-64";
 
 export default function ProductList() {
-  const rainbowColors = ["#fdd85d", "#fdd85d", "#219ebc", "#FFC300", "#219ebc"];
+  const rainbowColors = ["#9bf6ff", "#f3ffbd"];
+  //"#80ffdb", "#e0c3fc", "#90e0ef"
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const products = [
-    {
-      name: "Product 1",
-      productCode: "P001",
-      productPrice: 29.99,
-      tradeLicense: "TL-12345",
-    },
-    {
-      name: "Product 2",
-      productCode: "P002",
-      productPrice: 49.99,
-      tradeLicense: "TL-67890",
-    },
-    {
-      name: "Product 3",
-      productCode: "P003",
-      productPrice: 19.99,
-      tradeLicense: "TL-54321",
-    },
-    {
-      name: "Product 4",
-      productCode: "P004",
-      productPrice: 39.99,
-      tradeLicense: "TL-98765",
-    },
-    {
-      name: "Product 3",
-      productCode: "P003",
-      productPrice: 19.99,
-      tradeLicense: "TL-54321",
-    },
-    {
-      name: "Product 4",
-      productCode: "P004",
-      productPrice: 39.99,
-      tradeLicense: "TL-98765",
-    },
-    {
-      name: "Product 3",
-      productCode: "P003",
-      productPrice: 19.99,
-      tradeLicense: "TL-54321",
-    },
-    {
-      name: "Product 4",
-      productCode: "P004",
-      productPrice: 39.99,
-      tradeLicense: "TL-98765",
-    },
-  ];
 
-  //implement search logic 
-  const [filteredData, setFilteredData] = useState(products);
+  //filter part 
+  const [filteredData, setFilteredData] = useState(data);
   const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
     // Filter data based on the search term
-    const filtered = products.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filtered = data.filter((item) =>
+      item.Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filtered);
   }, [searchTerm]);
 
+  //fetch api
+  const fetchProductData = async () => {
+    try {
+      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+      const response = await fetch(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
+        headers: {
+          Authorization: authHeader,
+        },
+      });
+      const jsonData = await response.json();
+      console.log(JSON.stringify(jsonData, null, 2));
+      //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
+      setData(jsonData);
+      setFilteredData(jsonData);
+      setIsLoading(false);
+      //return jsonData;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoading(false);
+      // setIsLoading(false);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    fetchProductData();
+  }, []);
+
+  // Filter the data based on the search term
+  //implement search logic
+
   return (
     <>
-    
-  {/* implement search  part*/}
+      {/* implement search  part*/}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -86,7 +72,6 @@ export default function ProductList() {
 
       <ScrollView>
         <Text style={styles.header}>Product List</Text>
-
         {filteredData.map((product, index) => (
           <View
             key={index}
@@ -97,15 +82,17 @@ export default function ProductList() {
               },
             ]}
           >
-            <Text style={styles.productName}>{product.name}</Text>
+            <Text style={styles.productName}>Name:{product.Name}</Text>
             <Text style={styles.productInfo}>
-              Product Code: {product.productCode}
+              ProductCode:{product.ProductCode}
             </Text>
+
             <Text style={styles.productInfo}>
-              Price: ${product.productPrice.toFixed(2)}
+              Product Category: {product.ProductCategory}
             </Text>
+            <Text style={styles.productInfo}>Price: ${product.MRP}</Text>
             <Text style={styles.tradeLicense}>
-              Trade License: {product.tradeLicense}
+              Trade License: {product.ProductFamilyName}
             </Text>
           </View>
         ))}
@@ -113,7 +100,9 @@ export default function ProductList() {
 
       {/* total */}
       <View style={styles.bottomTextContainer}>
-        <Text style={styles.bottomText}>Total: {products.length}</Text>
+        <Text style={styles.bottomText}>
+          Total: {filteredData ? filteredData.length : data.length}{" "}
+        </Text>
       </View>
     </>
   );
@@ -123,6 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    borderRadius: 1,
   },
   header: {
     fontSize: 20,
@@ -130,6 +120,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   productCard: {
+    marginLeft: 22,
+    width: "90%",
     backgroundColor: "white",
     borderRadius: 5,
     padding: 16,
@@ -139,6 +131,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 2,
+    borderRadius: 5,
   },
   productName: {
     fontSize: 18,

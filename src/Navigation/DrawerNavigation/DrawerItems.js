@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Image,Alert,ToastAndroid} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Alert,
+  ToastAndroid,
+} from "react-native";
 import React from "react";
 import {
   DrawerContentScrollView,
@@ -7,47 +14,40 @@ import {
 } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
 import { useLogin } from "../../Context/LoginProvider";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-
-
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const DrawerItems = (props) => {
   const navigation = useNavigation();
 
-
   const { isLoggedIn, setIsLoggedIn } = useLogin();
-  const { login,userDetails}= isLoggedIn
- 
+  const { login, userDetails } = isLoggedIn;
+
   const handleLogout = async () => {
     Alert.alert(
-      'Logout',
-      'Are you sure you want to log out?',
+      "Logout",
+      "Are you sure you want to log out?",
       [
         {
-          text: 'No',
-          style: 'cancel',
+          text: "No",
+          style: "cancel",
         },
         {
-          text: 'Yes',
+          text: "Yes",
           onPress: async () => {
             // await AsyncStorage.removeItem('userData');
-            setIsLoggedIn(prevUserDetails => ({
+            setIsLoggedIn((prevUserDetails) => ({
               ...prevUserDetails,
               login: false,
-              userDetails: '',
+              userDetails: "",
             }));
-            ToastAndroid.show('Logout Successfully', ToastAndroid.SHORT);
-            navigation.navigate('Login');
+            ToastAndroid.show("Logout Successfully", ToastAndroid.SHORT);
+            navigation.navigate("Login");
           },
         },
       ],
-      {cancelable: false},
+      { cancelable: false }
     );
   };
-
-
-
 
   return (
     <View style={{ flex: 1 }}>
@@ -74,12 +74,13 @@ const DrawerItems = (props) => {
               resizeMode: "contain",
             }}
           />
+
           <View style={styles.container}>
             <Text style={[styles.boldWhiteText, styles.italicText]}>
-            {userDetails.FullName}
+              {userDetails.FullName}
             </Text>
             <Text style={[styles.grayText, styles.italicText]}>
-             {userDetails.Email}
+              {userDetails.Email}
             </Text>
           </View>
         </View>
@@ -91,12 +92,12 @@ const DrawerItems = (props) => {
       </DrawerContentScrollView>
 
       <DrawerItem
-          icon={({color, size}) => (
-            <Icon name="logout" color={color} size={size} />
-          )}
-          label="Sign Out"
-          onPress={handleLogout}
-        />
+        icon={({ color, size }) => (
+          <Icon name="logout" color={color} size={size} />
+        )}
+        label="Sign Out"
+        onPress={handleLogout}
+      />
     </View>
   );
 };

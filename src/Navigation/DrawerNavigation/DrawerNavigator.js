@@ -32,7 +32,6 @@ const DrawerNavigator = () => {
     >
       <Drawer.Screen name="Home" component={Home} />
 
-      {/* <Drawer.Screen name="Login " component={LoginPage} /> */}
       <Drawer.Screen name="Create Order" component={CreateOrder} />
       <Drawer.Screen name="Order Collection" component={OrderCollection} />
       <Drawer.Screen name="Customer List" component={CustomerList} />
