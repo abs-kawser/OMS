@@ -9,7 +9,9 @@ import { useLogin } from "../Context/LoginProvider";
 export default function Home() {
   //it comes from contex 
   const { isLoggedIn, setIsLoggedIn } = useLogin();
-  const { login,userDetails}= isLoggedIn
+  const { userDetails}= isLoggedIn
+
+  
   return (
     <View>
         <Text style={{ color:"red"}}> FullName:{userDetails.FullName}</Text>

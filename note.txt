@@ -11,3 +11,56 @@ data:
 
 http://184.168.127.174:6565/api/HomeApi/Login?networkId=U21080273 &password=123456
 // d
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//api call for post method and input field 
+ const handleApiCall = async () => {
+ 
+
+    // request body data
+
+    const requestData = {
+      Employee: userDetails?.EmpId,
+      DelegateEmployee: DelegateEmployee?.EmpIdAutomatic,
+      LeaveType: selectedLeaveType,
+      DayType: dayType ? 'Full Day' : 'Time',
+      StartDate: formatteStartdDate,
+      EndDate: formattedEndDate,
+      Reason: reason,
+      StartTime: '09:24',
+      EndTime: '13:24',
+      CompanyID: userDetails?.CompanyId,
+    };
+
+    console.log('Posting loan data:', JSON.stringify(requestData, null, 2));
+
+    const authHeader = 'Basic ' + base64.encode(USERNAME + ':' + PASSWORD);
+
+    const response = await fetch(`${Base_Url}/Api/LeaveApi`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: authHeader,
+      },
+      body: JSON.stringify(requestData),
+    });
+    // .then(response => response.json())
+    const result = await response.json();
+    console.log('this is result', JSON.stringify(result, null, 2));
+    setOutput(result);
+
+    ToastAndroid.show(result.Status, ToastAndroid.SHORT);
+    navigation.navigate('Leave Summary');
+  };

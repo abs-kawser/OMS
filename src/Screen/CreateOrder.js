@@ -9,32 +9,113 @@ import {
   ScrollView,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useLogin } from "../Context/LoginProvider";
+import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
+import base64 from "base-64";
 
 export default function CreateOrder() {
-  const [client, setClient] = useState("");
-  const [orderDate, setOrderDate] = useState("");
-  const [deliveryDate, setDeliveryDate] = useState("");
-  const [note, setNote] = useState("");
-
   const navigation = useNavigation();
 
-  const handleNextButtonPress = () => {
-    // Add navigation to the registration page or any other action
-    navigation.navigate("CreateOrderDetails");
-  };
+  const [client, setClient] = useState("");
+  const [orderDate, setOrderDate] = useState(new Date());
+  const [deliveryDate, setDeliveryDate] = useState(new Date());
+  const [note, setNote] = useState("");
+
+  //checking on log
+  console.log("client name ", client);
+  console.log("orderDate name ", orderDate);
+  console.log("deliveryDate name", deliveryDate);
+  console.log(note, "note");
 
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowDatePicker(false);
-    setDate(currentDate);
+  const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
+  const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
+
+  const { isLoggedIn, setIsLoggedIn } = useLogin();
+  const { userDetails } = isLoggedIn;
+
+  // ================================================
+  const handleOrderDate = (event, selectedDate) => {
+    if (selectedDate) {
+      setShowOrderDatePicker(false);
+      const newDate = new Date(selectedDate);
+      setOrderDate(newDate);
+    }
   };
 
-  const showDatepicker = () => {
-    setShowDatePicker(true);
+  const handleDateDelivery = (event, selectedDate) => {
+    if (selectedDate) {
+      setShowDeliveryDatePicker(false);
+      const newDate = new Date(selectedDate);
+      setDeliveryDate(newDate);
+    }
   };
+
+  // const handleOrderDate = (event,select) => {
+  //   if (select) {
+  //     showOrderDatePicker(false);
+  //     const newDate = new Date(select);
+
+  //     setOrderDate(select);
+  //   }
+  // };
+
+  // const handleDateDelivery = (event, select) => {
+  //   // const currentDate = selectedDate || date;
+  //   if (select) {
+  //     showDeliveryDatePicker(false);
+  //     const newDate = new Date(select);
+
+  //     setDeliveryDate(select);
+  //   }
+  // };
+
+  // ===========================================
+
+  //
+  const showDatepicker = (type) => {
+    if (type === "order") {
+      setShowOrderDatePicker(true);
+    } else if (type === "delivery") {
+      setShowDeliveryDatePicker(true);
+    }
+  };
+
+  // ========= api calling =========
+  const handleNextButton = async () => {
+    const requestData = {
+      CustomerId: 318233,
+      OrderDate: orderDate,
+      DeliveryDate: deliveryDate,
+      EntryBy: userDetails?.EmpId,
+      Note: note,
+      TerritoryId: userDetails?.TerritoryId,
+    };
+
+    console.log("Posting loan data:", JSON.stringify(requestData, null, 2));
+
+    const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+
+    const response = await fetch(`${BASE_URL}/api/NewOrderApi/CreateNewOrder`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authHeader,
+      },
+      body: JSON.stringify(requestData),
+    });
+    // .then(response => response.json())
+    const result = await response.json();
+    console.log("this is result", JSON.stringify(result, null, 2));
+    // setOutput(result);
+
+     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
+    // navigation.navigate("Leave Summary");
+  };
+
+  //navigation.navigate("CreateOrderDetails");
 
   return (
     <View style={styles.container}>
@@ -48,37 +129,44 @@ export default function CreateOrder() {
           onChangeText={(text) => setClient(text)}
         />
 
+        {/* ============================================================================================================================= */}
         <Text style={styles.label}>Order Date:</Text>
-
-      
-
-        <TouchableOpacity style={styles.button} onPress={showDatepicker}>
-          {showDatePicker && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => showDatepicker("order")}
+        >
+          {showOrderDatePicker && (
             <DateTimePicker
-              value={date}
+              value={orderDate}
               mode="date"
               display="default"
-              onChange={onChange}
+              onChange={(event, selectedDate) =>
+                handleOrderDate(event, selectedDate)
+              }
             />
           )}
-          <Text>Order Date: {date.toLocaleDateString()}</Text>
+          <Text>Order Date: {orderDate.toLocaleString()}</Text>
         </TouchableOpacity>
 
         <Text style={styles.label}>Delivery Date:</Text>
-
-      
-
-        <TouchableOpacity style={styles.button} onPress={showDatepicker}>
-          {showDatePicker && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => showDatepicker("delivery")}
+        >
+          {showDeliveryDatePicker && (
             <DateTimePicker
-              value={date}
+              value={deliveryDate}
               mode="date"
               display="default"
-              onChange={onChange}
+              onChange={(event, selectedDate) =>
+                handleDateDelivery(event, selectedDate)
+              }
             />
           )}
-          <Text>Delivery Date: {date.toLocaleDateString()}</Text>
+          <Text>Delivery Date: {deliveryDate.toLocaleString()}</Text>
         </TouchableOpacity>
+
+        {/* ===================================================================================================== */}
 
         <Text style={styles.label}>Note:</Text>
         <TextInput
@@ -89,10 +177,7 @@ export default function CreateOrder() {
           onChangeText={(text) => setNote(text)}
         />
 
-        <TouchableOpacity
-          style={styles.nextButton}
-          onPress={handleNextButtonPress}
-        >
+        <TouchableOpacity style={styles.nextButton} onPress={handleNextButton}>
           <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity>
       </ScrollView>

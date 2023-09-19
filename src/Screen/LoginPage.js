@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
 
-    backgroundColor: "blue",
+    backgroundColor: "#0096c7",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 20,
@@ -190,7 +190,8 @@ const styles = StyleSheet.create({
   },
   registerNowText: {
     fontSize: 16,
-    color: "blue",
+    color: "black",
+    //fontWeight: "bold",
     textDecorationLine: "underline",
   },
   warning: {

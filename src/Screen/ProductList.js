@@ -33,7 +33,7 @@ export default function ProductList() {
         },
       });
       const jsonData = await response.json();
-      console.log(JSON.stringify(jsonData, null, 2));
+      //console.log(JSON.stringify(jsonData, null, 2));
       //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
       setData(jsonData);
       setFilteredData(jsonData);
@@ -107,6 +107,9 @@ export default function ProductList() {
     </>
   );
 }
+
+
+
 
 const styles = StyleSheet.create({
   container: {

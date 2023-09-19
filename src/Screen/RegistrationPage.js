@@ -10,20 +10,12 @@ import {
 } from "react-native";
 import Header from "../../components/Header";
 
-
-
-
-
-
-
 const RegistrationPage = () => {
   return (
     <>
       <Header />
 
-      <ImageBackground
-        style={styles.container}
-      >
+      <ImageBackground style={styles.container}>
         <View style={styles.content}>
           <View style={styles.form}>
             <TextInput
