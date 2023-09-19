@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     color: 'white', // You can adjust the text color as needed
     fontSize: 24, // You can adjust the font size as needed
     fontWeight: 'bold', // You can adjust the font weight as needed
+     marginLeft:"40%"
   },
 });
 
