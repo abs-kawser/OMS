@@ -1,36 +1,56 @@
 import React, { useState, useMemo } from "react";
-import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import { Checkbox } from "react-native-paper";
 import Header from "../../components/Header";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
 const CreateOrderDetails = () => {
   const [showProductData, setShowProductData] = useState(false);
   const [showOrderData, setShowOrderData] = useState(false);
 
+  const [checkedProducts, setCheckedProducts] = useState([]);
+  const [quantity, setQuantity] = useState();
+
   // Sample array of products and orders
   const data = [
     {
+      id: 1,
       type: "product",
       name: "Product 1",
       price: "100",
+      value: 1,
     },
     {
+      id: 2,
       type: "product",
       name: "Product 2",
       price: "200",
+      value: 2,
     },
     {
+      id: 3,
       type: "product",
       name: "Product 3",
       price: "300",
+      value: 3,
     },
 
     {
+      id: 1,
       type: "order",
       orderNumber: "Order 1",
       date: "2023-09-13",
     },
     {
+      id: 2,
       type: "order",
       orderNumber: "Order 2",
       date: "2023-09-14",
@@ -50,12 +70,39 @@ const CreateOrderDetails = () => {
   };
 
 
-  const [checkedProducts, setCheckedProducts] = useState([]);
 
+  // Function to increment quantity
+  const incrementQuantity = (index) => {
+    const updatedProductData = [...filteredProductData];
+    const product = updatedProductData[index];
+    product.value = (product.value || 0) + 1;
+    setQuantity(product.value);
+    // Update the product data with the new value
+    filteredProductData(updatedProductData);
+  };
+
+
+  // Function to decrement quantity
+  const decrementQuantity = (index) => {
+    const updatedProductData = [...filteredProductData];
+    const product = updatedProductData[index];
+    if (product.value > 0) {
+      product.value = product.value - 1;
+      setQuantity(product.value);
+      // Update the product data with the new value
+      filteredProductData(updatedProductData);
+    }
+  };
+
+
+
+
+
+  
+  //togglecheck product
   const toggleProductCheckbox = (name) => {
-    
+    //old code
     const updatedCheckedProducts = [...checkedProducts];
-
     if (updatedCheckedProducts.includes(name)) {
       // Product is already checked, uncheck it
       updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
@@ -63,10 +110,8 @@ const CreateOrderDetails = () => {
       // Product is not checked, check it
       updatedCheckedProducts.push(name);
     }
-
     setCheckedProducts(updatedCheckedProducts);
   };
-
 
   //use memo
   const filteredProductData = useMemo(() => {
@@ -102,20 +147,64 @@ const CreateOrderDetails = () => {
                   <Text style={styles.name}>{product.name}name</Text>
                   <Text style={styles.price}>{product.price}price </Text>
                 </View>
+
                 <View style={styles.quantityContainer}>
-                  <Text style={styles.underline}>{product.quantity}10</Text>
+                  <View style={styles.containerx}>
+                    <Text style={styles.label}>Quantity:</Text>
+                    <View style={styles.inputContainer}>
+                      <TouchableOpacity
+                        onPress={() => decrementQuantity(index)}
+                      >
+                        <Text style={styles.button}>-</Text>
+                      </TouchableOpacity>
+
+                      {/* old code  */}
+          <TextInput
+            style={styles.input}
+            value={product.value ? product.value.toString() : ""}
+            onChangeText={(text) => {
+              const value = parseInt(text, 10);
+              if (!isNaN(value)) {
+                product.value = value;
+                setQuantity(value);
+                // Update the product data with the new value
+                filteredProductData(updatedProductData);
+              }
+            }}
+            keyboardType="numeric"
+            // style={styles.input}
+            // value={quantity ? quantity.toString() : ""}
+            // onChangeText={(text) => {
+            //   const value = parseInt(text, 10);
+            //   if (!isNaN(value)) {
+            //     setQuantity(value);
+            //   }
+            // }}
+            // keyboardType="numeric"
+          />
+
+                      <TouchableOpacity
+                        onPress={() => incrementQuantity(index)}
+                      >
+                        <Text style={styles.button}>+</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  {/* <Text style={styles.underline}>{product.quantity}10</Text> */}
                 </View>
 
-              <View style={styles.checkboxContainer}>
-
-                
-                
-                <Checkbox.Android
-                   status={checkedProducts.includes(product.name) ? 'checked' : 'unchecked'}
-                   onPress={() => toggleProductCheckbox(product.name)}
-                  color="blue"
-                />
-              </View>
+                <View style={styles.checkboxContainer}>
+                  <Checkbox.Android
+                    status={
+                      checkedProducts.includes(product.name)
+                        ? "checked"
+                        : "unchecked"
+                    }
+                    onPress={() => toggleProductCheckbox(product.name)}
+                    color="blue"
+                  />
+                </View>
               </View>
             ))}
           </View>
@@ -190,5 +279,30 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flex: 0.2,
     alignItems: "flex-end",
+  },
+
+  // ===================//
+  containerx: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  label: {
+    fontSize: 16,
+    marginRight: 10,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  button: {
+    fontSize: 24,
+    paddingHorizontal: 10,
+  },
+  input: {
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "gray",
+    padding: 5,
+    minWidth: 40,
   },
 });

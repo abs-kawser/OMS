@@ -15,6 +15,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useLogin } from "../../Context/LoginProvider";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+ 
+
 
 const DrawerItems = (props) => {
   const navigation = useNavigation();
@@ -34,7 +37,7 @@ const DrawerItems = (props) => {
         {
           text: "Yes",
           onPress: async () => {
-            // await AsyncStorage.removeItem('userData');
+            await AsyncStorage.removeItem('userData');
             setIsLoggedIn((prevUserDetails) => ({
               ...prevUserDetails,
               login: false,

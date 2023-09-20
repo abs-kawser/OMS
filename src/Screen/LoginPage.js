@@ -16,6 +16,7 @@ import base64 from "base-64";
 import Header from "../../components/Header";
 import { useLogin } from "../Context/LoginProvider";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginPage = () => {
   const navigation = useNavigation();
@@ -33,28 +34,31 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    setIsLoading(true); // Start loading
+    try {
+      setIsLoading(true); // Start loading
 
-    const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
 
-    const response = await fetch(
-      `${BASE_URL}/api/HomeApi/Login?networkId=${userId}&password=${password}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: authHeader,
-        },
-      }
-    );
+      const response = await fetch(
+        `${BASE_URL}/api/HomeApi/Login?networkId=${userId}&password=${password}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authHeader,
+          },
+        }
+      );
 
-    const result = await response.json();
+      const result = await response.json();
+      setIsLoading(false); // Stop loading
 
-    setIsLoading(false); // Stop loading
-
-    // console.log('this is login details', result.EmployeeId);
+      // console.log('this is login details', result.EmployeeId);
 
     if (result.EmpId) {
+      // Save user authentication details in AsyncStorage
+      await AsyncStorage.setItem("userData", JSON.stringify(result));
+
       setIsLoggedIn((prevUserDetails) => ({
         ...prevUserDetails,
         login: true,
@@ -71,7 +75,12 @@ const LoginPage = () => {
       const errorMessage = result;
       setError(errorMessage);
     }
+  } catch (error) {
+    console.error("AsyncStorage Error:", error);
+  }
   };
+
+
 
   const handleRegisterNow = () => {
     navigation.navigate("Register");

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  ToastAndroid,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLogin } from "../Context/LoginProvider";
@@ -25,14 +26,15 @@ export default function CreateOrder() {
   console.log("client name ", client);
   console.log("orderDate name ", orderDate);
   console.log("deliveryDate name", deliveryDate);
-  console.log(note, "note");
+  console.log("note", note);
 
-  const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [date, setDate] = useState(new Date());
+  // const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
 
+  //comeing from contex
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
 
@@ -53,25 +55,6 @@ export default function CreateOrder() {
     }
   };
 
-  // const handleOrderDate = (event,select) => {
-  //   if (select) {
-  //     showOrderDatePicker(false);
-  //     const newDate = new Date(select);
-
-  //     setOrderDate(select);
-  //   }
-  // };
-
-  // const handleDateDelivery = (event, select) => {
-  //   // const currentDate = selectedDate || date;
-  //   if (select) {
-  //     showDeliveryDatePicker(false);
-  //     const newDate = new Date(select);
-
-  //     setDeliveryDate(select);
-  //   }
-  // };
-
   // ===========================================
 
   //
@@ -84,7 +67,7 @@ export default function CreateOrder() {
   };
 
   // ========= api calling =========
-  const handleNextButton = async () => {
+  const fetchCreatenewOrderData = async () => {
     const requestData = {
       CustomerId: 318233,
       OrderDate: orderDate,
@@ -109,13 +92,17 @@ export default function CreateOrder() {
     // .then(response => response.json())
     const result = await response.json();
     console.log("this is result", JSON.stringify(result, null, 2));
-    // setOutput(result);
 
-     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
-    // navigation.navigate("Leave Summary");
+    ToastAndroid.show(result.Status, ToastAndroid.SHORT);
   };
 
-  //navigation.navigate("CreateOrderDetails");
+
+  
+  const handleNextButton = () => {
+    fetchCreatenewOrderData();
+
+    navigation.navigate("CreateOrderDetails");
+  };
 
   return (
     <View style={styles.container}>
