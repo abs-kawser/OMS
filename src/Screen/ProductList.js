@@ -3,56 +3,46 @@ import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
+import { fetchProductData } from "../Api/ProductListApi";
 
 export default function ProductList() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
-  //"#80ffdb", "#e0c3fc", "#90e0ef"
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
+  const [isLoading, setIsLoading] = useState(false);
 
-  //filter part 
-  const [filteredData, setFilteredData] = useState(data);
+  const [products, setProducts] = useState([]);
+  //filter part
+  const [filteredData, setFilteredData] = useState(products);
   const [searchTerm, setSearchTerm] = useState("");
-
   useEffect(() => {
     // Filter data based on the search term
-    const filtered = data.filter((item) =>
+    const filtered = products.filter((item) =>
       item.Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filtered);
   }, [searchTerm]);
 
-  //fetch api
-  const fetchProductData = async () => {
-    try {
-      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-      const response = await fetch(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
-        headers: {
-          Authorization: authHeader,
-        },
-      });
-      const jsonData = await response.json();
-      //console.log(JSON.stringify(jsonData, null, 2));
-      //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
-      setData(jsonData);
-      setFilteredData(jsonData);
-      setIsLoading(false);
-      //return jsonData;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setIsLoading(false);
-      // setIsLoading(false);
-      throw error;
-    }
-  };
-
+  
+//fetch api from Api folder 
   useEffect(() => {
-    fetchProductData();
-  }, []);
+    const getProductList = async () => {
+      try {
+        const productList = await fetchProductData(setIsLoading);
+        // setProducts(productList);
 
-  // Filter the data based on the search term
-  //implement search logic
+        setFilteredData(productList);
+        setProducts(productList);
+        setIsLoading(false);
+      } catch (error) {
+        // Handle the error gracefully
+        console.error("Error fetching product list:", error);
+      }
+    };
+
+    getProductList();
+
+    //fetchProductData();
+  }, []);
 
   return (
     <>
@@ -101,15 +91,12 @@ export default function ProductList() {
       {/* total */}
       <View style={styles.bottomTextContainer}>
         <Text style={styles.bottomText}>
-          Total: {filteredData ? filteredData.length : data.length}{" "}
+          Total: {filteredData ? filteredData.length : data.length}
         </Text>
       </View>
     </>
   );
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -191,3 +178,37 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
+
+
+
+
+
+
+
+
+
+// ============Fetch Api manualy ==================\\
+// //fetch api
+  // const fetchProductData = async () => {
+  //   try {
+  //     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+  //     const response = await fetch(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
+  //       headers: {
+  //         Authorization: authHeader,
+  //       },
+  //     });
+  //     const jsonData = await response.json();
+  //     //console.log(JSON.stringify(jsonData, null, 2));
+  //     //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
+  //     setData(jsonData);
+  //     setFilteredData(jsonData);
+  //     setIsLoading(false);
+  //     //return jsonData;
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setIsLoading(false);
+  //     // setIsLoading(false);
+  //     throw error;
+  //   }
+  // };

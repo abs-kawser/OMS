@@ -13,9 +13,11 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLogin } from "../Context/LoginProvider";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
+import { useForm, Controller } from "react-hook-form";
 
 export default function CreateOrder() {
   const navigation = useNavigation();
+  const { control,  errors } = useForm();
 
   const [client, setClient] = useState("");
   const [orderDate, setOrderDate] = useState(new Date());
@@ -107,16 +109,40 @@ export default function CreateOrder() {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.label}>Client Name:</Text>
+        
 
+        <Text style={styles.label}>Client Name:</Text>
         <TextInput
-          style={styles.input}
+          //style={styles.input}
+          style={[styles.input, { height: 100 }]}
+
           placeholder="Enter client name"
           value={client}
           onChangeText={(text) => setClient(text)}
         />
 
-        {/* ============================================================================================================================= */}
+
+{/*       
+  <Text style={styles.label}>Client Name:</Text>
+  <Controller
+    name="client"
+    control={control}
+    defaultValue=""
+    rules={{ required: "client name is required" }}
+    render={({ field }) => (
+      <TextInput
+        style={[styles.input, { height: 100 }]}
+        placeholder="Enter client name"
+        onChangeText={field.onChange}
+        value={field.value}
+      />
+    )}
+  />
+  {errors.client && (
+    <Text style={{ color: "red" }}>{errors.client.message}</Text>
+  )} */}
+
+{/* ================================================================= */}
         <Text style={styles.label}>Order Date:</Text>
         <TouchableOpacity
           style={styles.button}
@@ -157,7 +183,7 @@ export default function CreateOrder() {
 
         <Text style={styles.label}>Note:</Text>
         <TextInput
-          style={[styles.input, { height: 100 }]}
+          style={[styles.input, { height: 50 }]}
           multiline
           placeholder="Enter notes"
           value={note}

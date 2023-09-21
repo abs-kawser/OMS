@@ -60,7 +60,7 @@ const DrawerItems = (props) => {
           style={{
             borderBottomWidth: 1,
             // borderColor: "#e9ecef",
-            backgroundColor: "#822faf",
+            backgroundColor: "#001219",
             marginTop: -4,
             padding: 10,
           }}

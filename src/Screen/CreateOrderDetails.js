@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,52 +10,71 @@ import {
 } from "react-native";
 import { Checkbox } from "react-native-paper";
 import Header from "../../components/Header";
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { fetchProductData } from "../Api/ProductListApi";
 
 const CreateOrderDetails = () => {
   const [showProductData, setShowProductData] = useState(false);
   const [showOrderData, setShowOrderData] = useState(false);
 
+  const [productQuantities, setProductQuantities] = useState([]);
   const [checkedProducts, setCheckedProducts] = useState([]);
-  const [quantity, setQuantity] = useState();
+
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Api related work
+  useEffect(() => {
+    const getProductList = async () => {
+      try {
+        const productList = await fetchProductData(setIsLoading);
+        // setProducts(productList);
+
+        //setFilteredData(productList);
+        setProducts(productList);
+        setIsLoading(false);
+      } catch (error) {
+        // Handle the error gracefully
+        console.error("Error fetching product list:", error);
+      }
+    };
+
+    getProductList();
+  }, []);
 
   // Sample array of products and orders
-  const data = [
-    {
-      id: 1,
-      type: "product",
-      name: "Product 1",
-      price: "100",
-      value: 1,
-    },
-    {
-      id: 2,
-      type: "product",
-      name: "Product 2",
-      price: "200",
-      value: 2,
-    },
-    {
-      id: 3,
-      type: "product",
-      name: "Product 3",
-      price: "300",
-      value: 3,
-    },
+  // const data = [
+  //   {
+  //     id: 1,
+  //     type: "product",
+  //     name: "Product 1",
+  //     price: "100",
+  //   },
+  //   {
+  //     id: 2,
+  //     type: "product",
+  //     name: "Product 2",
+  //     price: "200",
+  //   },
+  //   {
+  //     id: 3,
+  //     type: "product",
+  //     name: "Product 3",
+  //     price: "300",
+  //   },
 
-    {
-      id: 1,
-      type: "order",
-      orderNumber: "Order 1",
-      date: "2023-09-13",
-    },
-    {
-      id: 2,
-      type: "order",
-      orderNumber: "Order 2",
-      date: "2023-09-14",
-    },
-  ];
+  //   {
+  //     id: 1,
+  //     type: "order",
+  //     orderNumber: "Order 1",
+  //     date: "2023-09-13",
+  //   },
+  //   {
+  //     id: 2,
+  //     type: "order",
+  //     orderNumber: "Order 2",
+  //     date: "2023-09-14",
+  //   },
+  // ];
 
   const handleProductButtonPress = () => {
     setShowProductData(true);
@@ -69,36 +88,22 @@ const CreateOrderDetails = () => {
     // You can perform additional actions related to showing order data here.
   };
 
+  // // Function to increment quantity for a specific product
+  // const incrementQuantity = (productId) => {
+  //   const updatedQuantities = { ...productQuantities };
+  //   updatedQuantities[productId] = (updatedQuantities[productId] || 0) + 1;
+  //   setProductQuantities(updatedQuantities);
+  // };
 
+  // // Function to decrement quantity for a specific product
+  // const decrementQuantity = (productId) => {
+  //   const updatedQuantities = { ...productQuantities };
+  //   if (updatedQuantities[productId] > 0) {
+  //     updatedQuantities[productId] -= 1;
+  //     setProductQuantities(updatedQuantities);
+  //   }
+  // };
 
-  // Function to increment quantity
-  const incrementQuantity = (index) => {
-    const updatedProductData = [...filteredProductData];
-    const product = updatedProductData[index];
-    product.value = (product.value || 0) + 1;
-    setQuantity(product.value);
-    // Update the product data with the new value
-    filteredProductData(updatedProductData);
-  };
-
-
-  // Function to decrement quantity
-  const decrementQuantity = (index) => {
-    const updatedProductData = [...filteredProductData];
-    const product = updatedProductData[index];
-    if (product.value > 0) {
-      product.value = product.value - 1;
-      setQuantity(product.value);
-      // Update the product data with the new value
-      filteredProductData(updatedProductData);
-    }
-  };
-
-
-
-
-
-  
   //togglecheck product
   const toggleProductCheckbox = (name) => {
     //old code
@@ -113,14 +118,53 @@ const CreateOrderDetails = () => {
     setCheckedProducts(updatedCheckedProducts);
   };
 
-  //use memo
-  const filteredProductData = useMemo(() => {
-    return data.filter((item) => item.type === "product");
-  }, [data]);
+  const handleQuantityChange = (productId, text) => {
+    if (text === "") {
+      // If the input is empty, clear the quantity
+      setProductQuantities((prevQuantities) => {
+        const updatedQuantities = { ...prevQuantities };
+        delete updatedQuantities[productId];
+        return updatedQuantities;
+      });
+    } else {
+      const value = parseInt(text, 10);
+      if (!isNaN(value)) {
+        setProductQuantities((prevQuantities) => ({
+          ...prevQuantities,
+          [productId]: value,
+        }));
+      }
+    }
+  };
 
-  const filteredOrderData = useMemo(() => {
-    return data.filter((item) => item.type === "order");
-  }, [data]);
+
+  const incrementQuantity = (productId) => {
+    setProductQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: (prevQuantities[productId] || 0) + 1,
+    }));
+  };
+  
+  const decrementQuantity = (productId) => {
+    setProductQuantities((prevQuantities) => {
+      const updatedQuantities = { ...prevQuantities };
+      if (updatedQuantities[productId] > 0) {
+        updatedQuantities[productId] -= 1;
+      }
+      return updatedQuantities;
+    });
+  };
+
+
+
+  // //use memo
+  // const filteredProductData = useMemo(() => {
+  //   return data.filter((item) => item.type === "product");
+  // }, [data]);
+
+  // const filteredOrderData = useMemo(() => {
+  //   return data.filter((item) => item.type === "order");
+  // }, [data]);
 
   return (
     <View style={styles.container}>
@@ -140,68 +184,79 @@ const CreateOrderDetails = () => {
 
       <ScrollView>
         {showProductData && (
-          <View style={styles.dataContainer} key={data.id}>
-            {filteredProductData.map((product, index) => (
-              <View style={styles.row}>
+          //key id
+          <View style={styles.dataContainer}>
+            {products.map((product, index) => (
+              <View style={styles.row} key={product.ProductId}>
                 <View style={styles.infoContainer}>
-                  <Text style={styles.name}>{product.name}name</Text>
-                  <Text style={styles.price}>{product.price}price </Text>
+                  <Text style={styles.name}>{product.Name} </Text>
+
+                 <View style={{flexDirection: "row", gap:10 ,}}> 
+                 <Text style={styles.price}>price :{product.MRP}</Text>
+                  <Text style={styles.price}>PackSize :{product.PackSize}</Text>
+                 </View>
+                  
+
                 </View>
 
+                {/* quantity   part  start  */}
                 <View style={styles.quantityContainer}>
+
                   <View style={styles.containerx}>
-                    <Text style={styles.label}>Quantity:</Text>
+                    {/* <Text style={styles.label}>QTY:</Text> */}
                     <View style={styles.inputContainer}>
                       <TouchableOpacity
-                        onPress={() => decrementQuantity(index)}
+                        onPress={() => decrementQuantity(product.ProductId)}
                       >
                         <Text style={styles.button}>-</Text>
                       </TouchableOpacity>
+                      <TextInput
 
-                      {/* old code  */}
-          <TextInput
-            style={styles.input}
-            value={product.value ? product.value.toString() : ""}
-            onChangeText={(text) => {
-              const value = parseInt(text, 10);
-              if (!isNaN(value)) {
-                product.value = value;
-                setQuantity(value);
-                // Update the product data with the new value
-                filteredProductData(updatedProductData);
-              }
-            }}
-            keyboardType="numeric"
-            // style={styles.input}
-            // value={quantity ? quantity.toString() : ""}
-            // onChangeText={(text) => {
-            //   const value = parseInt(text, 10);
-            //   if (!isNaN(value)) {
-            //     setQuantity(value);
-            //   }
-            // }}
-            // keyboardType="numeric"
-          />
+                        style={styles.input}
+                        value={
+                          productQuantities[product.ProductId]
+                            ? productQuantities[product.ProductId].toString()
+                            : ""
+                        }
+                        onChangeText={(text) =>
+                          handleQuantityChange(product.ProductId, text)
+                        }
+                        keyboardType="numeric"
 
+                        //=============================semi working code just first value not delete  //
+                        // style={styles.input}
+                        // value={
+                        //   productQuantities[product.ProductId]
+                        //     ? productQuantities[product.ProductId].toString()
+                        //     : ""
+                        // }
+                        // onChangeText={(text) => {
+                        //   const value = parseInt(text, 10);
+                        //   const updatedQuantities = { ...productQuantities };
+                        //   if (!isNaN(value)) {
+                        //     updatedQuantities[product.id] = value;
+                        //     setProductQuantities(updatedQuantities);
+                        //   }
+                        // }}
+                        // keyboardType="numeric"
+                      />
                       <TouchableOpacity
-                        onPress={() => incrementQuantity(index)}
+                        onPress={() => incrementQuantity(product.ProductId)}
                       >
                         <Text style={styles.button}>+</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
-
-                  {/* <Text style={styles.underline}>{product.quantity}10</Text> */}
                 </View>
 
                 <View style={styles.checkboxContainer}>
                   <Checkbox.Android
                     status={
-                      checkedProducts.includes(product.name)
+                      checkedProducts.includes(product.Name)
                         ? "checked"
                         : "unchecked"
                     }
-                    onPress={() => toggleProductCheckbox(product.name)}
+                    onPress={() => toggleProductCheckbox(product.Name)}
                     color="blue"
                   />
                 </View>
@@ -210,7 +265,7 @@ const CreateOrderDetails = () => {
           </View>
         )}
 
-        {showOrderData && (
+        {/* {showOrderData && (
           <View style={styles.dataContainer}>
             {filteredOrderData.map((order, index) => (
               <View key={index} style={styles.row}>
@@ -219,7 +274,7 @@ const CreateOrderDetails = () => {
               </View>
             ))}
           </View>
-        )}
+        )} */}
       </ScrollView>
     </View>
   );
@@ -227,27 +282,102 @@ const CreateOrderDetails = () => {
 
 export default CreateOrderDetails;
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//   },
+//   buttonContainer: {
+//     display: "flex",
+//     flexDirection: "row",
+//     justifyContent: "space-between", // Center the buttons vertically
+//     gap: 5,
+//     top: 15,
+//     padding: 20,
+//   },
+//   dataContainer: {
+//     marginTop: 20,
+//   },
+
+//   //
+
+//   row: {
+//     flexDirection: "row",
+//     //justifyContent: "space-between",
+//     alignItems: "center",
+//     paddingHorizontal: 16,
+//     paddingVertical: 8,
+//     borderBottomWidth: 1,
+//     borderBottomColor: "#ccc",
+//   },
+//   infoContainer: {
+//     // flex: 1,
+//     // flexDirection: 'row',
+//     // alignItems: 'center',
+//   },
+//   name: {
+//     fontSize: 12,
+
+//     marginRight: 10,
+//   },
+//   price: {
+//     fontSize: 16,
+//     color: "green",
+//   },
+//   quantityContainer: {
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   underline: {
+//     textDecorationLine: "underline",
+//   },
+//   checkboxContainer: {
+//     flex: 0.2,
+//     alignItems: "flex-end",
+//   },
+
+//   // ===================//
+//   containerx: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//   },
+//   label: {
+//     fontSize: 16,
+//     marginRight: 10,
+//   },
+//   inputContainer: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//   },
+//   button: {
+//     fontSize: 24,
+//     paddingHorizontal: 10,
+//   },
+//   input: {
+//     fontSize: 16,
+//     borderWidth: 1,
+//     borderColor: "gray",
+//     padding: 5,
+//     minWidth: 40,
+//   },
+// });
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   buttonContainer: {
-    display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between", // Center the buttons vertically
-    gap: 5,
-    top: 15,
+    justifyContent: "space-between",
+    marginTop: 15,
     padding: 20,
   },
   dataContainer: {
     marginTop: 20,
   },
-
-  //
-
   row: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    //justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -255,18 +385,19 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc",
   },
   infoContainer: {
-    // flex: 1,
-    // flexDirection: 'row',
-    // alignItems: 'center',
+    flex: 1,
+    flexDirection: "column",
   },
   name: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 15,
     marginRight: 10,
+    color:"gray",
+    fontWeight: "bold",
   },
   price: {
     fontSize: 16,
-    color: "green",
+  
+    color: "#403d39",
   },
   quantityContainer: {
     flex: 1,
@@ -280,8 +411,6 @@ const styles = StyleSheet.create({
     flex: 0.2,
     alignItems: "flex-end",
   },
-
-  // ===================//
   containerx: {
     flexDirection: "row",
     alignItems: "center",
