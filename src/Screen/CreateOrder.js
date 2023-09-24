@@ -19,17 +19,19 @@ import moment from "moment";
 export default function CreateOrder() {
   const navigation = useNavigation();
   //const { control,  errors } = useForm();
-  const { control, handleSubmit, errors, setValue, watch } = useForm({
-    defaultValues: {
-      client: "", // Provide default value for client
-    },
-  });
+  // const { control, handleSubmit, errors, setValue, watch } = useForm({
+  //   defaultValues: {
+  //     client: "", // Provide default value for client
+  //   },
+  // });
 
   const [client, setClient] = useState("");
   const [orderDate, setOrderDate] = useState(new Date());
   const [deliveryDate, setDeliveryDate] = useState(new Date());
   const [note, setNote] = useState("");
   const [isClientNameValid, setClientNameValid] = useState(false); // Track client name validity
+
+  const [isClientNameTouched, setClientNameTouched] = useState(false);
 
   //checking on log
   console.log("client name ", client);
@@ -102,22 +104,29 @@ export default function CreateOrder() {
     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
   };
 
-  const onClientNameChange = (text) => {
-    // Validate client name here, for example, check if it's not empty
-    const isValid = text.trim() !== "";
-    setClientNameValid(isValid);
-    setClient(text);
-  };
+  // const onClientNameChange = (text) => {
+  //   // Validate client name here, for example, check if it's not empty
+  //   const isValid = text.trim() !== "";
+  //   setClientNameValid(isValid);
+  //   setClient(text);
+  // };
 
   const onSubmit = () => {
     // Move your form submission logic here
     if (isClientNameValid) {
       fetchCreatenewOrderData();
       navigation.navigate("CreateOrderDetails");
-    } else {
-      // Handle the case where the client name is not valid
-      // For example, display an error message to the user.
     }
+  };
+
+  const onClientNameChange = (text) => {
+    const isValid = text.trim() !== "";
+    setClientNameValid(isValid);
+    setClient(text);
+  };
+
+  const onClientNameBlur = () => {
+    setClientNameTouched(true);
   };
 
   //=================================
@@ -142,18 +151,37 @@ export default function CreateOrder() {
           onChangeText={(text) => setClient(text)}
         /> */}
 
+       
+
+        {/* {!isClientNameValid && client === "" && (
+  <Text style={styles.errorMessage}>Client name is required ***</Text>
+)} */}
+
         <Text style={styles.label}>Client Name:</Text>
+        {isClientNameTouched && !isClientNameValid && client === "" && (
+          <Text style={styles.errorMessage}>Client name is required ***</Text>
+        )}
+
         <TextInput
           style={[styles.input, { height: 100 }]}
           placeholder="Enter client name"
           onChangeText={onClientNameChange}
           value={client}
+          onBlur={onClientNameBlur}
+
+          //  style={[styles.input, { height: 100 }]}
+          //  placeholder="Enter client name"
+          //  onChangeText={onClientNameChange}
+          //  value={client}
+          //  onBlur={onClientNameBlur}
+
+          // style={[styles.input, { height: 100 }]}
+          // placeholder="Enter client name"
+          // onChangeText={onClientNameChange}
+          // value={client}
         />
 
         {/* Display error message */}
-        {!isClientNameValid && (
-          <Text style={{ color: "red" }}>Client name is required</Text>
-        )}
 
         {/* ================================================================= */}
         <Text style={styles.label}>Order Date:</Text>
@@ -214,7 +242,7 @@ export default function CreateOrder() {
         <TouchableOpacity
           style={styles.nextButton}
           //onPress={handleNextButton((onSubmit))}
-          onPress={handleSubmit(onSubmit)} // Use handleSubmit here
+          onPress={onSubmit} // Use handleSubmit here
           disabled={!isClientNameValid} // Disable if client name is not valid
         >
           <Text style={styles.nextButtonText}>Nextt</Text>
@@ -264,5 +292,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 16,
     fontSize: 16,
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 18,
+    marginTop: 5, // Adjust the spacing from the input field
+    //fontStyle: 'italic', // You can use italic for error messages
   },
 });

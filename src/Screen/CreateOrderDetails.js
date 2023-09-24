@@ -187,7 +187,7 @@ const CreateOrderDetails = () => {
       </View>
 
       <ScrollView>
-  {showProductData && (
+  {showProductData  &&   (
     //key id
     <View style={styles.dataContainer}>
       {products.map((product, index) => (
