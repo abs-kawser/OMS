@@ -60,14 +60,14 @@ const DrawerItems = (props) => {
           style={{
             borderBottomWidth: 1,
             // borderColor: "#e9ecef",
-            backgroundColor: "#001219",
+            backgroundColor: "#72ddf7",
             marginTop: -4,
             padding: 10,
           }}
         >
           <Image
             source={{
-              uri: "https://reactnative.dev/img/tiny_logo.png",
+              uri: "https://i.postimg.cc/qR60dZkB/user-circle-icon-172814.png",
             }}
             style={{
               width: 100,
@@ -110,15 +110,19 @@ export default DrawerItems;
 const styles = StyleSheet.create({
   boldWhiteText: {
     fontWeight: "bold",
-    color: "#7fdeff",
+    color: "#323031",
     fontSize: 18,
+    marginLeft:30
   },
   grayText: {
-    color: "#caff8a",
+    //color: "#323031",
+    color:"gray",
     fontSize: 18,
+    marginLeft:30
+
   },
-  italicText: {
-    fontStyle: "italic",
-    fontSize: 18,
-  },
+  // italicText: {
+  //   fontStyle: "italic",
+  //   fontSize: 18,
+  // },
 });

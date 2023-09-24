@@ -17,7 +17,9 @@ import { useForm, Controller } from "react-hook-form";
 
 export default function CreateOrder() {
   const navigation = useNavigation();
-  const { control,  errors } = useForm();
+  //const { control,  errors } = useForm();
+  const { control, handleSubmit, errors, setValue } = useForm(); // Add handleSubmit and setValue
+
 
   const [client, setClient] = useState("");
   const [orderDate, setOrderDate] = useState(new Date());

@@ -13,7 +13,7 @@ import Header from "../../components/Header";
 import { fetchProductData } from "../Api/ProductListApi";
 
 const CreateOrderDetails = () => {
-  const [showProductData, setShowProductData] = useState(false);
+  const [showProductData, setShowProductData] = useState(true);
   const [showOrderData, setShowOrderData] = useState(false);
 
   const [productQuantities, setProductQuantities] = useState([]);
@@ -22,7 +22,7 @@ const CreateOrderDetails = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Api related work
+  // Api calling  related work
   useEffect(() => {
     const getProductList = async () => {
       try {
@@ -88,35 +88,37 @@ const CreateOrderDetails = () => {
     // You can perform additional actions related to showing order data here.
   };
 
-  // // Function to increment quantity for a specific product
-  // const incrementQuantity = (productId) => {
-  //   const updatedQuantities = { ...productQuantities };
-  //   updatedQuantities[productId] = (updatedQuantities[productId] || 0) + 1;
-  //   setProductQuantities(updatedQuantities);
-  // };
 
-  // // Function to decrement quantity for a specific product
-  // const decrementQuantity = (productId) => {
-  //   const updatedQuantities = { ...productQuantities };
-  //   if (updatedQuantities[productId] > 0) {
-  //     updatedQuantities[productId] -= 1;
-  //     setProductQuantities(updatedQuantities);
-  //   }
-  // };
 
   //togglecheck product
-  const toggleProductCheckbox = (name) => {
-    //old code
-    const updatedCheckedProducts = [...checkedProducts];
-    if (updatedCheckedProducts.includes(name)) {
-      // Product is already checked, uncheck it
-      updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
-    } else {
-      // Product is not checked, check it
-      updatedCheckedProducts.push(name);
-    }
-    setCheckedProducts(updatedCheckedProducts);
-  };
+  // const toggleProductCheckbox = (name) => {
+  //   //old code
+  //   const updatedCheckedProducts = [...checkedProducts];
+  //   if (updatedCheckedProducts.includes(name)) {
+  //     // Product is already checked, uncheck it
+  //     updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
+  //   } else {
+  //     // Product is not checked, check it
+  //     updatedCheckedProducts.push(name);
+  //   }
+  //   setCheckedProducts(updatedCheckedProducts);
+  // };
+
+  const toggleProductCheckbox = useMemo(() => {
+    return (name) => {
+      const updatedCheckedProducts = [...checkedProducts];
+      if (updatedCheckedProducts.includes(name)) {
+        // Product is already checked, uncheck it
+        updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
+      } else {
+        // Product is not checked, check it
+        updatedCheckedProducts.push(name);
+      }
+      setCheckedProducts(updatedCheckedProducts);
+    };
+  }, [checkedProducts]);
+
+
 
   const handleQuantityChange = (productId, text) => {
     if (text === "") {
@@ -138,6 +140,8 @@ const CreateOrderDetails = () => {
   };
 
 
+
+//Quantities part 
   const incrementQuantity = (productId) => {
     setProductQuantities((prevQuantities) => ({
       ...prevQuantities,
@@ -183,92 +187,94 @@ const CreateOrderDetails = () => {
       </View>
 
       <ScrollView>
-        {showProductData && (
-          //key id
-          <View style={styles.dataContainer}>
-            {products.map((product, index) => (
-              <View style={styles.row} key={product.ProductId}>
-                <View style={styles.infoContainer}>
-                  <Text style={styles.name}>{product.Name} </Text>
+  {showProductData && (
+    //key id
+    <View style={styles.dataContainer}>
+      {products.map((product, index) => (
+        <View style={styles.row} key={product.ProductId}>
+          <View style={styles.infoContainer}>
+            <Text style={styles.name}>{product.Name} </Text>
 
-                 <View style={{flexDirection: "row", gap:10 ,}}> 
-                 <Text style={styles.price}>price :{product.MRP}</Text>
-                  <Text style={styles.price}>PackSize :{product.PackSize}</Text>
-                 </View>
-                  
+            <View style={{flexDirection: "row", gap:10 ,}}> 
+            <Text style={styles.price}>price :{product.MRP}</Text>
+            <Text style={styles.price}>PackSize :{product.PackSize}</Text>
+            </View>
+            
 
-                </View>
-
-                {/* quantity   part  start  */}
-                <View style={styles.quantityContainer}>
-
-                  <View style={styles.containerx}>
-                    {/* <Text style={styles.label}>QTY:</Text> */}
-                    <View style={styles.inputContainer}>
-                      <TouchableOpacity
-                        onPress={() => decrementQuantity(product.ProductId)}
-                      >
-                        <Text style={styles.button}>-</Text>
-                      </TouchableOpacity>
-                      <TextInput
-
-                        style={styles.input}
-                        value={
-                          productQuantities[product.ProductId]
-                            ? productQuantities[product.ProductId].toString()
-                            : ""
-                        }
-                        onChangeText={(text) =>
-                          handleQuantityChange(product.ProductId, text)
-                        }
-                        keyboardType="numeric"
-
-                        //=============================semi working code just first value not delete  //
-                        // style={styles.input}
-                        // value={
-                        //   productQuantities[product.ProductId]
-                        //     ? productQuantities[product.ProductId].toString()
-                        //     : ""
-                        // }
-                        // onChangeText={(text) => {
-                        //   const value = parseInt(text, 10);
-                        //   const updatedQuantities = { ...productQuantities };
-                        //   if (!isNaN(value)) {
-                        //     updatedQuantities[product.id] = value;
-                        //     setProductQuantities(updatedQuantities);
-                        //   }
-                        // }}
-                        // keyboardType="numeric"
-                      />
-                      <TouchableOpacity
-                        onPress={() => incrementQuantity(product.ProductId)}
-                      >
-                        <Text style={styles.button}>+</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-
-                <View style={styles.checkboxContainer}>
-                  <Checkbox.Android
-                    status={
-                      checkedProducts.includes(product.Name)
-                        ? "checked"
-                        : "unchecked"
-                    }
-                    onPress={() => toggleProductCheckbox(product.Name)}
-                    color="blue"
-                  />
-                </View>
-              </View>
-            ))}
           </View>
-        )}
+
+          {/* quantity   part  start  */}
+          <View style={styles.quantityContainer}>
+
+            <View style={styles.containerx}>
+              {/* <Text style={styles.label}>QTY:</Text> */}
+              <View style={styles.inputContainer}>
+                <TouchableOpacity
+                  onPress={() => decrementQuantity(product.ProductId)}
+                >
+                  <Text style={styles.button}>-</Text>
+                </TouchableOpacity>
+                <TextInput
+                  placeholder="QTY"
+                  style={styles.input}
+                  value={
+                    productQuantities[product.ProductId]
+                      ? productQuantities[product.ProductId].toString()
+                      : ""
+                  }
+                  onChangeText={(text) =>
+                    handleQuantityChange(product.ProductId, text)
+                  }
+                  //keyboardType="numeric"
+
+                  //=============================semi working code just first value not delete  //
+                  // style={styles.input}
+                  // value={
+                  //   productQuantities[product.ProductId]
+                  //     ? productQuantities[product.ProductId].toString()
+                  //     : ""
+                  // }
+                  // onChangeText={(text) => {
+                  //   const value = parseInt(text, 10);
+                  //   const updatedQuantities = { ...productQuantities };
+                  //   if (!isNaN(value)) {
+                  //     updatedQuantities[product.id] = value;
+                  //     setProductQuantities(updatedQuantities);
+                  //   }
+                  // }}
+                  // keyboardType="numeric"
+
+
+                />
+                <TouchableOpacity
+                  onPress={() => incrementQuantity(product.ProductId)}
+                >
+                  <Text style={styles.button}>+</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.checkboxContainer}>
+            <Checkbox.Android
+              status={
+                checkedProducts.includes(product.Name)
+                  ? "checked"
+                  : "unchecked"
+              }
+              onPress={() => toggleProductCheckbox(product.Name)}
+              color="blue"
+            />
+          </View>
+        </View>
+      ))}
+    </View>
+  )}
 
         {/* {showOrderData && (
           <View style={styles.dataContainer}>
             {filteredOrderData.map((order, index) => (
-              <View key={index} style={styles.row}>
+              <View key={index} style={styles.row}  key={product.ProductId}>
                 <Text>Order Number: {order.orderNumber}</Text>
                 <Text>Date: {order.date}</Text>
               </View>
@@ -428,7 +434,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   input: {
-    fontSize: 16,
+    fontSize: 13,
     borderWidth: 1,
     borderColor: "gray",
     padding: 5,
