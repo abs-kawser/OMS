@@ -14,26 +14,28 @@ import { useLogin } from "../Context/LoginProvider";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import { useForm, Controller } from "react-hook-form";
+import moment from "moment";
 
 export default function CreateOrder() {
   const navigation = useNavigation();
   //const { control,  errors } = useForm();
-  const { control, handleSubmit, errors, setValue } = useForm(); // Add handleSubmit and setValue
-
+  const { control, handleSubmit, errors, setValue, watch } = useForm({
+    defaultValues: {
+      client: "", // Provide default value for client
+    },
+  });
 
   const [client, setClient] = useState("");
   const [orderDate, setOrderDate] = useState(new Date());
   const [deliveryDate, setDeliveryDate] = useState(new Date());
   const [note, setNote] = useState("");
+  const [isClientNameValid, setClientNameValid] = useState(false); // Track client name validity
 
   //checking on log
   console.log("client name ", client);
   console.log("orderDate name ", orderDate);
   console.log("deliveryDate name", deliveryDate);
   console.log("note", note);
-
-  // const [date, setDate] = useState(new Date());
-  // const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
@@ -100,20 +102,37 @@ export default function CreateOrder() {
     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
   };
 
-
-  
-  const handleNextButton = () => {
-    fetchCreatenewOrderData();
-
-    navigation.navigate("CreateOrderDetails");
+  const onClientNameChange = (text) => {
+    // Validate client name here, for example, check if it's not empty
+    const isValid = text.trim() !== "";
+    setClientNameValid(isValid);
+    setClient(text);
   };
 
+  const onSubmit = () => {
+    // Move your form submission logic here
+    if (isClientNameValid) {
+      fetchCreatenewOrderData();
+      navigation.navigate("CreateOrderDetails");
+    } else {
+      // Handle the case where the client name is not valid
+      // For example, display an error message to the user.
+    }
+  };
+
+  //=================================
+  // const handleNextButton = () => {
+  //   fetchCreatenewOrderData();
+
+  //   navigation.navigate("CreateOrderDetails");
+  // };
+
+  //========================
   return (
     <View style={styles.container}>
       <ScrollView>
-        
-
-        <Text style={styles.label}>Client Name:</Text>
+        {/* old code  */}
+        {/* <Text style={styles.label}>Client Name:</Text>
         <TextInput
           //style={styles.input}
           style={[styles.input, { height: 100 }]}
@@ -121,34 +140,27 @@ export default function CreateOrder() {
           placeholder="Enter client name"
           value={client}
           onChangeText={(text) => setClient(text)}
+        /> */}
+
+        <Text style={styles.label}>Client Name:</Text>
+        <TextInput
+          style={[styles.input, { height: 100 }]}
+          placeholder="Enter client name"
+          onChangeText={onClientNameChange}
+          value={client}
         />
 
+        {/* Display error message */}
+        {!isClientNameValid && (
+          <Text style={{ color: "red" }}>Client name is required</Text>
+        )}
 
-{/*       
-  <Text style={styles.label}>Client Name:</Text>
-  <Controller
-    name="client"
-    control={control}
-    defaultValue=""
-    rules={{ required: "client name is required" }}
-    render={({ field }) => (
-      <TextInput
-        style={[styles.input, { height: 100 }]}
-        placeholder="Enter client name"
-        onChangeText={field.onChange}
-        value={field.value}
-      />
-    )}
-  />
-  {errors.client && (
-    <Text style={{ color: "red" }}>{errors.client.message}</Text>
-  )} */}
-
-{/* ================================================================= */}
+        {/* ================================================================= */}
         <Text style={styles.label}>Order Date:</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => showDatepicker("order")}
+          disabled={!isClientNameValid} // Disable if client name is not valid
         >
           {showOrderDatePicker && (
             <DateTimePicker
@@ -160,13 +172,16 @@ export default function CreateOrder() {
               }
             />
           )}
-          <Text>Order Date: {orderDate.toLocaleString()}</Text>
+
+          {/* <Text>Order Date: {orderDate.toLocaleString()}</Text> */}
+          <Text>Order Date: {moment(orderDate).format("YYYY-MM-DD")}</Text>
         </TouchableOpacity>
 
         <Text style={styles.label}>Delivery Date:</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => showDatepicker("delivery")}
+          disabled={!isClientNameValid} // Disable if client name is not valid
         >
           {showDeliveryDatePicker && (
             <DateTimePicker
@@ -178,7 +193,10 @@ export default function CreateOrder() {
               }
             />
           )}
-          <Text>Delivery Date: {deliveryDate.toLocaleString()}</Text>
+          {/* <Text>Delivery Date: {deliveryDate.toLocaleString()}</Text> */}
+          <Text>
+            Delivery Date: {moment(deliveryDate).format("YYYY-MM-DD")}
+          </Text>
         </TouchableOpacity>
 
         {/* ===================================================================================================== */}
@@ -190,9 +208,15 @@ export default function CreateOrder() {
           placeholder="Enter notes"
           value={note}
           onChangeText={(text) => setNote(text)}
+          editable={isClientNameValid} // Only editable if client name is valid
         />
 
-        <TouchableOpacity style={styles.nextButton} onPress={handleNextButton}>
+        <TouchableOpacity
+          style={styles.nextButton}
+          //onPress={handleNextButton((onSubmit))}
+          onPress={handleSubmit(onSubmit)} // Use handleSubmit here
+          disabled={!isClientNameValid} // Disable if client name is not valid
+        >
           <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity>
       </ScrollView>
