@@ -11,6 +11,7 @@ import {
 import { Checkbox } from "react-native-paper";
 import Header from "../../components/Header";
 import { fetchProductData } from "../Api/ProductListApi";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 const CreateOrderDetails = () => {
   const [showProductData, setShowProductData] = useState(true);
@@ -22,6 +23,14 @@ const CreateOrderDetails = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Add a state variable to keep track of selected products
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
+
+  // Add a state variable to store the search term
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [orderQuantities, setOrderQuantities] = useState({});
+  console.log(`fg`,orderQuantities);
   // Api calling  related work
   useEffect(() => {
     const getProductList = async () => {
@@ -41,68 +50,26 @@ const CreateOrderDetails = () => {
     getProductList();
   }, []);
 
-  // Sample array of products and orders
-  // const data = [
-  //   {
-  //     id: 1,
-  //     type: "product",
-  //     name: "Product 1",
-  //     price: "100",
-  //   },
-  //   {
-  //     id: 2,
-  //     type: "product",
-  //     name: "Product 2",
-  //     price: "200",
-  //   },
-  //   {
-  //     id: 3,
-  //     type: "product",
-  //     name: "Product 3",
-  //     price: "300",
-  //   },
-
-  //   {
-  //     id: 1,
-  //     type: "order",
-  //     orderNumber: "Order 1",
-  //     date: "2023-09-13",
-  //   },
-  //   {
-  //     id: 2,
-  //     type: "order",
-  //     orderNumber: "Order 2",
-  //     date: "2023-09-14",
-  //   },
-  // ];
-
   const handleProductButtonPress = () => {
     setShowProductData(true);
     setShowOrderData(false);
-    // You can perform additional actions related to showing product data here.
+    
+    //  perform additional actions related to showing product data here.
   };
 
-  const handleOrderButtonPress = () => {
-    setShowProductData(false);
-    setShowOrderData(true);
-    // You can perform additional actions related to showing order data here.
-  };
+const handleOrderButtonPress = () => {
+setShowProductData(false);
+setShowOrderData(true);
+const updatedOrderQuantities = {};
+selectedProductIds.forEach((productId) => {
+  updatedOrderQuantities[productId] = productQuantities[productId] || 0;
+});
 
-
+setOrderQuantities(updatedOrderQuantities);
+console.log(updatedOrderQuantities);
+};
 
   //togglecheck product
-  // const toggleProductCheckbox = (name) => {
-  //   //old code
-  //   const updatedCheckedProducts = [...checkedProducts];
-  //   if (updatedCheckedProducts.includes(name)) {
-  //     // Product is already checked, uncheck it
-  //     updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
-  //   } else {
-  //     // Product is not checked, check it
-  //     updatedCheckedProducts.push(name);
-  //   }
-  //   setCheckedProducts(updatedCheckedProducts);
-  // };
 
   const toggleProductCheckbox = useMemo(() => {
     return (name) => {
@@ -115,10 +82,15 @@ const CreateOrderDetails = () => {
         updatedCheckedProducts.push(name);
       }
       setCheckedProducts(updatedCheckedProducts);
+
+      // Toggle the selected product IDs
+      setSelectedProductIds((prevIds) =>
+        updatedCheckedProducts.map(
+          (name) => products.find((product) => product.Name === name).ProductId
+        )
+      );
     };
-  }, [checkedProducts]);
-
-
+  }, [checkedProducts, products]);
 
   const handleQuantityChange = (productId, text) => {
     if (text === "") {
@@ -139,16 +111,14 @@ const CreateOrderDetails = () => {
     }
   };
 
-
-
-//Quantities part 
+  //Quantities part
   const incrementQuantity = (productId) => {
     setProductQuantities((prevQuantities) => ({
       ...prevQuantities,
       [productId]: (prevQuantities[productId] || 0) + 1,
     }));
   };
-  
+
   const decrementQuantity = (productId) => {
     setProductQuantities((prevQuantities) => {
       const updatedQuantities = { ...prevQuantities };
@@ -159,129 +129,165 @@ const CreateOrderDetails = () => {
     });
   };
 
+  // Function to calculate total price
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
 
+    selectedProductIds.forEach((productId) => {
+      const selectedProduct = products.find(
+        (product) => product.ProductId === productId
+      );
+      const quantity = productQuantities[productId] || 0;
+      totalPrice += selectedProduct.MRP * quantity;
+    });
 
-  // //use memo
-  // const filteredProductData = useMemo(() => {
-  //   return data.filter((item) => item.type === "product");
-  // }, [data]);
+    return totalPrice;
+  };
 
-  // const filteredOrderData = useMemo(() => {
-  //   return data.filter((item) => item.type === "order");
-  // }, [data]);
+  // ========================//
+
+  // Filter products based on the search term
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) =>
+      product.Name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [products, searchTerm]);
 
   return (
     <View style={styles.container}>
-      <Header />
+      {/* implement search  part*/}
+      <View style={styles.searchBox}>
+        <View style={styles.inputContainerx}>
+          <TextInput
+            style={styles.inputx}
+            placeholder="Search..."
+            onChangeText={(text) => setSearchTerm(text)}
+          />
+          <Icon
+            name="search" // Font Awesome icon name
+            size={24}
+            style={styles.iconx}
+          />
+        </View>
+      </View>
+
       <View style={styles.buttonContainer}>
-        <Button
-          title="Product List"
-          color="#3498db"
-          onPress={handleProductButtonPress}
-        />
-        <Button
-          title="Order Details"
-          color="#e74c3c"
-          onPress={handleOrderButtonPress}
-        />
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText} onPress={handleProductButtonPress}>
+            Product List
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button2}>
+          <Text style={styles.buttonText} onPress={handleOrderButtonPress}>
+            Order Details
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView>
-  {showProductData  &&   (
-    //key id
-    <View style={styles.dataContainer}>
-      {products.map((product, index) => (
-        <View style={styles.row} key={product.ProductId}>
-          <View style={styles.infoContainer}>
-            <Text style={styles.name}>{product.Name} </Text>
+        <>
+          {showProductData && (
+            //key id
+            <View style={styles.dataContainer}>
+              {filteredProducts.map((product, index) => (
+                <View style={styles.row} key={product.ProductId}>
+                  <View style={styles.infoContainer}>
+                    <Text style={styles.name}>{product.Name} </Text>
 
-            <View style={{flexDirection: "row", gap:10 ,}}> 
-            <Text style={styles.price}>price :{product.MRP}</Text>
-            <Text style={styles.price}>PackSize :{product.PackSize}</Text>
+                    <View style={{ flexDirection: "row", gap: 10 }}>
+                      <Text style={styles.price}>price :{product.MRP}</Text>
+                      <Text style={styles.price}>
+                        PackSize :{product.PackSize}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* quantity   part  start  */}
+                  <View style={styles.quantityContainer}>
+                    <View style={styles.containerx}>
+                      {/* <Text style={styles.label}>QTY:</Text> */}
+                      <View style={styles.inputContainer}>
+                        <TouchableOpacity
+                          onPress={() => decrementQuantity(product.ProductId)}
+                        >
+                          {/* <Text style={styles.button}>-</Text> */}
+                        </TouchableOpacity>
+                        <TextInput
+                          placeholder="QTY"
+                          style={styles.input}
+                          value={
+                            productQuantities[product.ProductId]
+                              ? productQuantities[product.ProductId].toString()
+                              : ""
+                          }
+                          onChangeText={(text) =>
+                            handleQuantityChange(product.ProductId, text)
+                          }
+                  
+                        />
+                        <TouchableOpacity
+                          onPress={() => incrementQuantity(product.ProductId)}
+                        >
+                          {/* <Text style={styles.button}>+</Text> */}
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+
+                  <View style={styles.checkboxContainer}>
+                    <Checkbox.Android
+                      status={
+                        checkedProducts.includes(product.Name)
+                          ? "checked"
+                          : "unchecked"
+                      }
+                      onPress={() => toggleProductCheckbox(product.Name)}
+                      color="blue"
+                    />
+                  </View>
+                </View>
+              ))}
             </View>
-            
+          )}
+        </>
 
-          </View>
+        <>
+{showOrderData && (
+<View style={styles.dataContainer}>
+<View style={styles.tableHeader}>
+<Text style={styles.headerText}>Namee</Text>
+<Text style={styles.headerText}>Quantityy</Text>
+<Text style={styles.headerText}>Amountt</Text>
+<Text style={styles.headerText}>Actionn</Text>
+</View>
+{selectedProductIds.map((productId) => {
+const selectedProduct = products.find(
+(product) => product.ProductId === productId
+);
 
-          {/* quantity   part  start  */}
-          <View style={styles.quantityContainer}>
+const quantity = orderQuantities[productId] || 0;
+const amount = selectedProduct.MRP * quantity;
+return (
+<View style={styles.tableRow} key={selectedProduct.ProductId}>
+<Text style={styles.cellText}>{selectedProduct.Name}</Text>
 
-            <View style={styles.containerx}>
-              {/* <Text style={styles.label}>QTY:</Text> */}
-              <View style={styles.inputContainer}>
-                <TouchableOpacity
-                  onPress={() => decrementQuantity(product.ProductId)}
-                >
-                  <Text style={styles.button}>-</Text>
-                </TouchableOpacity>
-                <TextInput
-                  placeholder="QTY"
-                  style={styles.input}
-                  value={
-                    productQuantities[product.ProductId]
-                      ? productQuantities[product.ProductId].toString()
-                      : ""
-                  }
-                  onChangeText={(text) =>
-                    handleQuantityChange(product.ProductId, text)
-                  }
-                  //keyboardType="numeric"
+<Text style={styles.cellText}>{quantity}</Text>
+<Text style={styles.cellText}>{amount}</Text>
 
-                  //=============================semi working code just first value not delete  //
-                  // style={styles.input}
-                  // value={
-                  //   productQuantities[product.ProductId]
-                  //     ? productQuantities[product.ProductId].toString()
-                  //     : ""
-                  // }
-                  // onChangeText={(text) => {
-                  //   const value = parseInt(text, 10);
-                  //   const updatedQuantities = { ...productQuantities };
-                  //   if (!isNaN(value)) {
-                  //     updatedQuantities[product.id] = value;
-                  //     setProductQuantities(updatedQuantities);
-                  //   }
-                  // }}
-                  // keyboardType="numeric"
-
-
-                />
-                <TouchableOpacity
-                  onPress={() => incrementQuantity(product.ProductId)}
-                >
-                  <Text style={styles.button}>+</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <Checkbox.Android
-              status={
-                checkedProducts.includes(product.Name)
-                  ? "checked"
-                  : "unchecked"
-              }
-              onPress={() => toggleProductCheckbox(product.Name)}
-              color="blue"
-            />
-          </View>
-        </View>
-      ))}
-    </View>
-  )}
-
-        {/* {showOrderData && (
-          <View style={styles.dataContainer}>
-            {filteredOrderData.map((order, index) => (
-              <View key={index} style={styles.row}  key={product.ProductId}>
-                <Text>Order Number: {order.orderNumber}</Text>
-                <Text>Date: {order.date}</Text>
-              </View>
-            ))}
-          </View>
-        )} */}
+<TouchableOpacity style={styles.actionButton}>
+<Text style={styles.actionText}>Deletee</Text>
+</TouchableOpacity>
+</View>
+);
+})}
+</View>
+)}
+        </>
       </ScrollView>
+
+      <Text style={styles.totalPriceText}>
+        Total Price: {calculateTotalPrice()}
+      </Text>
     </View>
   );
 };
@@ -375,12 +381,29 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 15,
-    padding: 20,
+
+    //marginTop: 15,
+    padding: 10,
   },
   dataContainer: {
     marginTop: 20,
   },
+
+  button: {
+    width: "50%", // Set width to 50% of screen width
+    backgroundColor: "#3498db",
+    padding: 10,
+  },
+  button2: {
+    width: "50%", // Set width to 50% of screen width
+    backgroundColor: "#e74c3c",
+    padding: 10,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+  },
+
   row: {
     flexDirection: "row",
     //justifyContent: "space-between",
@@ -397,12 +420,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 15,
     marginRight: 10,
-    color:"gray",
+    color: "gray",
     fontWeight: "bold",
   },
   price: {
     fontSize: 16,
-  
+
     color: "#403d39",
   },
   quantityContainer: {
@@ -429,10 +452,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  button: {
-    fontSize: 24,
-    paddingHorizontal: 10,
-  },
+  // button: {
+  //   fontSize: 24,
+  //   paddingHorizontal: 10,
+  // },
   input: {
     fontSize: 13,
     borderWidth: 1,
@@ -440,4 +463,100 @@ const styles = StyleSheet.create({
     padding: 5,
     minWidth: 40,
   },
+  totalPriceText: {
+    color: "black",
+    textAlign: "center",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  searchBox: {
+    // marginLeft: 50,
+    alignSelf: "center",
+    marginVertical: 10,
+  },
+
+  inputContainerx: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "80%",
+    borderColor: "black",
+    borderWidth: 1,
+    margin: 5,
+    padding: 5,
+    marginLeft: 5,
+    borderRadius: 50,
+  },
+  inputx: {
+    flex: 1,
+    height: 40,
+    padding: 10,
+  },
+  iconx: {
+    marginRight: 10,
+  },
+  // ===============================
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    backgroundColor: "#f2f2f2", // Header background color
+  },
+  headerText: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  tableRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc", // Border color
+  },
+  cellText: {
+    fontSize: 16,
+    flex: 1,
+  },
+  actionButton: {
+    backgroundColor: "blue", // Button background color
+    padding: 5,
+    borderRadius: 5,
+  },
+  actionText: {
+    color: "white", // Button text color
+    fontWeight: "bold",
+  },
 });
+
+// const toggleProductCheckbox = (name) => {
+//   //old code
+//   const updatedCheckedProducts = [...checkedProducts];
+//   if (updatedCheckedProducts.includes(name)) {
+//     // Product is already checked, uncheck it
+//     updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
+//   } else {
+//     // Product is not checked, check it
+//     updatedCheckedProducts.push(name);
+//   }
+//   setCheckedProducts(updatedCheckedProducts);
+// };
+
+// =======================================
+// {showOrderData && (
+
+//   <View style={styles.dataContainer}>
+//     {selectedProductIds.map((productId) => {
+//       const selectedProduct = products.find(
+//         (product) => product.ProductId === productId
+//       );
+//       return (
+//         <View style={styles.row} key={selectedProduct.ProductId}>
+//           <View style={styles.infoContainer}>
+//             <Text style={styles.name}>{selectedProduct.Name}</Text>
+//           </View>
+//         </View>
+//       );
+//     })}
+//   </View>
+// )
+
+// }

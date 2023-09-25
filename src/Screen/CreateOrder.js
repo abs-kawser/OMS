@@ -115,7 +115,7 @@ export default function CreateOrder() {
     // Move your form submission logic here
     if (isClientNameValid) {
       fetchCreatenewOrderData();
-      navigation.navigate("CreateOrderDetails");
+      navigation.navigate("Create Order ");
     }
   };
 
@@ -150,8 +150,6 @@ export default function CreateOrder() {
           value={client}
           onChangeText={(text) => setClient(text)}
         /> */}
-
-       
 
         {/* {!isClientNameValid && client === "" && (
   <Text style={styles.errorMessage}>Client name is required ***</Text>
@@ -205,7 +203,7 @@ export default function CreateOrder() {
           <Text>Order Date: {moment(orderDate).format("YYYY-MM-DD")}</Text>
         </TouchableOpacity>
 
-        <Text style={styles.label}>Delivery Date:</Text>
+        <Text style={styles.label}> Delivery Date:</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => showDatepicker("delivery")}

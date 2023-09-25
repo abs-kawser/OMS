@@ -20,11 +20,11 @@ const StackNavigator = () => {
       {/* take screen  */}
 
       <Stack.Screen
-        name="CreateOrderDetails"
+        name="Create Order "
         component={CreateOrderDetails}
         options={{
-          headerShown: false,
-          //headerBackVisible: true,
+          headerShown: true,
+          headerBackVisible: true,
         }}
       />
     </Stack.Navigator>
