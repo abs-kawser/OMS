@@ -18,13 +18,10 @@ import moment from "moment";
 
 export default function CreateOrder() {
   const navigation = useNavigation();
-  //const { control,  errors } = useForm();
-  // const { control, handleSubmit, errors, setValue, watch } = useForm({
-  //   defaultValues: {
-  //     client: "", // Provide default value for client
-  //   },
-  // });
 
+
+
+  
   const [client, setClient] = useState("");
   const [orderDate, setOrderDate] = useState(new Date());
   const [deliveryDate, setDeliveryDate] = useState(new Date());

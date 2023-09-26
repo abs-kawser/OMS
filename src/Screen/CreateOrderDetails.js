@@ -3,21 +3,23 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   ScrollView,
   TouchableOpacity,
   TextInput,
 } from "react-native";
 import { Checkbox } from "react-native-paper";
-import Header from "../../components/Header";
 import { fetchProductData } from "../Api/ProductListApi";
 import Icon from "react-native-vector-icons/FontAwesome5";
-
+import { useLogin } from "../Context/LoginProvider";
+import { Button } from "@rneui/themed";
 const CreateOrderDetails = () => {
+  const { isLoggedIn, setIsLoggedIn } = useLogin();
+  const { userDetails } = isLoggedIn;
+
   const [showProductData, setShowProductData] = useState(true);
   const [showOrderData, setShowOrderData] = useState(false);
 
-  const [productQuantities, setProductQuantities] = useState([]);
+  const [productQuantities, setProductQuantities] = useState({});
   const [checkedProducts, setCheckedProducts] = useState([]);
 
   const [products, setProducts] = useState([]);
@@ -26,11 +28,14 @@ const CreateOrderDetails = () => {
   // Add a state variable to keep track of selected products
   const [selectedProductIds, setSelectedProductIds] = useState([]);
 
+  //console.log("selectedProductIds:", selectedProductIds);
+
   // Add a state variable to store the search term
   const [searchTerm, setSearchTerm] = useState("");
 
   const [orderQuantities, setOrderQuantities] = useState({});
-  console.log(`fg`,orderQuantities);
+  console.log(`Quantities`, orderQuantities);
+
   // Api calling  related work
   useEffect(() => {
     const getProductList = async () => {
@@ -53,44 +58,112 @@ const CreateOrderDetails = () => {
   const handleProductButtonPress = () => {
     setShowProductData(true);
     setShowOrderData(false);
-    
-    //  perform additional actions related to showing product data here.
   };
 
-const handleOrderButtonPress = () => {
-setShowProductData(false);
-setShowOrderData(true);
-const updatedOrderQuantities = {};
-selectedProductIds.forEach((productId) => {
-  updatedOrderQuantities[productId] = productQuantities[productId] || 0;
-});
+  //old code when check box useing and its perfetcly working
+  // const handleOrderButtonPress = () => {
+  // setShowProductData(false);
+  // setShowOrderData(true);
+  // const updatedOrderQuantities = {};
+  // selectedProductIds.forEach((productId) => {
+  //   updatedOrderQuantities[productId] = productQuantities[productId] || 0;
+  // });
 
-setOrderQuantities(updatedOrderQuantities);
-console.log(updatedOrderQuantities);
-};
+  // setOrderQuantities(updatedOrderQuantities);
+  // console.log(updatedOrderQuantities);
+  // };
+
+  const handleOrderButtonPress = () => {
+    setShowProductData(false);
+    setShowOrderData(true);
+
+    // Initialize an object to store updated order quantities
+    const updatedOrderQuantities = {};
+
+    // Iterate over selected products and update order quantities
+    selectedProductIds.forEach((productId) => {
+      const quantity = productQuantities[productId] || 0;
+      if (quantity > 0) {
+        updatedOrderQuantities[productId] = quantity;
+      }
+    });
+
+    // Update state with the selected product IDs and order quantities
+    //setSelectedProductIds(Object.keys(updatedOrderQuantities),);
+
+    setOrderQuantities(updatedOrderQuantities);
+  };
 
   //togglecheck product
+  // const toggleProductCheckbox = useMemo(() => {
+  //   return (name) => {
+  //     const updatedCheckedProducts = [...checkedProducts];
+  //     if (updatedCheckedProducts.includes(name)) {
+  //       // Product is already checked, uncheck it
+  //       updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
+  //     } else {
+  //       // Product is not checked, check it
+  //       updatedCheckedProducts.push(name);
+  //     }
+  //     setCheckedProducts(updatedCheckedProducts);
 
-  const toggleProductCheckbox = useMemo(() => {
-    return (name) => {
-      const updatedCheckedProducts = [...checkedProducts];
-      if (updatedCheckedProducts.includes(name)) {
-        // Product is already checked, uncheck it
-        updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
-      } else {
-        // Product is not checked, check it
-        updatedCheckedProducts.push(name);
-      }
-      setCheckedProducts(updatedCheckedProducts);
+  //     // Toggle the selected product IDs
+  //     setSelectedProductIds((prevIds) =>
+  //       updatedCheckedProducts.map(
+  //         (name) => products.find((product) => product.Name === name).ProductId
+  //       )
+  //     );
+  //   };
+  // }, [checkedProducts, products]);
 
-      // Toggle the selected product IDs
-      setSelectedProductIds((prevIds) =>
-        updatedCheckedProducts.map(
-          (name) => products.find((product) => product.Name === name).ProductId
-        )
-      );
-    };
-  }, [checkedProducts, products]);
+  //old code
+  // const handleQuantityChange = (productId, text) => {
+  //   if (text === "") {
+  //     // If the input is empty, clear the quantity
+  //     setProductQuantities((prevQuantities) => {
+  //       const updatedQuantities = { ...prevQuantities };
+  //       delete updatedQuantities[productId];
+  //       return updatedQuantities;
+  //     });
+  //   } else {
+  //     const value = parseInt(text, 10);
+  //     if (!isNaN(value)) {
+  //       setProductQuantities((prevQuantities) => ({
+  //         ...prevQuantities,
+  //         [productId]: value,
+  //       }));
+  //     }
+  //   }
+  // };
+
+  // const handleQuantityChange = (productId, text) => {
+  //   if (text === "") {
+  //     // If the input is empty, clear the quantity
+  //     setProductQuantities((prevQuantities) => {
+  //       const updatedQuantities = { ...prevQuantities };
+  //       delete updatedQuantities[productId];
+  //       return updatedQuantities;
+  //     });
+  //   } else {
+  //     const value = parseInt(text, 10);
+  //     if (!isNaN(value)) {
+  //       setProductQuantities((prevQuantities) => ({
+  //         ...prevQuantities,
+  //         [productId]: value,
+  //       }));
+
+  //       // If the entered quantity is greater than zero, add the productId to selectedProductIds
+  //       if (value > 0) {
+  //         setSelectedProductIds((prevIds) => [...prevIds, productId]);
+  //       } else {
+  //         // If the quantity is zero, remove the productId from selectedProductIds
+  //         setSelectedProductIds((prevIds) =>
+  //           prevIds.filter((id) => id !== productId)
+  //         );
+  //       }
+  //     }
+  //   }
+  // };
 
   const handleQuantityChange = (productId, text) => {
     if (text === "") {
@@ -107,26 +180,18 @@ console.log(updatedOrderQuantities);
           ...prevQuantities,
           [productId]: value,
         }));
+
+        // If the entered quantity is greater than zero, add the productId to selectedProductIds
+        if (value > 0 && !selectedProductIds.includes(productId)) {
+          setSelectedProductIds((prevIds) => [...prevIds, productId]);
+        } else if (value === 0 && selectedProductIds.includes(productId)) {
+          // If the quantity is zero, remove the productId from selectedProductIds
+          setSelectedProductIds((prevIds) =>
+            prevIds.filter((id) => id !== productId)
+          );
+        }
       }
     }
-  };
-
-  //Quantities part
-  const incrementQuantity = (productId) => {
-    setProductQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: (prevQuantities[productId] || 0) + 1,
-    }));
-  };
-
-  const decrementQuantity = (productId) => {
-    setProductQuantities((prevQuantities) => {
-      const updatedQuantities = { ...prevQuantities };
-      if (updatedQuantities[productId] > 0) {
-        updatedQuantities[productId] -= 1;
-      }
-      return updatedQuantities;
-    });
   };
 
   // Function to calculate total price
@@ -155,6 +220,10 @@ console.log(updatedOrderQuantities);
 
   return (
     <View style={styles.container}>
+      <View style={styles.userInformation}>
+        <Text style={styles.userText1}> Name:{userDetails.FullName}</Text>
+        <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text>
+      </View>
       {/* implement search  part*/}
       <View style={styles.searchBox}>
         <View style={styles.inputContainerx}>
@@ -205,13 +274,10 @@ console.log(updatedOrderQuantities);
                   {/* quantity   part  start  */}
                   <View style={styles.quantityContainer}>
                     <View style={styles.containerx}>
-                      {/* <Text style={styles.label}>QTY:</Text> */}
                       <View style={styles.inputContainer}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                           onPress={() => decrementQuantity(product.ProductId)}
-                        >
-                          {/* <Text style={styles.button}>-</Text> */}
-                        </TouchableOpacity>
+                        ></TouchableOpacity> */}
                         <TextInput
                           placeholder="QTY"
                           style={styles.input}
@@ -223,18 +289,15 @@ console.log(updatedOrderQuantities);
                           onChangeText={(text) =>
                             handleQuantityChange(product.ProductId, text)
                           }
-                  
                         />
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                           onPress={() => incrementQuantity(product.ProductId)}
-                        >
-                          {/* <Text style={styles.button}>+</Text> */}
-                        </TouchableOpacity>
+                        ></TouchableOpacity> */}
                       </View>
                     </View>
                   </View>
 
-                  <View style={styles.checkboxContainer}>
+                  {/* <View style={styles.checkboxContainer}>
                     <Checkbox.Android
                       status={
                         checkedProducts.includes(product.Name)
@@ -244,7 +307,7 @@ console.log(updatedOrderQuantities);
                       onPress={() => toggleProductCheckbox(product.Name)}
                       color="blue"
                     />
-                  </View>
+                  </View> */}
                 </View>
               ))}
             </View>
@@ -252,36 +315,76 @@ console.log(updatedOrderQuantities);
         </>
 
         <>
-{showOrderData && (
-<View style={styles.dataContainer}>
-<View style={styles.tableHeader}>
-<Text style={styles.headerText}>Namee</Text>
-<Text style={styles.headerText}>Quantityy</Text>
-<Text style={styles.headerText}>Amountt</Text>
-<Text style={styles.headerText}>Actionn</Text>
-</View>
-{selectedProductIds.map((productId) => {
-const selectedProduct = products.find(
-(product) => product.ProductId === productId
-);
+          {showOrderData && (
+            <View style={styles.dataContainer}>
+              <View style={styles.tableHeader}>
+                <Text style={styles.headerText}>Name</Text>
+                <Text style={styles.headerText}>Quantity</Text>
+                <Text style={styles.headerText}>Amount</Text>
+                <Text style={styles.headerText}>Action</Text>
+              </View>
+              {selectedProductIds.map((productId) => {
+                const selectedProduct = products.find(
+                  (product) => product.ProductId === productId
+                );
+                console.log("productId:", productId);
+                console.log("selectedProduct:", selectedProduct);
+                // Check if the product has a quantity value
+                const quantity = productQuantities[productId] || 0;
+                if (quantity > 0) {
+                  return (
+                    <View style={styles.tableRow} key={productId}>
+                      <Text style={styles.cellText} numberOfLines={2}>
+                        {selectedProduct.Name}
+                      </Text>
 
-const quantity = orderQuantities[productId] || 0;
-const amount = selectedProduct.MRP * quantity;
-return (
-<View style={styles.tableRow} key={selectedProduct.ProductId}>
-<Text style={styles.cellText}>{selectedProduct.Name}</Text>
+                      <Text style={styles.cellText}>{quantity}</Text>
 
-<Text style={styles.cellText}>{quantity}</Text>
-<Text style={styles.cellText}>{amount}</Text>
+                      <Text style={styles.cellText}>
+                        {selectedProduct.MRP * quantity}
+                      </Text>
+                      <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => console.log("Delete button pressed")}
+                      >
+                        <Icon name="trash" size={25} color="tomato" />
+                        {/* <Text style={styles.actionText}
+                        >Delete</Text> */}
+                      </TouchableOpacity>
+                    </View>
+                  );
+                }
 
-<TouchableOpacity style={styles.actionButton}>
-<Text style={styles.actionText}>Deletee</Text>
-</TouchableOpacity>
-</View>
-);
-})}
-</View>
-)}
+                return null; // Skip products with quantity === 0
+              })}
+
+              {/* Add the two buttons here */}
+              {/* <View style={styles.buttonOrderContainer}>
+                <TouchableOpacity
+                  style={styles.buttonSave}
+                  onPress={() => {
+                    // Handle the first button's action
+                  }}
+                >
+                  <Text style={styles.buttonText}>Button 1</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonNext}
+                  onPress={() => {
+                    // Handle the second button's action
+                  }}
+                >
+                  <Text style={styles.buttonText}>Button 2</Text>
+                </TouchableOpacity>
+              </View> */}
+              <View style={styles.btngrp}>
+                <Button 
+                  
+                >Save</Button>
+                <Button>Next</Button>
+              </View>
+            </View>
+          )}
         </>
       </ScrollView>
 
@@ -378,6 +481,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  userInformation: {
+    justifyContent: "center",
+    textAlign: "center",
+    alignItems: "center",
+  },
+  userText1: {
+    fontSize: 16,
+  },
+  userText2: {
+    fontSize: 16,
+    color: "#168aad",
+  },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -430,12 +545,11 @@ const styles = StyleSheet.create({
   },
   quantityContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    //justifyContent: "space-between",
+    alignItems: "flex-end",
+    paddingHorizontal: 20,
   },
-  underline: {
-    textDecorationLine: "underline",
-  },
+
   checkboxContainer: {
     flex: 0.2,
     alignItems: "flex-end",
@@ -513,17 +627,31 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc", // Border color
   },
   cellText: {
-    fontSize: 16,
+    fontSize: 13,
     flex: 1,
   },
+  quantity: {
+    marginLeft: 20,
+  },
+
   actionButton: {
-    backgroundColor: "blue", // Button background color
+    backgroundColor: "#dee2e6", // Button background color
     padding: 5,
     borderRadius: 5,
   },
   actionText: {
     color: "white", // Button text color
     fontWeight: "bold",
+  },
+  // button design for order details
+  btngrp: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginTop: 20,
+    paddingHorizontal: 10,
+    gap: 5,
   },
 });
 
@@ -560,3 +688,37 @@ const styles = StyleSheet.create({
 // )
 
 // }
+
+// ========checkbos when use
+
+/* {showOrderData && (
+            <View style={styles.dataContainer}>
+              <View style={styles.tableHeader}>
+                <Text style={styles.headerText}>Namee</Text>
+                <Text style={styles.headerText}>Quantityy</Text>
+                <Text style={styles.headerText}>Amountt</Text>
+                <Text style={styles.headerText}>Actionn</Text>
+              </View>
+              {selectedProductIds.map((productId) => {
+                const selectedProduct = products.find(
+                  (product) => product.ProductId === productId
+                ); 
+
+                console.log("productId:", productId);
+                console.log("selectedProduct:", selectedProduct);
+
+                const quantity = orderQuantities[productId] || 0;
+                const amount = selectedProduct.MRP * quantity;
+                return (
+                  <View style={styles.tableRow} key={selectedProduct.ProductId}>
+                    <Text style={styles.cellText}>{selectedProduct.Name}</Text>
+                    <Text style={styles.cellText}>{quantity}</Text>
+                    <Text style={styles.cellText}>{amount}</Text>
+                    <TouchableOpacity style={styles.actionButton}>
+                      <Text style={styles.actionText}>Deletee</Text>
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </View>
+          )} */

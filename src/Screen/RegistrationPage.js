@@ -11,6 +11,16 @@ import {
 import Header from "../../components/Header";
 
 const RegistrationPage = () => {
+
+
+
+
+
+
+
+
+
+  
   return (
     <>
       <Header />
