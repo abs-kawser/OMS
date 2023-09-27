@@ -33,6 +33,8 @@ const LoginPage = () => {
   //loading
   const [isLoading, setIsLoading] = useState(false);
 
+
+
   const handleLogin = async () => {
     try {
       setIsLoading(true); // Start loading
@@ -103,7 +105,7 @@ const LoginPage = () => {
 
           <TextInput
             style={styles.input}
-            placeholder="network Id"
+            placeholder="User Id"
             onChangeText={(text) => setUserId(text)}
             value={userId}
           />
@@ -119,7 +121,7 @@ const LoginPage = () => {
           {error && <Text style={styles.warning}>{error}</Text>}
 
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            {isLoading && <ActivityIndicator size="small" color="red" />}
+            {isLoading && <ActivityIndicator size="small" color="red" /> } 
             <Text style={styles.loginButtonTextX}>Loginn</Text>
           </TouchableOpacity>
 
@@ -179,11 +181,11 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: "center",
     justifyContent: "center",
-
+      width:  "40%",
     backgroundColor: "#0096c7",
     paddingVertical: 12,
     paddingHorizontal: 24,
-    borderRadius: 20,
+    borderRadius: 15,
     alignItems: "center",
     alignSelf: "center",
     marginBottom: 16,

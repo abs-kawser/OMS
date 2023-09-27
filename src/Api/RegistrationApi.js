@@ -1,12 +1,12 @@
 import base64 from "base-64";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 
-export const fetchRegistrationData = async (setIsLoading) => {
+export const fetchRegistrationData = async (setIsLoading,userId, mobile, password) => {
   const requestData = {
     // CustomerId: 318233,
-    NetworkId: U21080274,
-    MobileNo: "01731111112",
-    Password: 123456,
+    NetworkId: userId,
+    MobileNo: mobile,
+    Password: password,
   };
 
   console.log("Posting loan data:", JSON.stringify(requestData, null, 2));
@@ -14,10 +14,12 @@ export const fetchRegistrationData = async (setIsLoading) => {
   try {
     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
     const response = await fetch(`${BASE_URL}/api/HomeApi/Registration`, {
-      headers: {
-        Authorization: authHeader,
-        method: "POST",
-      },
+      method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: authHeader,
+        },
+
       body: JSON.stringify(requestData),
     });
     const jsonData = await response.json();

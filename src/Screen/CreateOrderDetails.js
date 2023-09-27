@@ -381,7 +381,7 @@ const CreateOrderDetails = () => {
                 <Button 
                   
                 >Save</Button>
-                <Button>Next</Button>
+                <Button>Submit</Button>
               </View>
             </View>
           )}
