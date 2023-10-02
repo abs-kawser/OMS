@@ -6,13 +6,27 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
-import { Checkbox } from "react-native-paper";
 import { fetchProductData } from "../Api/ProductListApi";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { useLogin } from "../Context/LoginProvider";
 import { Button } from "@rneui/themed";
-const CreateOrderDetails = () => {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { fetchOrderInfoData } from "../Api/OrderInfo";
+import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
+import base64 from "base-64";
+
+import LottieView from "lottie-react-native"; // Import LottieView
+
+const CreateOrderDetails = ({ route }) => {
+  const data = route.params?.data;
+
+  console.log("this create order data ", data.OrderNo);
+
+  const navigation = useNavigation();
+
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
 
@@ -21,37 +35,66 @@ const CreateOrderDetails = () => {
 
   const [productQuantities, setProductQuantities] = useState({});
   const [checkedProducts, setCheckedProducts] = useState([]);
-
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   // Add a state variable to keep track of selected products
   const [selectedProductIds, setSelectedProductIds] = useState([]);
-
   //console.log("selectedProductIds:", selectedProductIds);
-
   // Add a state variable to store the search term
   const [searchTerm, setSearchTerm] = useState("");
-
   const [orderQuantities, setOrderQuantities] = useState({});
   console.log(`Quantities`, orderQuantities);
 
+  const [orderNo, setOrderNo] = useState(""); // Initialize with an empty string
+  console.log("check order No ", orderNo);
+
+  const [isLoadingProductData, setIsLoadingProductData] = useState(true);
+
   // Api calling  related work
+  // useEffect(() => {
+  //   const getProductList = async () => {
+  //     try {
+  //       const productList = await fetchProductData(setIsLoading);
+  //       // setProducts(productList);
+
+  //       //setFilteredData(productList);
+  //       setProducts(productList);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       // Handle the error gracefully
+  //       console.error("Error fetching product list:", error);
+  //     }
+  //   };
+
+  //   getProductList();
+  // }, []);
+
   useEffect(() => {
+    // Check if data is already in AsyncStorage
     const getProductList = async () => {
       try {
-        const productList = await fetchProductData(setIsLoading);
-        // setProducts(productList);
-
-        //setFilteredData(productList);
-        setProducts(productList);
-        setIsLoading(false);
+        const storedData = await AsyncStorage.getItem("ProductList");
+        if (storedData) {
+          setProducts(JSON.parse(storedData));
+          setIsLoadingProductData(false);
+        } else {
+          // Data not in AsyncStorage, fetch from API
+          try {
+            const jsonData = await fetchProductData();
+            setProducts(jsonData);
+            setIsLoadingProductData(false);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        }
       } catch (error) {
-        // Handle the error gracefully
-        console.error("Error fetching product list:", error);
+        console.error("Error reading stored data:", error);
+      } finally {
+        setIsLoadingProductData(false); // Set loading to false when fetch is complete
       }
     };
 
+    // Call the function to check stored data or fetch from API
     getProductList();
   }, []);
 
@@ -76,10 +119,8 @@ const CreateOrderDetails = () => {
   const handleOrderButtonPress = () => {
     setShowProductData(false);
     setShowOrderData(true);
-
     // Initialize an object to store updated order quantities
     const updatedOrderQuantities = {};
-
     // Iterate over selected products and update order quantities
     selectedProductIds.forEach((productId) => {
       const quantity = productQuantities[productId] || 0;
@@ -87,10 +128,8 @@ const CreateOrderDetails = () => {
         updatedOrderQuantities[productId] = quantity;
       }
     });
-
     // Update state with the selected product IDs and order quantities
     //setSelectedProductIds(Object.keys(updatedOrderQuantities),);
-
     setOrderQuantities(updatedOrderQuantities);
   };
 
@@ -218,13 +257,85 @@ const CreateOrderDetails = () => {
     );
   }, [products, searchTerm]);
 
+  // =============================================================================
+  // const fetchOrderInfoData = async () => {
+  //   try {
+
+  //     const url = `${BASE_URL}/api/NewOrderApi/GetPoInfo?orderNo=${data?.OrderNo}&verId=1`;
+  //     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+  //     // Fetch data from the URL
+  //     const response = await fetch(url, {
+  //       method: "GET",
+  //       headers: {
+
+  //         Authorization: authHeader,
+  //       },
+  //     });
+  //     //console.log("order info", response);
+  //     console.log("Check data:", JSON.stringify(response, null, 2));
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (error) {
+  //     console.error("Fetch error:", error);
+  //     throw error;
+  //   }
+  // };
+
+  // fetchOrderInfoData api
+
+  const fetchOrderInfoData = async (userDetails) => {
+    try {
+      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+      const response = await fetch(
+        `${BASE_URL}/api/NewOrderApi/GetPoInfo?orderNo=${data?.OrderNo}&verId=1`,
+        {
+          headers: {
+            Authorization: authHeader,
+          },
+        }
+      );
+      const jsonData = await response.json();
+
+      navigation.navigate("Order Info", { data: jsonData });
+
+      // await AsyncStorage.setItem('AttendanceSummary', JSON.stringify(jsonData));
+      console.log("data xyz", JSON.stringify(jsonData, null, 2));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // setIsLoading(false);
+      throw error;
+    }
+  };
+
+  // const handleSubmit = async () => {
+  //   try {
+  //     // Assuming you have the order number in route.params.data.OrderNo
+  //     const orderNumber = route.params?.data?.OrderNo;
+
+  //     if (orderNumber) {
+  //       const orderInfo = await fetchOrderInfoData(orderNumber);
+  //       // Do something with the fetched orderInfo
+  //       console.log("Order Info:", orderInfo);
+  //       navigation.navigate("Order Info", );
+  //     } else {
+  //       // Handle the case where there is no order number
+  //       console.error("No valid order number found");
+  //     }
+  //   } catch (error) {
+  //     // Handle any errors that may occur during the fetch or submission
+  //     console.error("Error handling submission:", error);
+  //   }
+  // };
+
   return (
     <View style={styles.container}>
       <View style={styles.userInformation}>
         <Text style={styles.userText1}> Name:{userDetails.FullName}</Text>
         <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text>
       </View>
+
       {/* implement search  part*/}
+
       <View style={styles.searchBox}>
         <View style={styles.inputContainerx}>
           <TextInput
@@ -253,140 +364,116 @@ const CreateOrderDetails = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView>
-        <>
-          {showProductData && (
-            //key id
-            <View style={styles.dataContainer}>
-              {filteredProducts.map((product, index) => (
-                <View style={styles.row} key={product.ProductId}>
-                  <View style={styles.infoContainer}>
-                    <Text style={styles.name}>{product.Name} </Text>
+      <>
+        {isLoadingProductData ? (
+          <View style={styles.loadingContainer}>
+            {/* <ActivityIndicator size="large" color="#0077b6" /> */}
+            <LottieView
+              source={require("../../Lottie/animation_ln8n5kbe.json")} // Replace with your animation file path
+              autoPlay
+              loop
+              style={styles.lottiContainer}
+            />
+          </View>
+        ) : (
+          <ScrollView>
+            <>
+              {showProductData && (
+                //key id
+                <View style={styles.dataContainer}>
+                  {filteredProducts.map((product, index) => (
+                    <View style={styles.row} key={product.ProductId}>
+                      <View style={styles.infoContainer}>
+                        <Text style={styles.name}>{product.Name} </Text>
 
-                    <View style={{ flexDirection: "row", gap: 10 }}>
-                      <Text style={styles.price}>price :{product.MRP}</Text>
-                      <Text style={styles.price}>
-                        PackSize :{product.PackSize}
-                      </Text>
-                    </View>
-                  </View>
+                        <View style={{ flexDirection: "row", gap: 10 }}>
+                          <Text style={styles.price}>price :{product.MRP}</Text>
+                          <Text style={styles.price}>
+                            PackSize :{product.PackSize}
+                          </Text>
+                        </View>
+                      </View>
 
-                  {/* quantity   part  start  */}
-                  <View style={styles.quantityContainer}>
-                    <View style={styles.containerx}>
-                      <View style={styles.inputContainer}>
-                        {/* <TouchableOpacity
-                          onPress={() => decrementQuantity(product.ProductId)}
-                        ></TouchableOpacity> */}
-                        <TextInput
-                          placeholder="QTY"
-                          style={styles.input}
-                          value={
-                            productQuantities[product.ProductId]
-                              ? productQuantities[product.ProductId].toString()
-                              : ""
-                          }
-                          onChangeText={(text) =>
-                            handleQuantityChange(product.ProductId, text)
-                          }
-                        />
-                        {/* <TouchableOpacity
-                          onPress={() => incrementQuantity(product.ProductId)}
-                        ></TouchableOpacity> */}
+                      {/* quantity   part  start  */}
+                      <View style={styles.quantityContainer}>
+                        <View style={styles.containerx}>
+                          <View style={styles.inputContainer}>
+                            <TextInput
+                              placeholder="QTY"
+                              style={styles.input}
+                              keyboardType="numeric"
+                              value={
+                                productQuantities[product.ProductId]
+                                  ? productQuantities[
+                                      product.ProductId
+                                    ].toString()
+                                  : ""
+                              }
+                              onChangeText={(text) =>
+                                handleQuantityChange(product.ProductId, text)
+                              }
+                            />
+                          </View>
+                        </View>
                       </View>
                     </View>
-                  </View>
-
-                  {/* <View style={styles.checkboxContainer}>
-                    <Checkbox.Android
-                      status={
-                        checkedProducts.includes(product.Name)
-                          ? "checked"
-                          : "unchecked"
-                      }
-                      onPress={() => toggleProductCheckbox(product.Name)}
-                      color="blue"
-                    />
-                  </View> */}
+                  ))}
                 </View>
-              ))}
-            </View>
-          )}
-        </>
+              )}
+            </>
 
-        <>
-          {showOrderData && (
-            <View style={styles.dataContainer}>
-              <View style={styles.tableHeader}>
-                <Text style={styles.headerText}>Name</Text>
-                <Text style={styles.headerText}>Quantity</Text>
-                <Text style={styles.headerText}>Amount</Text>
-                <Text style={styles.headerText}>Action</Text>
-              </View>
-              {selectedProductIds.map((productId) => {
-                const selectedProduct = products.find(
-                  (product) => product.ProductId === productId
-                );
-                console.log("productId:", productId);
-                console.log("selectedProduct:", selectedProduct);
-                // Check if the product has a quantity value
-                const quantity = productQuantities[productId] || 0;
-                if (quantity > 0) {
-                  return (
-                    <View style={styles.tableRow} key={productId}>
-                      <Text style={styles.cellText} numberOfLines={2}>
-                        {selectedProduct.Name}
-                      </Text>
+            <>
+              {showOrderData && (
+                <View style={styles.dataContainer}>
+                  <View style={styles.tableHeader}>
+                    <Text style={styles.headerText}>Name</Text>
+                    <Text style={styles.headerText}>Quantity</Text>
+                    <Text style={styles.headerText}>Amount</Text>
+                    <Text style={styles.headerText}>Action</Text>
+                  </View>
+                  {selectedProductIds.map((productId) => {
+                    const selectedProduct = products.find(
+                      (product) => product.ProductId === productId
+                    );
+                    console.log("productId:", productId);
+                    console.log("selectedProduct:", selectedProduct);
+                    // Check if the product has a quantity value
+                    const quantity = productQuantities[productId] || 0;
+                    if (quantity > 0) {
+                      return (
+                        <View style={styles.tableRow} key={productId}>
+                          <Text style={styles.cellText} numberOfLines={2}>
+                            {selectedProduct.Name}
+                          </Text>
 
-                      <Text style={styles.cellText}>{quantity}</Text>
+                          <Text style={styles.cellText}>{quantity}</Text>
 
-                      <Text style={styles.cellText}>
-                        {selectedProduct.MRP * quantity}
-                      </Text>
-                      <TouchableOpacity
-                        style={styles.actionButton}
-                        onPress={() => console.log("Delete button pressed")}
-                      >
-                        <Icon name="trash" size={25} color="tomato" />
-                        {/* <Text style={styles.actionText}
-                        >Delete</Text> */}
-                      </TouchableOpacity>
-                    </View>
-                  );
-                }
+                          <Text style={styles.cellText}>
+                            {selectedProduct.MRP * quantity}
+                          </Text>
+                          <TouchableOpacity
+                            style={styles.actionButton}
+                            onPress={() => console.log("Delete button pressed")}
+                          >
+                            <Icon name="trash" size={25} color="tomato" />
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    }
 
-                return null; // Skip products with quantity === 0
-              })}
+                    return null;
+                  })}
 
-              {/* Add the two buttons here */}
-              {/* <View style={styles.buttonOrderContainer}>
-                <TouchableOpacity
-                  style={styles.buttonSave}
-                  onPress={() => {
-                    // Handle the first button's action
-                  }}
-                >
-                  <Text style={styles.buttonText}>Button 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.buttonNext}
-                  onPress={() => {
-                    // Handle the second button's action
-                  }}
-                >
-                  <Text style={styles.buttonText}>Button 2</Text>
-                </TouchableOpacity>
-              </View> */}
-              <View style={styles.btngrp}>
-                <Button 
-                  
-                >Save</Button>
-                <Button>Submit</Button>
-              </View>
-            </View>
-          )}
-        </>
-      </ScrollView>
+                  <View style={styles.btngrp}>
+                    <Button>Save</Button>
+                    <Button onPress={fetchOrderInfoData}>Submit</Button>
+                  </View>
+                </View>
+              )}
+            </>
+          </ScrollView>
+        )}
+      </>
 
       <Text style={styles.totalPriceText}>
         Total Price: {calculateTotalPrice()}
@@ -587,6 +674,7 @@ const styles = StyleSheet.create({
     // marginLeft: 50,
     alignSelf: "center",
     marginVertical: 10,
+    background: "#F4F4F4",
   },
 
   inputContainerx: {
@@ -604,6 +692,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     padding: 10,
+    color: "#80A896",
   },
   iconx: {
     marginRight: 10,
@@ -653,6 +742,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     gap: 5,
   },
+  loadingContainer: {
+    alignSelf: "center",
+    flex: 1,
+    // justifyContent:"center",
+    // alignItems:"center"
+  },
+  lottiContainer:{
+    height:50,
+    width:50
+  }
 });
 
 // const toggleProductCheckbox = (name) => {

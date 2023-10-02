@@ -94,6 +94,7 @@ const LoginPage = () => {
 
       <View style={styles.container}>
         <SafeAreaView>
+          
           <View style={styles.imageContainer}>
             <Image
               source={{
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
       width:  "40%",
-    backgroundColor: "#0096c7",
+    backgroundColor: "#ffe66d",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 15,
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
   loginButtonTextX: {
     fontSize: 15,
     //fontWeight: 'bold',
-    color: "white",
+    color: "#7d8597",
     fontWeight: "bold",
   },
   registerNow: {

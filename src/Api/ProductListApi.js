@@ -1,5 +1,6 @@
 import base64 from "base-64";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -15,7 +16,7 @@ export const fetchProductData = async ( setIsLoading) => {
     });
     const jsonData = await response.json();
     //console.log(JSON.stringify(jsonData, null, 2));
-    //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
+    await AsyncStorage.setItem('ProductList', JSON.stringify(jsonData));
     // setData(jsonData);
     // setFilteredData(jsonData);
     // setIsLoading(false);

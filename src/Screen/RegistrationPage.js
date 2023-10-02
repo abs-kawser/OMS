@@ -53,13 +53,17 @@ const RegistrationPage = () => {
       <View style={styles.container}>
         <ScrollView>
           <View>
-            <View style={styles.commontextContainer}>
+            <View>
+              <View style={styles.commontextContainer}>
+                <Text style={styles.commonText}>Here's</Text>
+                <Text style={styles.commonText}>your first </Text>
+                <Text style={styles.commonText}>step with </Text>
+                <Text style={styles.commonText}>us </Text>
+              </View>
 
-              <Text style={styles.commonText}>Here's</Text>
-              <Text style={styles.commonText}>your first </Text>
-              <Text style={styles.commonText}>step with </Text>
-              <Text style={styles.commonText}>us </Text>
-
+              <View>
+                <Image />
+              </View>
             </View>
 
             <View style={styles.content}>
@@ -114,8 +118,6 @@ const RegistrationPage = () => {
           </View>
         </ScrollView>
       </View>
-
-   
     </>
   );
 };
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   commontextContainer: {
-    marginTop:"20%",
+    marginTop: "20%",
     //transform: [{ rotate: '-15deg' }]
   },
 
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: "white",
-    marginLeft:30
+    marginLeft: 30,
     //marginRight: "50%",
   },
 
@@ -186,8 +188,8 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: "center",
     justifyContent: "center",
-    width: "40%",
-    backgroundColor: "#b9fbc0",
+    width: "60%",
+    backgroundColor: "#ffe66d",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 15,

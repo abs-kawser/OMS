@@ -2,6 +2,7 @@ import base64 from "base-64";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 
 export const fetchRegistrationData = async (setIsLoading,userId, mobile, password) => {
+  
   const requestData = {
     // CustomerId: 318233,
     NetworkId: userId,

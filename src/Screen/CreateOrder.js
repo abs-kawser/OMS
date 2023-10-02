@@ -9,19 +9,16 @@ import {
   ScrollView,
   ToastAndroid,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLogin } from "../Context/LoginProvider";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
-import { useForm, Controller } from "react-hook-form";
 import moment from "moment";
 
 export default function CreateOrder() {
   const navigation = useNavigation();
 
-
-
-  
   const [client, setClient] = useState("");
   const [orderDate, setOrderDate] = useState(new Date());
   const [deliveryDate, setDeliveryDate] = useState(new Date());
@@ -29,6 +26,9 @@ export default function CreateOrder() {
   const [isClientNameValid, setClientNameValid] = useState(false); // Track client name validity
 
   const [isClientNameTouched, setClientNameTouched] = useState(false);
+  const [error, setError] = useState("");
+
+  const [outPut, setOutput] = useState([]);
 
   //checking on log
   console.log("client name ", client);
@@ -45,18 +45,40 @@ export default function CreateOrder() {
 
   // ================================================
   const handleOrderDate = (event, selectedDate) => {
+    // if (selectedDate) {
+    //   setShowOrderDatePicker(false);
+    //   const newDate = new Date(selectedDate);
+    //   setOrderDate(newDate);
+    // }
+    setShowOrderDatePicker(false);
     if (selectedDate) {
-      setShowOrderDatePicker(false);
-      const newDate = new Date(selectedDate);
-      setOrderDate(newDate);
+      setOrderDate(selectedDate);
+      // Attempt to set the delivery date
+      if (selectedDate > deliveryDate) {
+        setError("Delivery date cannot be earlier than order date");
+      } else {
+        // Throw an error if the delivery date is earlier than the order date
+        setError("");
+      }
     }
   };
 
   const handleDateDelivery = (event, selectedDate) => {
+    // if (selectedDate) {
+    //   setShowDeliveryDatePicker(false);
+    //   const newDate = new Date(selectedDate);
+    //   setDeliveryDate(newDate);
+    // }
+    setShowDeliveryDatePicker(false);
     if (selectedDate) {
-      setShowDeliveryDatePicker(false);
-      const newDate = new Date(selectedDate);
-      setDeliveryDate(newDate);
+      setDeliveryDate(selectedDate);
+      // Attempt to set the delivery date
+      if (selectedDate < orderDate) {
+        setError("Delivery date cannot be earlier than order date");
+      } else {
+        // Throw an error if the delivery date is earlier than the order date
+        setError("");
+      }
     }
   };
 
@@ -83,7 +105,6 @@ export default function CreateOrder() {
     };
 
     console.log("Posting loan data:", JSON.stringify(requestData, null, 2));
-
     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
 
     const response = await fetch(`${BASE_URL}/api/NewOrderApi/CreateNewOrder`, {
@@ -96,6 +117,10 @@ export default function CreateOrder() {
     });
     // .then(response => response.json())
     const result = await response.json();
+    setOutput(result);
+
+    navigation.navigate("Create Order ", { data: result });
+
     console.log("this is result", JSON.stringify(result, null, 2));
 
     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
@@ -108,13 +133,13 @@ export default function CreateOrder() {
   //   setClient(text);
   // };
 
-  const onSubmit = () => {
-    // Move your form submission logic here
-    if (isClientNameValid) {
-      fetchCreatenewOrderData();
-      navigation.navigate("Create Order ");
-    }
-  };
+  // const onSubmit = () => {
+  //   // Move your form submission logic here
+  //   if (isClientNameValid) {
+  //     fetchCreatenewOrderData();
+  //     navigation.navigate("Create Order ",{data:outPut});
+  //   }
+  // };
 
   const onClientNameChange = (text) => {
     const isValid = text.trim() !== "";
@@ -159,7 +184,7 @@ export default function CreateOrder() {
 
         <TextInput
           style={[styles.input, { height: 100 }]}
-          placeholder="Enter client name"
+          placeholder="Client name is required"
           onChangeText={onClientNameChange}
           value={client}
           onBlur={onClientNameBlur}
@@ -197,7 +222,7 @@ export default function CreateOrder() {
           )}
 
           {/* <Text>Order Date: {orderDate.toLocaleString()}</Text> */}
-          <Text>Order Date: {moment(orderDate).format("YYYY-MM-DD")}</Text>
+          <Text>{moment(orderDate).format("YYYY-MM-DD")}</Text>
         </TouchableOpacity>
 
         <Text style={styles.label}> Delivery Date:</Text>
@@ -217,10 +242,9 @@ export default function CreateOrder() {
             />
           )}
           {/* <Text>Delivery Date: {deliveryDate.toLocaleString()}</Text> */}
-          <Text>
-            Delivery Date: {moment(deliveryDate).format("YYYY-MM-DD")}
-          </Text>
+          <Text>{moment(deliveryDate).format("YYYY-MM-DD")}</Text>
         </TouchableOpacity>
+        {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
 
         {/* ===================================================================================================== */}
 
@@ -237,7 +261,7 @@ export default function CreateOrder() {
         <TouchableOpacity
           style={styles.nextButton}
           //onPress={handleNextButton((onSubmit))}
-          onPress={onSubmit} // Use handleSubmit here
+          onPress={fetchCreatenewOrderData} // Use handleSubmit here
           disabled={!isClientNameValid} // Disable if client name is not valid
         >
           <Text style={styles.nextButtonText}>Nextt</Text>
