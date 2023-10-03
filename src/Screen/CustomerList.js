@@ -3,10 +3,15 @@ import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
+import { useLogin } from "../Context/LoginProvider";
 
 export default function CustomerList() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
   //"#80ffdb", "#e0c3fc", "#90e0ef"
+
+  const { isLoggedIn, setIsLoggedIn } = useLogin();
+  const { userDetails } = isLoggedIn;
+
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -23,11 +28,13 @@ export default function CustomerList() {
   }, [searchTerm]);
 
   //fetch api
-  const fetchCustomerData = async (territoryId, scId) => {
+  const fetchCustomerData = async () => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
       const response = await fetch(
-        `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${territoryId}&scId=${scId}`,
+        `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
+          userDetails?.TerritoryId
+        }&scId=${userDetails.ScId !== null ? userDetails.ScId : 1}`,
         {
           headers: {
             Authorization: authHeader,
@@ -50,7 +57,7 @@ export default function CustomerList() {
   };
 
   useEffect(() => {
-    fetchCustomerData(0, 10);
+    fetchCustomerData();
   }, []);
 
   // Filter the data based on the search term

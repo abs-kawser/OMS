@@ -283,6 +283,7 @@ const CreateOrderDetails = ({ route }) => {
 
   // fetchOrderInfoData api
 
+  // ${data?.OrderNo}
   const fetchOrderInfoData = async (userDetails) => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
@@ -748,10 +749,10 @@ const styles = StyleSheet.create({
     // justifyContent:"center",
     // alignItems:"center"
   },
-  lottiContainer:{
-    height:50,
-    width:50
-  }
+  lottiContainer: {
+    height: 50,
+    width: 50,
+  },
 });
 
 // const toggleProductCheckbox = (name) => {

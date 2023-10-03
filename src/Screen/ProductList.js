@@ -8,7 +8,7 @@ import { fetchProductData } from "../Api/ProductListApi";
 export default function ProductList() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [products, setProducts] = useState([]);
   //filter part
