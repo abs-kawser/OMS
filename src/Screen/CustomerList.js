@@ -1,11 +1,22 @@
-import { StyleSheet, Text, View, ScrollView, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import { useLogin } from "../Context/LoginProvider";
+import { useNavigation } from "@react-navigation/native";
+import { Button } from "react-native-paper";
 
 export default function CustomerList() {
+  const navigation = useNavigation();
+
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
   //"#80ffdb", "#e0c3fc", "#90e0ef"
 
@@ -79,34 +90,42 @@ export default function CustomerList() {
             style={styles.icon}
           />
         </View>
-
+        
+       <View style={styles.headerAndButton}>
+       <Text style={styles.header}>Customer  List </Text>
+         <TouchableOpacity>
+            <Button>Create Order</Button>
+         </TouchableOpacity>
+       </View>
         <ScrollView>
-          <Text style={styles.header}>Customer List</Text>
           {filteredData.map((Customer, index) => (
-            <View
-              key={index}
-              style={[
-                styles.productCard,
-                {
-                  backgroundColor: rainbowColors[index % rainbowColors.length],
-                },
-              ]}
-            >
-              <Text style={styles.productName}> {Customer.Name}</Text>
-              <Text style={styles.productInfo}>
-                <Text style={{ fontWeight: "bold" }}>Customer Id: </Text>
-                {Customer.CustomerId}
-              </Text>
+            <TouchableOpacity>
+              <View
+                key={index}
+                style={[
+                  styles.productCard,
+                  {
+                    backgroundColor:
+                      rainbowColors[index % rainbowColors.length],
+                  },
+                ]}
+              >
+                <Text style={styles.productName}> {Customer.Name}</Text>
+                <Text style={styles.productInfo}>
+                  <Text style={{ fontWeight: "bold" }}>Customer Id: </Text>
+                  {Customer.CustomerId}
+                </Text>
 
-              <Text style={styles.productInfo}>
-                <Text style={{ fontWeight: "bold" }}>Depot Name: </Text>
-                {Customer.DepotName}
-              </Text>
-              <Text style={styles.productInfo}>
-                <Text style={{ fontWeight: "bold" }}>Address: </Text>
-                {Customer.Address}
-              </Text>
-            </View>
+                <Text style={styles.productInfo}>
+                  <Text style={{ fontWeight: "bold" }}>Depot Name: </Text>
+                  {Customer.DepotName}
+                </Text>
+                <Text style={styles.productInfo}>
+                  <Text style={{ fontWeight: "bold" }}>Address: </Text>
+                  {Customer.Address}
+                </Text>
+              </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
@@ -124,6 +143,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
+  headerAndButton:{
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
   header: {
     fontSize: 20,
     fontWeight: "bold",

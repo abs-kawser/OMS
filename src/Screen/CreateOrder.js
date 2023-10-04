@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -17,7 +17,17 @@ import base64 from "base-64";
 import moment from "moment";
 import { Picker } from "@react-native-picker/picker";
 
+import { Dropdown } from "react-native-element-dropdown";
+import Icon from "react-native-vector-icons/FontAwesome5";
+
 export default function CreateOrder() {
+  const route = useRoute();
+  const customerId = route.params?.customerId;
+
+
+
+  //check
+
   const navigation = useNavigation();
 
   const [client, setClient] = useState("");
@@ -32,16 +42,18 @@ export default function CreateOrder() {
   const [outPut, setOutput] = useState([]);
 
   //===//
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [selectedClient, setSelectedClient] = useState("");
+  const [value, setValue] = useState(" ");
 
   //checking on log
   // console.log("client name ", client);
-  // console.log("orderDate name ", orderDate);
-  // console.log("deliveryDate name", deliveryDate);
-  // console.log("note", note);
-  // console.log("data", data);
-  console.log("selectedClient", selectedClient);
+  console.log("orderDate name ", orderDate);
+  console.log("deliveryDate name", deliveryDate);
+  console.log("note", note);
+  //console.log("data", data);
+  //console.log("selectedClient check", selectedClient);
+  console.log(value);
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
@@ -89,6 +101,16 @@ export default function CreateOrder() {
     }
   };
 
+  const onClientNameChange = (text) => {
+    const isValid = text.trim() !== "";
+    setClientNameValid(isValid);
+    setClient(text);
+  };
+
+  const onClientNameBlur = () => {
+    setClientNameTouched(true);
+  };
+
   // ===========================================
 
   //
@@ -103,7 +125,7 @@ export default function CreateOrder() {
   // ========= api calling =========
   const fetchCreatenewOrderData = async () => {
     const requestData = {
-      CustomerId: selectedClient,
+      CustomerId: value,
       OrderDate: orderDate,
       DeliveryDate: deliveryDate,
       EntryBy: userDetails?.EmpId,
@@ -128,16 +150,6 @@ export default function CreateOrder() {
     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
   };
 
-  const onClientNameChange = (text) => {
-    const isValid = text.trim() !== "";
-    setClientNameValid(isValid);
-    setClient(text);
-  };
-
-  const onClientNameBlur = () => {
-    setClientNameTouched(true);
-  };
-
   //customert api call
   const fetchCustomerData = async () => {
     try {
@@ -158,7 +170,9 @@ export default function CreateOrder() {
         JSON.stringify(jsonData, null, 2)
       );
       //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
+
       setData(jsonData);
+
       //setFilteredData(jsonData);
       //setIsLoggedIn(true);
       //return jsonData;
@@ -179,11 +193,37 @@ export default function CreateOrder() {
       <ScrollView>
         <View>
           <Text style={styles.label}>Client Name:</Text>
-          {/* {isClientNameTouched && !isClientNameValid && client === "" && (
-      <Text style={styles.errorMessage}>Client name is required ***</Text>
-    )} */}
+          <TouchableOpacity>
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={500}
+              labelField="Name" // Display as "Name"
+              valueField="CustomerId" // Store CustomerId
+              placeholder="Select item"
+              searchPlaceholder="Search..."
+              value={value}
+              // onChange={(item) => {
+              //   setValue(item.Name);
+              // }}
 
-          <View style={styles.input}>
+              onChange={(item) => {
+                setValue(item.CustomerId); // Store the CustomerId in the state
+              }}
+            />
+          </TouchableOpacity>
+
+          {/* 
+          {isClientNameTouched && !isClientNameValid && client === "" && (
+            <Text style={styles.errorMessage}>Client name is required ***</Text>
+          )} */}
+
+          {/* <View style={styles.input}>
             <Picker
               selectedValue={selectedClient}
               onValueChange={(itemValue, itemIndex) =>
@@ -199,7 +239,7 @@ export default function CreateOrder() {
                 />
               ))}
             </Picker>
-          </View>
+          </View> */}
         </View>
 
         {/* Display error message */}
@@ -328,5 +368,38 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 5, // Adjust the spacing from the input field
     //fontStyle: 'italic', // You can use italic for error messages
+  },
+
+  //========
+  dropdown: {
+    // margin: 16,
+    // height: 50,
+    // borderBottomColor: 'gray',
+    // borderBottomWidth: 0.5,
+
+    borderWidth: 1,
+    borderColor: "#0096c7",
+    borderRadius: 8,
+    height: 80,
+    backgroundColor: "#f1faee",
+    justifyContent: "center",
+    marginBottom: 16,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 25,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });
