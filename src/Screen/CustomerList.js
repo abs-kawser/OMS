@@ -24,6 +24,7 @@ export default function CustomerList() {
   const { userDetails } = isLoggedIn;
 
   const [data, setData] = useState([]);
+  //Loading 
   const [isLoading, setIsLoading] = useState(true);
 
   //filter part
@@ -90,13 +91,13 @@ export default function CustomerList() {
             style={styles.icon}
           />
         </View>
-        
-       <View style={styles.headerAndButton}>
-       <Text style={styles.header}>Customer  List </Text>
-         <TouchableOpacity>
+
+        <View style={styles.headerAndButton}>
+          <Text style={styles.header}>Customer List </Text>
+          <TouchableOpacity>
             <Button>Create Order</Button>
-         </TouchableOpacity>
-       </View>
+          </TouchableOpacity>
+        </View>
         <ScrollView>
           {filteredData.map((Customer, index) => (
             <TouchableOpacity>
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
-  headerAndButton:{
+  headerAndButton: {
     flexDirection: "row",
     justifyContent: "space-between",
   },

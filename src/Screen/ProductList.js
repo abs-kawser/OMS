@@ -14,6 +14,7 @@ export default function ProductList() {
   //filter part
   const [filteredData, setFilteredData] = useState(products);
   const [searchTerm, setSearchTerm] = useState("");
+  
   useEffect(() => {
     // Filter data based on the search term
     const filtered = products.filter((item) =>
@@ -22,8 +23,7 @@ export default function ProductList() {
     setFilteredData(filtered);
   }, [searchTerm]);
 
-  
-//fetch api from Api folder 
+  //fetch api from Api folder
   useEffect(() => {
     const getProductList = async () => {
       try {
@@ -179,36 +179,27 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-
-
-
-
-
-
-
 // ============Fetch Api manualy ==================\\
 // //fetch api
-  // const fetchProductData = async () => {
-  //   try {
-  //     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-  //     const response = await fetch(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
-  //       headers: {
-  //         Authorization: authHeader,
-  //       },
-  //     });
-  //     const jsonData = await response.json();
-  //     //console.log(JSON.stringify(jsonData, null, 2));
-  //     //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
-  //     setData(jsonData);
-  //     setFilteredData(jsonData);
-  //     setIsLoading(false);
-  //     //return jsonData;
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     setIsLoading(false);
-  //     // setIsLoading(false);
-  //     throw error;
-  //   }
-  // };
+// const fetchProductData = async () => {
+//   try {
+//     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+//     const response = await fetch(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
+//       headers: {
+//         Authorization: authHeader,
+//       },
+//     });
+//     const jsonData = await response.json();
+//     //console.log(JSON.stringify(jsonData, null, 2));
+//     //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
+//     setData(jsonData);
+//     setFilteredData(jsonData);
+//     setIsLoading(false);
+//     //return jsonData;
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     setIsLoading(false);
+//     // setIsLoading(false);
+//     throw error;
+//   }
+// };

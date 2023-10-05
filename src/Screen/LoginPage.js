@@ -33,8 +33,6 @@ const LoginPage = () => {
   //loading
   const [isLoading, setIsLoading] = useState(false);
 
-
-
   const handleLogin = async () => {
     try {
       setIsLoading(true); // Start loading
@@ -57,32 +55,30 @@ const LoginPage = () => {
 
       // console.log('this is login details', result.EmployeeId);
 
-    if (result.EmpId) {
-      // Save user authentication details in AsyncStorage
-      await AsyncStorage.setItem("userData", JSON.stringify(result));
+      if (result.EmpId) {
+        // Save user authentication details in AsyncStorage
+        await AsyncStorage.setItem("userData", JSON.stringify(result));
 
-      setIsLoggedIn((prevUserDetails) => ({
-        ...prevUserDetails,
-        login: true,
-        userDetails: result,
-      }));
+        setIsLoggedIn((prevUserDetails) => ({
+          ...prevUserDetails,
+          login: true,
+          userDetails: result,
+        }));
 
-      navigation.navigate("DrawerNavigator");
+        navigation.navigate("DrawerNavigator");
 
-      ToastAndroid.show(
-        result.EmpId && "Login Successfully",
-        ToastAndroid.SHORT
-      );
-    } else {
-      const errorMessage = result;
-      setError(errorMessage);
+        ToastAndroid.show(
+          result.EmpId && "Login Successfully",
+          ToastAndroid.SHORT
+        );
+      } else {
+        const errorMessage = result;
+        setError(errorMessage);
+      }
+    } catch (error) {
+      console.error("AsyncStorage Error:", error);
     }
-  } catch (error) {
-    console.error("AsyncStorage Error:", error);
-  }
   };
-
-
 
   const handleRegisterNow = () => {
     navigation.navigate("Register");
@@ -94,7 +90,6 @@ const LoginPage = () => {
 
       <View style={styles.container}>
         <SafeAreaView>
-          
           <View style={styles.imageContainer}>
             <Image
               source={{
@@ -122,7 +117,7 @@ const LoginPage = () => {
           {error && <Text style={styles.warning}>{error}</Text>}
 
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            {isLoading && <ActivityIndicator size="small" color="red" /> } 
+            {isLoading && <ActivityIndicator size="small" color="red" />}
             <Text style={styles.loginButtonTextX}>Loginn</Text>
           </TouchableOpacity>
 
@@ -182,7 +177,7 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: "center",
     justifyContent: "center",
-      width:  "40%",
+    width: "40%",
     backgroundColor: "#ffe66d",
     paddingVertical: 12,
     paddingHorizontal: 24,

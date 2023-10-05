@@ -43,7 +43,6 @@ export default function CreateOrder() {
 
   //===//
   const [data, setData] = useState([]);
-  const [selectedClient, setSelectedClient] = useState("");
   const [value, setValue] = useState(" ");
 
   //checking on log
@@ -169,7 +168,7 @@ export default function CreateOrder() {
         "this from create order page ",
         JSON.stringify(jsonData, null, 2)
       );
-      //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
+      // await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
 
       setData(jsonData);
 

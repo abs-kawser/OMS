@@ -7,13 +7,28 @@ import { Text } from "react-native-paper";
 
 
 const OrderStatus = () => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <View style={styles.container}>
       {/* Order Date Input */}
       <Text variant="titleMedium">Order Date</Text>
       <PaperTextInput
         mode="outlined"
-        label="YYYY-MM-DD"
+        label="DD-MM-YYYY"
         placeholder="Enter order date"
         style={styles.input}
       />
@@ -23,7 +38,7 @@ const OrderStatus = () => {
 
       <PaperTextInput
         mode="outlined"
-        label="YYYY-MM-DD"
+        label="DD-MM-YYYY"
         placeholder="Enter delivery date"
         style={styles.input}
       />

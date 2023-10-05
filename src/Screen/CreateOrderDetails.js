@@ -287,8 +287,9 @@ const CreateOrderDetails = ({ route }) => {
   const fetchOrderInfoData = async (userDetails) => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+
       const response = await fetch(
-        `${BASE_URL}/api/NewOrderApi/GetPoInfo?orderNo=${data?.OrderNo}&verId=1`,
+        `${BASE_URL}/api/NewOrderApi/GetPoInfo?  =${data?.OrderNo}&verId=1`,
         {
           headers: {
             Authorization: authHeader,
