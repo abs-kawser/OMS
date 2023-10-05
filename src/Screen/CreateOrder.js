@@ -309,7 +309,7 @@ export default function CreateOrder() {
       </ScrollView>
     </View>
   );
-}
+}   
 
 const styles = StyleSheet.create({
   container: {
