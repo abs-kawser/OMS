@@ -1,3 +1,5 @@
+// =======================
+
 import React, { useState, useMemo, useEffect } from "react";
 import {
   StyleSheet,
@@ -14,7 +16,6 @@ import { useLogin } from "../Context/LoginProvider";
 import { Button } from "@rneui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { fetchOrderInfoData } from "../Api/OrderInfo";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 
@@ -40,7 +41,7 @@ const CreateOrderDetails = ({ route }) => {
   // Add a state variable to keep track of selected products
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   //console.log("selectedProductIds:", selectedProductIds);
-  // Add a state variable to store the search term
+
   const [searchTerm, setSearchTerm] = useState("");
   const [orderQuantities, setOrderQuantities] = useState({});
   console.log(`Quantities`, orderQuantities);
@@ -257,39 +258,12 @@ const CreateOrderDetails = ({ route }) => {
     );
   }, [products, searchTerm]);
 
-  // =============================================================================
-  // const fetchOrderInfoData = async () => {
-  //   try {
-
-  //     const url = `${BASE_URL}/api/NewOrderApi/GetPoInfo?orderNo=${data?.OrderNo}&verId=1`;
-  //     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-  //     // Fetch data from the URL
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: {
-
-  //         Authorization: authHeader,
-  //       },
-  //     });
-  //     //console.log("order info", response);
-  //     console.log("Check data:", JSON.stringify(response, null, 2));
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (error) {
-  //     console.error("Fetch error:", error);
-  //     throw error;
-  //   }
-  // };
-
-  // fetchOrderInfoData api
-
-  // ${data?.OrderNo}
   const fetchOrderInfoData = async (userDetails) => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
 
       const response = await fetch(
-        `${BASE_URL}/api/NewOrderApi/GetPoInfo?  =${data?.OrderNo}&verId=1`,
+        `${BASE_URL}/api/NewOrderApi/GetPoInfo?orderNo=${data?.OrderNo}&verId=1`,
         {
           headers: {
             Authorization: authHeader,
@@ -756,70 +730,70 @@ const styles = StyleSheet.create({
   },
 });
 
-// const toggleProductCheckbox = (name) => {
-//   //old code
-//   const updatedCheckedProducts = [...checkedProducts];
-//   if (updatedCheckedProducts.includes(name)) {
-//     // Product is already checked, uncheck it
-//     updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
-//   } else {
-//     // Product is not checked, check it
-//     updatedCheckedProducts.push(name);
-//   }
-//   setCheckedProducts(updatedCheckedProducts);
-// };
+// // const toggleProductCheckbox = (name) => {
+// //   //old code
+// //   const updatedCheckedProducts = [...checkedProducts];
+// //   if (updatedCheckedProducts.includes(name)) {
+// //     // Product is already checked, uncheck it
+// //     updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
+// //   } else {
+// //     // Product is not checked, check it
+// //     updatedCheckedProducts.push(name);
+// //   }
+// //   setCheckedProducts(updatedCheckedProducts);
+// // };
 
-// =======================================
-// {showOrderData && (
+// // =======================================
+// // {showOrderData && (
 
-//   <View style={styles.dataContainer}>
-//     {selectedProductIds.map((productId) => {
-//       const selectedProduct = products.find(
-//         (product) => product.ProductId === productId
-//       );
-//       return (
-//         <View style={styles.row} key={selectedProduct.ProductId}>
-//           <View style={styles.infoContainer}>
-//             <Text style={styles.name}>{selectedProduct.Name}</Text>
-//           </View>
-//         </View>
-//       );
-//     })}
-//   </View>
-// )
+// //   <View style={styles.dataContainer}>
+// //     {selectedProductIds.map((productId) => {
+// //       const selectedProduct = products.find(
+// //         (product) => product.ProductId === productId
+// //       );
+// //       return (
+// //         <View style={styles.row} key={selectedProduct.ProductId}>
+// //           <View style={styles.infoContainer}>
+// //             <Text style={styles.name}>{selectedProduct.Name}</Text>
+// //           </View>
+// //         </View>
+// //       );
+// //     })}
+// //   </View>
+// // )
 
-// }
+// // }
 
-// ========checkbos when use
+// // ========checkbos when use
 
-/* {showOrderData && (
-            <View style={styles.dataContainer}>
-              <View style={styles.tableHeader}>
-                <Text style={styles.headerText}>Namee</Text>
-                <Text style={styles.headerText}>Quantityy</Text>
-                <Text style={styles.headerText}>Amountt</Text>
-                <Text style={styles.headerText}>Actionn</Text>
-              </View>
-              {selectedProductIds.map((productId) => {
-                const selectedProduct = products.find(
-                  (product) => product.ProductId === productId
-                ); 
+// /* {showOrderData && (
+//             <View style={styles.dataContainer}>
+//               <View style={styles.tableHeader}>
+//                 <Text style={styles.headerText}>Namee</Text>
+//                 <Text style={styles.headerText}>Quantityy</Text>
+//                 <Text style={styles.headerText}>Amountt</Text>
+//                 <Text style={styles.headerText}>Actionn</Text>
+//               </View>
+//               {selectedProductIds.map((productId) => {
+//                 const selectedProduct = products.find(
+//                   (product) => product.ProductId === productId
+//                 );
 
-                console.log("productId:", productId);
-                console.log("selectedProduct:", selectedProduct);
+//                 console.log("productId:", productId);
+//                 console.log("selectedProduct:", selectedProduct);
 
-                const quantity = orderQuantities[productId] || 0;
-                const amount = selectedProduct.MRP * quantity;
-                return (
-                  <View style={styles.tableRow} key={selectedProduct.ProductId}>
-                    <Text style={styles.cellText}>{selectedProduct.Name}</Text>
-                    <Text style={styles.cellText}>{quantity}</Text>
-                    <Text style={styles.cellText}>{amount}</Text>
-                    <TouchableOpacity style={styles.actionButton}>
-                      <Text style={styles.actionText}>Deletee</Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
-            </View>
-          )} */
+//                 const quantity = orderQuantities[productId] || 0;
+//                 const amount = selectedProduct.MRP * quantity;
+//                 return (
+//                   <View style={styles.tableRow} key={selectedProduct.ProductId}>
+//                     <Text style={styles.cellText}>{selectedProduct.Name}</Text>
+//                     <Text style={styles.cellText}>{quantity}</Text>
+//                     <Text style={styles.cellText}>{amount}</Text>
+//                     <TouchableOpacity style={styles.actionButton}>
+//                       <Text style={styles.actionText}>Deletee</Text>
+//                     </TouchableOpacity>
+//                   </View>
+//                 );
+//               })}
+//             </View>
+//           )} */

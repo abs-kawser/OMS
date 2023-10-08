@@ -19,12 +19,11 @@ import { Picker } from "@react-native-picker/picker";
 
 import { Dropdown } from "react-native-element-dropdown";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function CreateOrder() {
   const route = useRoute();
   const customerId = route.params?.customerId;
-
-
 
   //check
 
@@ -35,7 +34,6 @@ export default function CreateOrder() {
   const [deliveryDate, setDeliveryDate] = useState(new Date());
   const [note, setNote] = useState("");
   const [isClientNameValid, setClientNameValid] = useState(false); // Track client name validity
-
   const [isClientNameTouched, setClientNameTouched] = useState(false);
   const [error, setError] = useState("");
 
@@ -52,7 +50,7 @@ export default function CreateOrder() {
   console.log("note", note);
   //console.log("data", data);
   //console.log("selectedClient check", selectedClient);
-  console.log(value);
+  console.log("Value",value);
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
@@ -75,7 +73,6 @@ export default function CreateOrder() {
       if (selectedDate > deliveryDate) {
         setError("Delivery date cannot be earlier than order date");
       } else {
-        // Throw an error if the delivery date is earlier than the order date
         setError("");
       }
     }
@@ -99,6 +96,7 @@ export default function CreateOrder() {
       }
     }
   };
+  // ===============================
 
   const onClientNameChange = (text) => {
     const isValid = text.trim() !== "";
@@ -168,13 +166,11 @@ export default function CreateOrder() {
         "this from create order page ",
         JSON.stringify(jsonData, null, 2)
       );
-      // await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
+
+      await AsyncStorage.setItem("customerData", JSON.stringify(jsonData));
 
       setData(jsonData);
-
-      //setFilteredData(jsonData);
-      //setIsLoggedIn(true);
-      //return jsonData;
+      return jsonData;
     } catch (error) {
       console.error("Error fetching data:", error);
       setIsLoading(false);
@@ -184,15 +180,39 @@ export default function CreateOrder() {
   };
 
   useEffect(() => {
-    fetchCustomerData();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const storedData = await AsyncStorage.getItem('customerData');
+        if (storedData) {
+          setData(JSON.parse(storedData));
+          // setLoading(false);
+        } else {
+          // Data not in AsyncStorage, fetch from API
+          try {
+            const jsonData = await fetchCustomerData();
+            setData(jsonData); // Update state with fetched data
+            // setLoading(false);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        }
+      } catch (error) {
+        console.error('Error reading stored data:', error);
+      }
+
+    
+    };
+
+    fetchData()
+    //fetchCustomerData();
+  }, [userDetails]);
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <View>
           <Text style={styles.label}>Client Name:</Text>
-          <TouchableOpacity>
+          <TouchableOpacity >
             <Dropdown
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
@@ -217,7 +237,7 @@ export default function CreateOrder() {
             />
           </TouchableOpacity>
 
-          {/* 
+{/*           
           {isClientNameTouched && !isClientNameValid && client === "" && (
             <Text style={styles.errorMessage}>Client name is required ***</Text>
           )} */}
@@ -309,7 +329,7 @@ export default function CreateOrder() {
       </ScrollView>
     </View>
   );
-}   
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -369,36 +389,37 @@ const styles = StyleSheet.create({
     //fontStyle: 'italic', // You can use italic for error messages
   },
 
-  //========
-  dropdown: {
-    // margin: 16,
-    // height: 50,
-    // borderBottomColor: 'gray',
-    // borderBottomWidth: 0.5,
+ 
 
+  dropdown: {
     borderWidth: 1,
     borderColor: "#0096c7",
     borderRadius: 8,
-    height: 80,
-    backgroundColor: "#f1faee",
-    justifyContent: "center",
-    marginBottom: 16,
-  },
-  icon: {
-    marginRight: 5,
+    height: 70, // Reduced the height for a cleaner look
+    // backgroundColor: "#fff", // Changed the background color to white
+    paddingHorizontal: 10, // Added padding for text inside the dropdown
   },
   placeholderStyle: {
     fontSize: 16,
+    color: "#999", // Added a subtle color for the placeholder
   },
   selectedTextStyle: {
     fontSize: 16,
+    color: "#333", // Changed the selected text color
   },
   iconStyle: {
     width: 20,
-    height: 25,
+    height: 20, // Reduced the height of the arrow icon
+    marginRight: 5,
   },
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+    backgroundColor: "#f1faee", // Added a background color for the search bar
+    borderRadius: 4, // Rounded corners for the search bar
+    paddingLeft: 10, // Added padding for the search input
   },
+
+
+
 });

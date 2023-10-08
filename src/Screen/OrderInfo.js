@@ -1,20 +1,19 @@
-
-
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React from "react";
 
 const OrderInfo = ({ route }) => {
   const data = route.params?.data;
+  console.log( "order info data ",data);
   return (
     <View>
       <ScrollView>
         <View style={styles.pageInfoOne}>
-          <Text style={styles.text}>{data.OrderBaicInfo.OrderNo}</Text>
-          <Text style={styles.text}>{data.OrderBaicInfo.OrderDate} </Text>
-          <Text style={styles.text}>{data.OrderBaicInfo.DeliveryDate} </Text>
+          <Text style={styles.text}>{data?.OrderBaicInfo?.OrderNo}</Text>
+          <Text style={styles.text}>{data?.OrderBaicInfo?.OrderDate} </Text>
+          <Text style={styles.text}>{data?.OrderBaicInfo?.DeliveryDate} </Text>
           <View style={styles.divider}></View>
-          <Text style={styles.text}>{data.OrderBaicInfo.CustomerName}</Text>
-          <Text style={styles.text}>{data.OrderBaicInfo.CustomerAddress}</Text>
+          <Text style={styles.text}>{data?.OrderBaicInfo?.CustomerName}</Text>
+          <Text style={styles.text}>{data?.OrderBaicInfo?.CustomerAddress}</Text>
         </View>
       </ScrollView>
     </View>
@@ -26,12 +25,11 @@ export default OrderInfo;
 const styles = StyleSheet.create({
   pageInfoOne: {
     marginTop: 30,
-    backgroundColor:"#c9cdd0",
-    width:"80%",
-    alignSelf:"center",
-    borderRadius:5,
+    backgroundColor: "#c9cdd0",
+    width: "80%",
+    alignSelf: "center",
+    borderRadius: 5,
     elevation: 4,
-
   },
   text: {
     color: "#000000",
@@ -49,6 +47,6 @@ const styles = StyleSheet.create({
     width: "60%",
     backgroundColor: "gray", // Set the color of the line to gray.
     // marginLeft: "20%",
-    alignSelf:"center"
+    alignSelf: "center",
   },
 });
