@@ -6,6 +6,7 @@ import DrawerNavigator from "../DrawerNavigation/DrawerNavigator";
 import { NavigationContainer } from "@react-navigation/native";
 import CreateOrderDetails from "../../Screen/CreateOrderDetails";
 import OrderInfo from "../../Screen/OrderInfo";
+import OrderStatusInfo from "../../Screen/OrderStatusInfo";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +22,7 @@ const StackNavigator = () => {
       {/* take screen  */}
 
       <Stack.Screen
-        name="Create Order "
+        name="Order Details"
         component={CreateOrderDetails}
         options={{
           headerShown: true,
@@ -46,6 +47,21 @@ const StackNavigator = () => {
           headerTitleAlign: "center",
         }}
       />
+      {/* screen for order Status */}
+
+      <Stack.Screen
+        name="Order Status Info"
+        component={OrderStatusInfo}
+        options={{
+          headerShown: true,
+          headerBackVisible: true,
+          title: "Order Status",
+          headerStyle: { backgroundColor: "#8338ec" },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+        }}
+      />
+
     </Stack.Navigator>
   );
 };

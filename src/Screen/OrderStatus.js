@@ -1,40 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   // Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Modal
+  Modal,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
+import base64 from "base-64";
+
 //import { Button } from "react-native-elements";
 
 import { TextInput as PaperTextInput, Button } from "react-native-paper";
 import { Text } from "react-native-paper";
+import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
+import { useLogin } from "../Context/LoginProvider";
+import { useNavigation } from "@react-navigation/native";
 
 const OrderStatus = () => {
+  const navigation = useNavigation();
+
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
   const [error, setError] = useState("");
   const [orderDate, setOrderDate] = useState(null);
   const [deliveryDate, setDeliveryDate] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState([]);
 
+  const [customerId, setCustomerId] = useState();
 
+  // context
 
+  const { isLoggedIn, setIsLoggedIn } = useLogin();
+  const { userDetails } = isLoggedIn;
 
   //const [orderDate, setOrderDate] = useState(new Date());
   //const [deliveryDate, setDeliveryDate] = useState(new Date());
 
- 
-
-
   const showOrderDatepicker = () => {
     setShowOrderDatePicker(true);
   };
-
-
 
   const showDatepicker = (type) => {
     if (type === "order") {
@@ -48,6 +56,11 @@ const OrderStatus = () => {
   const handleOrderDate = (event, selectedDate) => {
     setShowOrderDatePicker(false);
     if (selectedDate) {
+      const dateTime = moment(selectedDate);
+      const gmtTime = dateTime.utc().add(1, "days");
+
+      console.log(gmtTime.toLocaleString());
+
       setOrderDate(selectedDate);
       // Attempt to set the delivery date
       if (selectedDate > deliveryDate) {
@@ -61,6 +74,10 @@ const OrderStatus = () => {
   const handleDateDelivery = (event, selectedDate) => {
     setShowDeliveryDatePicker(false);
     if (selectedDate) {
+      const dateTime = moment(selectedDate);
+      const gmtTime = dateTime.utc().add(1, "days");
+
+      console.log(gmtTime.toLocaleString());
       setDeliveryDate(selectedDate);
       // Attempt to set the delivery date
       if (selectedDate < orderDate) {
@@ -73,66 +90,106 @@ const OrderStatus = () => {
   };
   // ===============================
 
-  // Api caaling 
-      
+  // Api caaling
+
   const fetchOrderStatus = async () => {
     try {
+      // const emp = "U21080273";
+      // const customer = "300255";
+
+      console.log({
+        orderDate,
+        deliveryDate,
+        baseUrl: `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${
+          userDetails.EmpCode
+        }&OrderDate=${orderDate
+          .toISOString()
+          .substring(0, 10)}&DeliveryDate=${deliveryDate
+          .toISOString()
+          .substring(0, 10)}&CustomerId=${customerId}`,
+        PASSWORD,
+        USERNAME,
+      });
+
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
       const response = await fetch(
-        `${BASE_URL}`,
+        // `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${emp}&OrderDate=${orderDate.toISOString().substring(0, 10)}&DeliveryDate=${deliveryDate.toISOString().substring(0, 10)}&CustomerId=${customer}`,
+        `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${
+          userDetails.EmpCode
+        }&OrderDate=${orderDate
+          .toLocaleString()
+          .substring(0, 10)}&DeliveryDate=${deliveryDate
+          .toLocaleString()
+          .substring(0, 10)}&CustomerId=${customerId}`,
         {
           headers: {
             Authorization: authHeader,
           },
         }
       );
+      console.log(response);
       const jsonData = await response.json();
       console.log(JSON.stringify(jsonData, null, 2));
+      navigation.navigate("Order Status Info", { OrderStatus: jsonData });
+
       //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
-      setData(jsonData);
-      setFilteredData(jsonData);
-      setIsLoading(false);
+      // setData(jsonData);
+      // setFilteredData(jsonData);
+      // setIsLoading(false);
       //return jsonData;
     } catch (error) {
       console.error("Error fetching data:", error);
-      setIsLoading(false);
+      // setIsLoading(false);
       // setIsLoading(false);
       throw error;
     }
   };
 
+  // useEffect(() => {
+  //   // declare the data fetching function
+  //   const fetchData = async () => {
+  //     const data = await fetchOrderStatus();
+  //   }
 
-
+  //   // call the function
+  //   fetchData()
+  //     // make sure to catch any error
+  //     // .catch(console.error);
+  // }, [])
 
   return (
     <View style={styles.container}>
       {/* ================================================================= */}
 
       <View>
-      <TouchableOpacity style={styles.button} onPress={() => showOrderDatepicker()}>
-        <Text>
-          {orderDate ? moment(orderDate).format("DD-MM-YYYY") : 'DD-MM-YYYY'}
-        </Text>
-      </TouchableOpacity>
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={showOrderDatePicker}
-        onRequestClose={() => setShowOrderDatePicker(false)}
-      >
-        <View>
-          <DateTimePicker
-            value={orderDate || new Date()}
-            mode="date"
-            display="default"
-            style={{ height: 50 }} 
-            onChange={(event, selectedDate) => handleOrderDate(event, selectedDate)}
-          />
-        
-        </View>
-      </Modal>
-    </View>
- 
+        <Text style={styles.label}>Order Date</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => showOrderDatepicker()}
+        >
+          <Text>
+            {orderDate ? moment(orderDate).format("DD-MM-YYYY") : "DD-MM-YYYY"}
+          </Text>
+        </TouchableOpacity>
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={showOrderDatePicker}
+          onRequestClose={() => setShowOrderDatePicker(false)}
+        >
+          <View>
+            <DateTimePicker
+              value={orderDate || new Date()}
+              mode="date"
+              display="default"
+              style={{ height: 50 }}
+              onChange={(event, selectedDate) =>
+                handleOrderDate(event, selectedDate)
+              }
+            />
+          </View>
+        </Modal>
+      </View>
 
       {/* <Text style={styles.label}>Order Date</Text>
       <TouchableOpacity
@@ -157,7 +214,6 @@ const OrderStatus = () => {
       )}
     </TouchableOpacity> */}
 
-
       {/* <TouchableOpacity
         style={styles.button}
         onPress={() => showDatepicker("order")}
@@ -176,7 +232,7 @@ const OrderStatus = () => {
         <Text>{moment(orderDate).format("DD-MM-YYYY")}</Text>
       </TouchableOpacity> */}
 
- {/* delivery date */}
+      {/* delivery date */}
       <View style={{ marginTop: 20 }}>
         <Text style={styles.label}> Delivery Date</Text>
 
@@ -233,9 +289,15 @@ const OrderStatus = () => {
           mode="outlined"
           label="Customer ID"
           placeholder="Enter customer ID"
+          onChangeText={(text) => setCustomerId(text)}
+          value={customerId}
         />
         {/* Search Button */}
-        <Button mode="contained" style={styles.searchButton}>
+        <Button
+          mode="contained"
+          style={styles.searchButton}
+          onPress={fetchOrderStatus}
+        >
           Search
         </Button>
       </View>

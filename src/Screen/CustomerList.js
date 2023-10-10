@@ -12,7 +12,10 @@ import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import { useLogin } from "../Context/LoginProvider";
 import { useNavigation } from "@react-navigation/native";
-import { Button } from "react-native-paper";
+// import { Button } from "react-native-paper";
+
+import { Button } from '@rneui/themed';
+// import { Button } from "react-native-elements";
 
 export default function CustomerList() {
   const navigation = useNavigation();
@@ -75,6 +78,15 @@ export default function CustomerList() {
   // Filter the data based on the search term
   //implement search logic
 
+
+
+
+  const CreateOrder=()=>{
+
+      navigation.navigate('Create Order',);
+
+  }
+
   return (
     <>
       {/* implement search  part*/}
@@ -95,7 +107,23 @@ export default function CustomerList() {
         <View style={styles.headerAndButton}>
           <Text style={styles.header}>Customer List </Text>
           <TouchableOpacity>
-            <Button>Create Order</Button>
+
+          <Button
+              title="Create  Order"
+              buttonStyle={{ backgroundColor: 'rgba(127, 220, 103, 1)' }}
+              containerStyle={{
+                height: 40,
+                width: 180,
+                marginHorizontal: 50,
+                marginVertical: 10,
+              }}
+              titleStyle={{
+                color: 'white',
+                marginHorizontal: 20,
+              }}
+              onPress={CreateOrder}
+            />
+            {/* <Button onPress={CreateOrder}>Create  Order</Button> */}
           </TouchableOpacity>
         </View>
         <ScrollView>
@@ -152,7 +180,8 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 16,
+    marginTop:15
+    // marginBottom: 16,
   },
   productCard: {
     backgroundColor: "#fff",

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View,ScrollView } from "react-native";
 import React from "react";
 import { Button } from "react-native-paper";
 import { lightBlue100 } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
@@ -16,6 +16,7 @@ export default function Home() {
 
     <View>
       {/* <Header/> */}
+      <ScrollView> 
       <View style={styles.container}>
         <Text style={styles.Details}>User Details Details</Text>
         <Text style={styles.text}> FullName:{userDetails.FullName}</Text>
@@ -30,8 +31,9 @@ export default function Home() {
         </Text>
       </View>
 
-      {/* <FanseCards />
-      <ElevatedCards /> */}
+      {/* <FanseCards /> */}
+      {/* <ElevatedCards /> */}
+      </ScrollView>
     </View>
  
     // <View> 

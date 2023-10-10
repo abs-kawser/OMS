@@ -50,7 +50,7 @@ export default function CreateOrder() {
   console.log("note", note);
   //console.log("data", data);
   //console.log("selectedClient check", selectedClient);
-  console.log("Value",value);
+  console.log("Value", value);
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
@@ -142,7 +142,7 @@ export default function CreateOrder() {
     // .then(response => response.json())
     const result = await response.json();
     setOutput(result);
-    navigation.navigate("Create Order ", { data: result });
+    navigation.navigate("Order Details", { data: result });
     console.log("this is result", JSON.stringify(result, null, 2));
     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
   };
@@ -182,7 +182,7 @@ export default function CreateOrder() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const storedData = await AsyncStorage.getItem('customerData');
+        const storedData = await AsyncStorage.getItem("customerData");
         if (storedData) {
           setData(JSON.parse(storedData));
           // setLoading(false);
@@ -193,17 +193,15 @@ export default function CreateOrder() {
             setData(jsonData); // Update state with fetched data
             // setLoading(false);
           } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error("Error fetching data:", error);
           }
         }
       } catch (error) {
-        console.error('Error reading stored data:', error);
+        console.error("Error reading stored data:", error);
       }
-
-    
     };
 
-    fetchData()
+    fetchData();
     //fetchCustomerData();
   }, [userDetails]);
 
@@ -212,8 +210,8 @@ export default function CreateOrder() {
       <ScrollView>
         <View>
           <Text style={styles.label}>Client Name:</Text>
-          <TouchableOpacity >
-            <Dropdown
+          <TouchableOpacity>
+            {/* <Dropdown
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
@@ -222,7 +220,10 @@ export default function CreateOrder() {
               data={data}
               search
               maxHeight={500}
-              labelField="Name" // Display as "Name"
+              labelField="Name" 
+              //labelField={(item) => `${item.Name}`} 
+      
+              // Display as "Name"
               valueField="CustomerId" // Store CustomerId
               placeholder="Select item"
               searchPlaceholder="Search..."
@@ -234,10 +235,82 @@ export default function CreateOrder() {
               onChange={(item) => {
                 setValue(item.CustomerId); // Store the CustomerId in the state
               }}
+            /> */}
+
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={500}
+              labelField="Name"
+              valueField="CustomerId"
+              placeholder="Select item"
+              searchPlaceholder="Search..."
+              value={value}
+              onChange={(item) => {
+                setValue(item.CustomerId);
+              }}
+              renderItem={(item, index, isSelected) => (
+                // <View style={{ marginBottom: 50 }}>
+                //   <Text
+                //     style={{
+                //       fontSize: 16,
+                //       fontWeight: isSelected ? "bold" : "normal",
+                //     }}
+                //   >
+                //     {item.Name} - {item.CustomerId} - {item.Address}
+                //   </Text>
+                // </View>
+
+                // <View style={{ marginBottom: 30 }}>
+                //   <Text
+                //     style={{
+                //       fontSize: 16,
+                //       fontWeight: isSelected ? "bold" : "normal",
+                //     }}
+                //   >
+                //     Name: {item.Name}
+                //   </Text>
+                //   <Text
+                //     style={{
+                //       fontSize: 16,
+                //       fontWeight: isSelected ? "bold" : "normal",
+                //     }}
+                //   >
+                //     CustomerId: {item.CustomerId}
+                //   </Text>
+                //   <Text
+                //     style={{
+                //       fontSize: 16,
+                //       fontWeight: isSelected ? "bold" : "normal",
+                //     }}
+                //   >
+                //     Address: {item.Address}
+                //   </Text>
+                // </View>
+
+                <View style={styles.dropdownItem}>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    Name: <Text style={styles.nameText}>{item.Name}</Text>
+                  </Text>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    CustomerId:{" "}
+                    <Text style={styles.customerIdText}>{item.CustomerId}</Text>
+                  </Text>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    Address:{" "}
+                    <Text style={styles.addressText}>{item.Address}</Text>
+                  </Text>
+                </View>
+              )}
             />
           </TouchableOpacity>
 
-{/*           
+          {/*           
           {isClientNameTouched && !isClientNameValid && client === "" && (
             <Text style={styles.errorMessage}>Client name is required ***</Text>
           )} */}
@@ -389,8 +462,6 @@ const styles = StyleSheet.create({
     //fontStyle: 'italic', // You can use italic for error messages
   },
 
- 
-
   dropdown: {
     borderWidth: 1,
     borderColor: "#0096c7",
@@ -420,6 +491,27 @@ const styles = StyleSheet.create({
     paddingLeft: 10, // Added padding for the search input
   },
 
-
-
+  // =====
+  dropdownItem: {
+    marginLeft: 20,
+    paddingHorizontal: 5,
+    marginBottom: 30,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: "normal",
+  },
+  boldText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  nameText: {
+    color: "#00b4d8",
+  },
+  customerIdText: {
+    color: "green",
+  },
+  addressText: {
+    color: "#ff1654",
+  },
 });
