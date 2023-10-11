@@ -23,11 +23,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function CreateOrder() {
   const route = useRoute();
-  const customerId = route.params?.customerId;
+  const navigation = useNavigation();
+  const customerInfoList = route.params?.customerInfoList;
+
+  console.log("customer Info xyz", customerInfoList);
+  //const customerId = route.params?.customerId;
 
   //check
-
-  const navigation = useNavigation();
 
   const [client, setClient] = useState("");
   const [orderDate, setOrderDate] = useState(new Date());
@@ -41,16 +43,31 @@ export default function CreateOrder() {
 
   //===//
   const [data, setData] = useState([]);
-  const [value, setValue] = useState(" ");
+  const [value, setValue] = useState(customerInfoList?.CustomerId);
+
+  //const [selectedValue,setSelectedValue]=useState(customerInfoList?.CustomerId)
+
+     //console.log("selectedValue",selectedValue);
+  
+  // const [value, setValue] = useState(
+  //   route.params?.customerInfoList?.CustomerId
+  // );
+
+  // ===
+  // const [selectedCustomer, setSelectedCustomer] = useState( customerInfo ? customerInfo.CustomerId : null);
+
+  // ====
 
   //checking on log
   // console.log("client name ", client);
-  console.log("orderDate name ", orderDate);
-  console.log("deliveryDate name", deliveryDate);
-  console.log("note", note);
+  // console.log("orderDate name ", orderDate);
+  // console.log("deliveryDate name", deliveryDate);
+  // console.log("note", note);
+  console.log("value",value);
+
   //console.log("data", data);
   //console.log("selectedClient check", selectedClient);
-  console.log("Value", value);
+
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
@@ -237,6 +254,25 @@ export default function CreateOrder() {
               }}
             /> */}
 
+            {/* <View style={styles.input}>
+              <Picker
+                selectedValue={selectedValue}
+                onValueChange={(item) => {
+                  setSelectedValue(item);
+  
+                }}
+              >
+                <Picker.Item label="Select name" value="select name" />
+                {data?.map((items, index) => (
+                  <Picker.Item
+                    label={items.Name}
+                    value={items.CustomerId}
+                    key={index}
+                  />
+                ))}
+              </Picker>
+            </View> */}
+
             <Dropdown
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
@@ -253,46 +289,10 @@ export default function CreateOrder() {
               value={value}
               onChange={(item) => {
                 setValue(item.CustomerId);
+
               }}
+
               renderItem={(item, index, isSelected) => (
-                // <View style={{ marginBottom: 50 }}>
-                //   <Text
-                //     style={{
-                //       fontSize: 16,
-                //       fontWeight: isSelected ? "bold" : "normal",
-                //     }}
-                //   >
-                //     {item.Name} - {item.CustomerId} - {item.Address}
-                //   </Text>
-                // </View>
-
-                // <View style={{ marginBottom: 30 }}>
-                //   <Text
-                //     style={{
-                //       fontSize: 16,
-                //       fontWeight: isSelected ? "bold" : "normal",
-                //     }}
-                //   >
-                //     Name: {item.Name}
-                //   </Text>
-                //   <Text
-                //     style={{
-                //       fontSize: 16,
-                //       fontWeight: isSelected ? "bold" : "normal",
-                //     }}
-                //   >
-                //     CustomerId: {item.CustomerId}
-                //   </Text>
-                //   <Text
-                //     style={{
-                //       fontSize: 16,
-                //       fontWeight: isSelected ? "bold" : "normal",
-                //     }}
-                //   >
-                //     Address: {item.Address}
-                //   </Text>
-                // </View>
-
                 <View style={styles.dropdownItem}>
                   <Text style={[styles.text, isSelected && styles.boldText]}>
                     Name: <Text style={styles.nameText}>{item.Name}</Text>
@@ -512,6 +512,6 @@ const styles = StyleSheet.create({
     color: "green",
   },
   addressText: {
-    color: "#ff1654",
+    color: "#22223b",
   },
 });

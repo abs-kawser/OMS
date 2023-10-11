@@ -14,20 +14,18 @@ import { useLogin } from "../Context/LoginProvider";
 import { useNavigation } from "@react-navigation/native";
 // import { Button } from "react-native-paper";
 
-import { Button } from '@rneui/themed';
+import { Button } from "@rneui/themed";
 // import { Button } from "react-native-elements";
 
 export default function CustomerList() {
   const navigation = useNavigation();
 
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
-  //"#80ffdb", "#e0c3fc", "#90e0ef"
-
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
 
   const [data, setData] = useState([]);
-  //Loading 
+  //Loading
   const [isLoading, setIsLoading] = useState(true);
 
   //filter part
@@ -78,14 +76,10 @@ export default function CustomerList() {
   // Filter the data based on the search term
   //implement search logic
 
-
-
-
-  const CreateOrder=()=>{
-
-      navigation.navigate('Create Order',);
-
-  }
+  const CreateOrder = (customerInfoList) => {
+    // setSelectedCustomer(customerInfo);
+    navigation.navigate("Create Order", { customerInfoList: customerInfoList });
+  };
 
   return (
     <>
@@ -107,30 +101,13 @@ export default function CustomerList() {
         <View style={styles.headerAndButton}>
           <Text style={styles.header}>Customer List </Text>
           <TouchableOpacity>
-
-          <Button
-              title="Create  Order"
-              buttonStyle={{ backgroundColor: 'rgba(127, 220, 103, 1)' }}
-              containerStyle={{
-                height: 40,
-                width: 180,
-                marginHorizontal: 50,
-                marginVertical: 10,
-              }}
-              titleStyle={{
-                color: 'white',
-                marginHorizontal: 20,
-              }}
-              onPress={CreateOrder}
-            />
             {/* <Button onPress={CreateOrder}>Create  Order</Button> */}
           </TouchableOpacity>
         </View>
         <ScrollView>
           {filteredData.map((Customer, index) => (
-            <TouchableOpacity>
+            <TouchableOpacity key={index}>
               <View
-                key={index}
                 style={[
                   styles.productCard,
                   {
@@ -153,6 +130,22 @@ export default function CustomerList() {
                   <Text style={{ fontWeight: "bold" }}>Address: </Text>
                   {Customer.Address}
                 </Text>
+
+                <Button
+                  title="Create  Order"
+                  buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
+                  containerStyle={{
+                    height: 40,
+                    width: 180,
+                    marginHorizontal: 50,
+                    marginVertical: 10,
+                  }}
+                  titleStyle={{
+                    color: "white",
+                    marginHorizontal: 20,
+                  }}
+                  onPress={() => CreateOrder(Customer)}
+                />
               </View>
             </TouchableOpacity>
           ))}
@@ -180,7 +173,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: "bold",
-    marginTop:15
+    marginTop: 15,
     // marginBottom: 16,
   },
   productCard: {
