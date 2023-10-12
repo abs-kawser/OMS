@@ -14,7 +14,7 @@ export default function ProductList() {
   //filter part
   const [filteredData, setFilteredData] = useState(products);
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   useEffect(() => {
     // Filter data based on the search term
     const filtered = products.filter((item) =>
@@ -61,7 +61,7 @@ export default function ProductList() {
       </View>
 
       <ScrollView>
-        <Text style={styles.header}>Product List</Text>
+        <Text style={styles.header}>Product  List</Text>
         {filteredData.map((product, index) => (
           <View
             key={index}
@@ -72,18 +72,33 @@ export default function ProductList() {
               },
             ]}
           >
-            <Text style={styles.productName}>Name:{product.Name}</Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.productName}>{product.Name}</Text>
+              <Text style={styles.productInfo}>
+                ( {product.ProductCode})
+              </Text>
+            </View>
+
+            {/* <Text style={styles.productName}>Name:{product.Name}</Text>
             <Text style={styles.productInfo}>
               ProductCode:{product.ProductCode}
+            </Text> */}
+
+            <Text style={styles.Category}>
+               Category: {product.ProductCategory}
             </Text>
 
-            <Text style={styles.productInfo}>
-              Product Category: {product.ProductCategory}
-            </Text>
-            <Text style={styles.productInfo}>Price: ${product.MRP}</Text>
+            <View style={styles.textContainer}> 
+            <Text style={styles.productInfo}>Trade Price : Tk {product.MRP}</Text>
             <Text style={styles.tradeLicense}>
-              Trade License: {product.ProductFamilyName}
+            Pack Size: {product.PackSize}
             </Text>
+            </View>
+            {/* <Text style={styles.tradeLicense}>
+              Trade License: {product.ProductFamilyName}
+            </Text> */}
+
+            
           </View>
         ))}
       </ScrollView>
@@ -108,6 +123,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 16,
+    marginLeft:25
   },
   productCard: {
     marginLeft: 22,
@@ -116,23 +132,25 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 16,
     marginBottom: 16,
-    elevation: 2,
+    elevation: 5,
     shadowColor: "rgba(0, 0, 0, 0.2)",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 2,
-    borderRadius: 5,
+    borderRadius: 8,
   },
   productName: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    color: "black"
+    // fontWeight: "bold",
   },
   productInfo: {
-    marginTop: 8,
+    color: "black"
+    // marginTop: 8,
   },
   tradeLicense: {
-    marginTop: 8,
-    color: "green", // You can customize the color as needed
+     
+    color: "black", // You can customize the color as needed
   },
 
   containerx: {
@@ -177,6 +195,17 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 10,
   },
+  textContainer: {
+    flexDirection: 'row',
+    gap:10 ,
+   
+     
+  },
+  Category:{
+    color:"black",
+    marginTop:8,
+    marginBottom:8
+  }
 });
 
 // ============Fetch Api manualy ==================\\

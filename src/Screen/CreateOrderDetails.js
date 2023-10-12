@@ -24,7 +24,9 @@ import LottieView from "lottie-react-native"; // Import LottieView
 const CreateOrderDetails = ({ route }) => {
   const data = route.params?.data;
 
-  console.log("this create order data ", data.OrderNo);
+  const customerInfo = route.params?.dropDown;
+
+  console.log("this customerInfo data ", customerInfo.Name);
 
   const navigation = useNavigation();
 
@@ -306,8 +308,8 @@ const CreateOrderDetails = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.userInformation}>
-        <Text style={styles.userText1}> Name:{userDetails.FullName}</Text>
-        <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text>
+        <Text style={styles.userText1}>{customerInfo?.Name}</Text>
+        {/* <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text> */}
       </View>
 
       {/* implement search  part*/}

@@ -32,6 +32,8 @@ export default function CustomerList() {
   const [filteredData, setFilteredData] = useState(data);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Initialize with null
+
   useEffect(() => {
     // Filter data based on the search term
     const filtered = data.filter((item) =>
@@ -73,11 +75,7 @@ export default function CustomerList() {
     fetchCustomerData();
   }, []);
 
-  // Filter the data based on the search term
-  //implement search logic
-
   const CreateOrder = (customerInfoList) => {
-    // setSelectedCustomer(customerInfo);
     navigation.navigate("Create Order", { customerInfoList: customerInfoList });
   };
 
@@ -104,9 +102,9 @@ export default function CustomerList() {
             {/* <Button onPress={CreateOrder}>Create  Order</Button> */}
           </TouchableOpacity>
         </View>
-        <ScrollView>
+        <ScrollView  keyboardShouldPersistTaps={'handled'}>
           {filteredData.map((Customer, index) => (
-            <TouchableOpacity key={index}>
+            // <TouchableOpacity key={index}>
               <View
                 style={[
                   styles.productCard,
@@ -116,38 +114,43 @@ export default function CustomerList() {
                   },
                 ]}
               >
-                <Text style={styles.productName}> {Customer.Name}</Text>
-                <Text style={styles.productInfo}>
-                  <Text style={{ fontWeight: "bold" }}>Customer Id: </Text>
-                  {Customer.CustomerId}
-                </Text>
+                <View style={styles.textContainer}>
+                  <Text style={styles.productName}> {Customer.Name}</Text>
+                  <Text style={styles.productInfo}>
+                    ( {Customer.CustomerId})
+                  </Text>
+                </View>
 
-                <Text style={styles.productInfo}>
-                  <Text style={{ fontWeight: "bold" }}>Depot Name: </Text>
-                  {Customer.DepotName}
-                </Text>
-                <Text style={styles.productInfo}>
-                  <Text style={{ fontWeight: "bold" }}>Address: </Text>
+                <Text style={styles.Address}>
+                  <Text>Address: </Text>
                   {Customer.Address}
                 </Text>
 
-                <Button
-                  title="Create  Order"
-                  buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
-                  containerStyle={{
-                    height: 40,
-                    width: 180,
-                    marginHorizontal: 50,
-                    marginVertical: 10,
-                  }}
-                  titleStyle={{
-                    color: "white",
-                    marginHorizontal: 20,
-                  }}
-                  onPress={() => CreateOrder(Customer)}
-                />
+                <Text style={styles.DepotName}>
+                  <Text>Depot Name: </Text>
+                  {Customer.DepotName}
+                </Text>
+
+                <View style={{alignSelf:"center" }}>
+                  <Button
+                    title="Create Order"
+                    buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
+                    containerStyle={{
+                      height: 40,
+                      // width: 180,
+                      marginTop: 20,
+                      borderRadius: 10,
+                      // marginLeft:170
+                    }}
+                    titleStyle={{
+                      color: "white",
+                      // marginHorizontal: 20,
+                    }}
+                    onPress={() => CreateOrder(Customer)}
+                  />
+                </View>
               </View>
-            </TouchableOpacity>
+            // </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
@@ -173,8 +176,8 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: "bold",
-    marginTop: 15,
-    // marginBottom: 16,
+    marginBottom: 16,
+    marginLeft: 16,
   },
   productCard: {
     backgroundColor: "#fff",
@@ -185,41 +188,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
-    // marginLeft: 22,
-    // width: "90%",
-    // backgroundColor: "white",
-    // borderRadius: 5,
-    // padding: 15,
-    // marginBottom: 16,
-    // elevation: 2,
-    // shadowColor: "rgba(0, 0, 0, 0.2)",
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 1,
-    // shadowRadius: 2,
-    // borderRadius: 5,
   },
   productName: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    color: "black",
+
+    // fontWeight: "bold",
   },
   productInfo: {
-    marginTop: 8,
+    color: "black",
+
+    //  marginTop: 8,
   },
   tradeLicense: {
-    marginTop: 8,
-    color: "green", // You can customize the color as needed
+    marginTop: 5,
+    color: "black", // You can customize the color as needed
   },
-
-  // containerx: {
-  //   flex: 1,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
-  // text: {
-  //   color: "blue", // You can change 'blue' to any color you like
-  //   fontSize: 18,
-  //   fontWeight: "normal", // You can adjust the font weight as needed
-  // },
 
   bottomTextContainer: {
     position: "absolute",
@@ -251,5 +235,18 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+  },
+
+  textContainer: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  DepotName: {
+    marginTop: 10,
+    color: "black",
+  },
+  Address: {
+    marginTop: 10,
+    color: "black",
   },
 });

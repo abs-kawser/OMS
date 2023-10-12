@@ -26,7 +26,7 @@ export default function CreateOrder() {
   const navigation = useNavigation();
   const customerInfoList = route.params?.customerInfoList;
 
-  console.log("customer Info xyz", customerInfoList);
+  console.log("customer Info from Create Order page", customerInfoList);
   //const customerId = route.params?.customerId;
 
   //check
@@ -44,30 +44,17 @@ export default function CreateOrder() {
   //===//
   const [data, setData] = useState([]);
   const [value, setValue] = useState(customerInfoList?.CustomerId);
-
-  //const [selectedValue,setSelectedValue]=useState(customerInfoList?.CustomerId)
-
-     //console.log("selectedValue",selectedValue);
-  
-  // const [value, setValue] = useState(
-  //   route.params?.customerInfoList?.CustomerId
-  // );
-
-  // ===
-  // const [selectedCustomer, setSelectedCustomer] = useState( customerInfo ? customerInfo.CustomerId : null);
-
-  // ====
+  const [dropDown, setDropDown] = useState(null);
 
   //checking on log
   // console.log("client name ", client);
   // console.log("orderDate name ", orderDate);
   // console.log("deliveryDate name", deliveryDate);
   // console.log("note", note);
-  console.log("value",value);
+  console.log("value", dropDown);
 
   //console.log("data", data);
   //console.log("selectedClient check", selectedClient);
-
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
@@ -159,8 +146,12 @@ export default function CreateOrder() {
     // .then(response => response.json())
     const result = await response.json();
     setOutput(result);
-    navigation.navigate("Order Details", { data: result });
+    navigation.navigate("Order Details", { data: result,dropDown:dropDown });
+
+
     console.log("this is result", JSON.stringify(result, null, 2));
+
+
     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
   };
 
@@ -222,11 +213,19 @@ export default function CreateOrder() {
     //fetchCustomerData();
   }, [userDetails]);
 
+
+  useEffect(() => {
+    setValue(customerInfoList?.CustomerId);
+  }, [customerInfoList]);
+
+
+
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View>
-          <Text style={styles.label}>Client Name:</Text>
+          <Text style={styles.label}>Customer Name:</Text>
           <TouchableOpacity>
             {/* <Dropdown
               style={styles.dropdown}
@@ -289,8 +288,9 @@ export default function CreateOrder() {
               value={value}
               onChange={(item) => {
                 setValue(item.CustomerId);
-
+                setDropDown(item)
               }}
+            
 
               renderItem={(item, index, isSelected) => (
                 <View style={styles.dropdownItem}>
