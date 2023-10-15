@@ -10,6 +10,8 @@ import ProductList from "../../Screen/ProductList";
 import NoOrder from "../../Screen/NoOrder";
 import OrderStatus from "../../Screen/OrderStatus";
 import DrawerItems from "./DrawerItems";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 
 const Drawer = createDrawerNavigator();
 
@@ -22,7 +24,7 @@ const DrawerNavigator = () => {
         headerTitleAlign: "center",
         headerTintColor: "#ffffff",
         headerStyle: {
-          backgroundColor: "#468faf",
+          backgroundColor: "#72ddf7",
           elevation: 50,
           borderBottomWidth: 1,
           borderTopWidth: 0,
@@ -30,14 +32,32 @@ const DrawerNavigator = () => {
         },
       }}
     >
-      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Home" component={Home} 
+           options={{
+            drawerIcon: ({ focused, size }) => (
+              <FontAwesome name="home" size={size} color={focused ? 'black' : 'gray'} />
+            ),
+          }}
+      
+      />
 
-      <Drawer.Screen name="Create Order" component={CreateOrder} />
-      {/* <Drawer.Screen name="Order Collection" component={OrderCollection} /> */}
+      <Drawer.Screen name="Create Order" component={CreateOrder} 
+             options={{
+              drawerLabel: 'Create Order',
+              drawerIcon: ({ focused, size }) => (
+                <FontAwesome
+                  name="plus-square" // Change this to the actual icon name
+                  size={size}
+                  color={focused ? 'blue' : 'black'}
+                />
+              ),
+            }}
+       />
       <Drawer.Screen name="Customer List" component={CustomerList} />
       <Drawer.Screen name="Product List" component={ProductList} />
       <Drawer.Screen name="Order Status" component={OrderStatus} />
       <Drawer.Screen name="No Order" component={NoOrder} />
+      {/* <Drawer.Screen name="Order Collection" component={OrderCollection} /> */}
     </Drawer.Navigator>
   );
 };

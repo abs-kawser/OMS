@@ -16,10 +16,10 @@ import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import moment from "moment";
 import { Picker } from "@react-native-picker/picker";
-
 import { Dropdown } from "react-native-element-dropdown";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useCustomerInfo } from "../Context/CustomerProvider";
 
 export default function CreateOrder() {
   const route = useRoute();
@@ -44,14 +44,14 @@ export default function CreateOrder() {
   //===//
   const [data, setData] = useState([]);
   const [value, setValue] = useState(customerInfoList?.CustomerId);
-  const [dropDown, setDropDown] = useState(null);
+  //const [dropDown, setDropDown] = useState(null);
 
   //checking on log
   // console.log("client name ", client);
   // console.log("orderDate name ", orderDate);
   // console.log("deliveryDate name", deliveryDate);
   // console.log("note", note);
-  console.log("value", dropDown);
+  //console.log("value", dropDown);
 
   //console.log("data", data);
   //console.log("selectedClient check", selectedClient);
@@ -62,6 +62,9 @@ export default function CreateOrder() {
   //comeing from contex
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
+
+  const { customerInformation, setCustomerInformation } = useCustomerInfo();
+  console.log("customerIn formation", customerInformation);
 
   // ================================================
   const handleOrderDate = (event, selectedDate) => {
@@ -146,11 +149,10 @@ export default function CreateOrder() {
     // .then(response => response.json())
     const result = await response.json();
     setOutput(result);
-    navigation.navigate("Order Details", { data: result,dropDown:dropDown });
-
+    navigation.navigate("Order Details", { data: result });
+    //navigation.navigate("Order Details", { data: result,dropDown:dropDown });
 
     console.log("this is result", JSON.stringify(result, null, 2));
-
 
     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
   };
@@ -174,9 +176,7 @@ export default function CreateOrder() {
         "this from create order page ",
         JSON.stringify(jsonData, null, 2)
       );
-
       await AsyncStorage.setItem("customerData", JSON.stringify(jsonData));
-
       setData(jsonData);
       return jsonData;
     } catch (error) {
@@ -213,65 +213,22 @@ export default function CreateOrder() {
     //fetchCustomerData();
   }, [userDetails]);
 
-
   useEffect(() => {
     setValue(customerInfoList?.CustomerId);
+
+    //setDropDown(item.Name)
   }, [customerInfoList]);
 
-
-
+  // useEffect(()=>{
+  //   setDropDown(item)
+  // },[])
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <View>
-          <Text style={styles.label}>Customer Name:</Text>
+          <Text style={styles.label}>Customer  Name</Text>
           <TouchableOpacity>
-            {/* <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={data}
-              search
-              maxHeight={500}
-              labelField="Name" 
-              //labelField={(item) => `${item.Name}`} 
-      
-              // Display as "Name"
-              valueField="CustomerId" // Store CustomerId
-              placeholder="Select item"
-              searchPlaceholder="Search..."
-              value={value}
-              // onChange={(item) => {
-              //   setValue(item.Name);
-              // }}
-
-              onChange={(item) => {
-                setValue(item.CustomerId); // Store the CustomerId in the state
-              }}
-            /> */}
-
-            {/* <View style={styles.input}>
-              <Picker
-                selectedValue={selectedValue}
-                onValueChange={(item) => {
-                  setSelectedValue(item);
-  
-                }}
-              >
-                <Picker.Item label="Select name" value="select name" />
-                {data?.map((items, index) => (
-                  <Picker.Item
-                    label={items.Name}
-                    value={items.CustomerId}
-                    key={index}
-                  />
-                ))}
-              </Picker>
-            </View> */}
-
             <Dropdown
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
@@ -288,10 +245,8 @@ export default function CreateOrder() {
               value={value}
               onChange={(item) => {
                 setValue(item.CustomerId);
-                setDropDown(item)
+                setCustomerInformation(item);
               }}
-            
-
               renderItem={(item, index, isSelected) => (
                 <View style={styles.dropdownItem}>
                   <Text style={[styles.text, isSelected && styles.boldText]}>
@@ -337,51 +292,54 @@ export default function CreateOrder() {
         {/* Display error message */}
 
         {/* ================================================================= */}
-        <Text style={styles.label}>Order Date:</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => showDatepicker("order")}
-          //disabled={!isClientNameValid} // Disable if client name is not valid
-        >
-          {showOrderDatePicker && (
-            <DateTimePicker
-              value={orderDate}
-              mode="date"
-              display="default"
-              onChange={(event, selectedDate) =>
-                handleOrderDate(event, selectedDate)
-              }
-            />
-          )}
+        <View style={{ marginTop: 20 }}>
+          <Text style={styles.label}>Order  Date</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => showDatepicker("order")}
+            //disabled={!isClientNameValid} // Disable if client name is not valid
+          >
+            {showOrderDatePicker && (
+              <DateTimePicker
+                value={orderDate}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) =>
+                  handleOrderDate(event, selectedDate)
+                }
+              />
+            )}
 
-          {/* <Text>Order Date: {orderDate.toLocaleString()}</Text> */}
-          <Text>{moment(orderDate).format("DD-MM-YYYY")}</Text>
-        </TouchableOpacity>
+            {/* <Text>Order Date: {orderDate.toLocaleString()}</Text> */}
+            <Text>{moment(orderDate).format("DD-MM-YYYY")}</Text>
+          </TouchableOpacity>
+        </View>
 
-        <Text style={styles.label}> Delivery Date:</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => showDatepicker("delivery")}
-          //disabled={!isClientNameValid} // Disable if client name is not valid
-        >
-          {showDeliveryDatePicker && (
-            <DateTimePicker
-              value={deliveryDate}
-              mode="date"
-              display="default"
-              onChange={(event, selectedDate) =>
-                handleDateDelivery(event, selectedDate)
-              }
-            />
-          )}
-          {/* <Text>Delivery Date: {deliveryDate.toLocaleString()}</Text> */}
-          <Text>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
-        </TouchableOpacity>
-        {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
-
+        <View style={{ marginTop: 15 }}>
+          <Text style={styles.label}> Delivery  Date</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => showDatepicker("delivery")}
+            //disabled={!isClientNameValid} // Disable if client name is not valid
+          >
+            {showDeliveryDatePicker && (
+              <DateTimePicker
+                value={deliveryDate}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) =>
+                  handleDateDelivery(event, selectedDate)
+                }
+              />
+            )}
+            {/* <Text>Delivery Date: {deliveryDate.toLocaleString()}</Text> */}
+            <Text>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
+          </TouchableOpacity>
+          {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+        </View>
         {/* ===================================================================================================== */}
-
-        <Text style={styles.label}>Note:</Text>
+         <View style={{ marginTop: 15 }}> 
+        <Text style={styles.label}>Note</Text>
         <TextInput
           style={[styles.input, { height: 50 }]}
           multiline
@@ -390,7 +348,7 @@ export default function CreateOrder() {
           onChangeText={(text) => setNote(text)}
           //editable={isClientNameValid} // Only editable if client name is valid
         />
-
+           </View>
         <TouchableOpacity
           style={styles.nextButton}
           //onPress={handleNextButton((onSubmit))}
@@ -399,6 +357,8 @@ export default function CreateOrder() {
         >
           <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity>
+
+
       </ScrollView>
     </View>
   );
@@ -448,12 +408,13 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: "#0096c7",
     borderRadius: 5,
     padding: 10,
     marginBottom: 16,
     fontSize: 16,
+    
   },
   errorMessage: {
     color: "red",

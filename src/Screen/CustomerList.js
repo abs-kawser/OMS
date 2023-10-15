@@ -15,10 +15,12 @@ import { useNavigation } from "@react-navigation/native";
 // import { Button } from "react-native-paper";
 
 import { Button } from "@rneui/themed";
+import { useCustomerInfo } from "../Context/CustomerProvider";
 // import { Button } from "react-native-elements";
 
 export default function CustomerList() {
   const navigation = useNavigation();
+  const { customerInformation, setCustomerInformation } = useCustomerInfo();
 
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -77,6 +79,7 @@ export default function CustomerList() {
 
   const CreateOrder = (customerInfoList) => {
     navigation.navigate("Create Order", { customerInfoList: customerInfoList });
+    setCustomerInformation(customerInfoList);
   };
 
   return (
@@ -102,54 +105,51 @@ export default function CustomerList() {
             {/* <Button onPress={CreateOrder}>Create  Order</Button> */}
           </TouchableOpacity>
         </View>
-        <ScrollView  keyboardShouldPersistTaps={'handled'}>
+        <ScrollView keyboardShouldPersistTaps={"handled"}>
           {filteredData.map((Customer, index) => (
             // <TouchableOpacity key={index}>
-              <View
-                style={[
-                  styles.productCard,
-                  {
-                    backgroundColor:
-                      rainbowColors[index % rainbowColors.length],
-                  },
-                ]}
-              >
-                <View style={styles.textContainer}>
-                  <Text style={styles.productName}> {Customer.Name}</Text>
-                  <Text style={styles.productInfo}>
-                    ( {Customer.CustomerId})
-                  </Text>
-                </View>
-
-                <Text style={styles.Address}>
-                  <Text>Address: </Text>
-                  {Customer.Address}
-                </Text>
-
-                <Text style={styles.DepotName}>
-                  <Text>Depot Name: </Text>
-                  {Customer.DepotName}
-                </Text>
-
-                <View style={{alignSelf:"center" }}>
-                  <Button
-                    title="Create Order"
-                    buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
-                    containerStyle={{
-                      height: 40,
-                      // width: 180,
-                      marginTop: 20,
-                      borderRadius: 10,
-                      // marginLeft:170
-                    }}
-                    titleStyle={{
-                      color: "white",
-                      // marginHorizontal: 20,
-                    }}
-                    onPress={() => CreateOrder(Customer)}
-                  />
-                </View>
+            <View
+              style={[
+                styles.productCard,
+                {
+                  backgroundColor: rainbowColors[index % rainbowColors.length],
+                },
+              ]}
+            >
+              <View style={styles.textContainer}>
+                <Text style={styles.productName}> {Customer.Name}</Text>
+                <Text style={styles.productInfo}>({Customer.CustomerId})</Text>
               </View>
+
+              <Text style={styles.Address}>
+                <Text>Address: </Text>
+                {Customer.Address}
+              </Text>
+
+              <Text style={styles.DepotName}>
+                <Text>Depot Name: </Text>
+                {Customer.DepotName}
+              </Text>
+
+              <View style={{ alignSelf: "center" }}>
+                <Button
+                  title="Create Order"
+                  buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
+                  containerStyle={{
+                    height: 40,
+                    // width: 180,
+                    marginTop: 20,
+                    borderRadius: 10,
+                    // marginLeft:170
+                  }}
+                  titleStyle={{
+                    color: "white",
+                    // marginHorizontal: 20,
+                  }}
+                  onPress={() => CreateOrder(Customer)}
+                />
+              </View>
+            </View>
             // </TouchableOpacity>
           ))}
         </ScrollView>
@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#caf0f8",
     padding: 2,
     alignSelf: "center",
+    
   },
   bottomText: {
     color: "black",

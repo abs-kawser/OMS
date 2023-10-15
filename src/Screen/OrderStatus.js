@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     fontWeight: "bold",
-    alignSelf: "center",
+    //alignSelf: "center",
   },
   input: {
     // borderWidth: 1,

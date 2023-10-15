@@ -4,21 +4,20 @@ import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider } from "react-native-paper";
 import LoginProvider from "./src/Context/LoginProvider";
 import AppNav from "./src/Navigation/Auth/AppNav";
+import CustomerProvider from "./src/Context/CustomerProvider";
 
 const App = () => {
   return (
-
     <LoginProvider>
-      <PaperProvider>
-        <AppNav />
-      </PaperProvider>
+      <CustomerProvider>
+        <PaperProvider>
+          <AppNav />
+        </PaperProvider>
+      </CustomerProvider>
     </LoginProvider>
-
   );
 };
 
 export default App;
 
 const styles = StyleSheet.create({});
-
-

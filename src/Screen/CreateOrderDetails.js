@@ -20,18 +20,23 @@ import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 
 import LottieView from "lottie-react-native"; // Import LottieView
+import { useCustomerInfo } from "../Context/CustomerProvider";
 
 const CreateOrderDetails = ({ route }) => {
   const data = route.params?.data;
 
-  const customerInfo = route.params?.dropDown;
+  //const customerInfo = route.params?.dropDown;
 
-  console.log("this customerInfo data ", customerInfo.Name);
+  //console.log("this customerInfo data ", customerInfo.Name);
 
   const navigation = useNavigation();
 
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
+
+
+  const {customerInformation, setCustomerInformation}=useCustomerInfo()
+
 
   const [showProductData, setShowProductData] = useState(true);
   const [showOrderData, setShowOrderData] = useState(false);
@@ -308,7 +313,8 @@ const CreateOrderDetails = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.userInformation}>
-        <Text style={styles.userText1}>{customerInfo?.Name}</Text>
+        <Text style={styles.userText1}>{customerInformation?.Name}</Text>
+         <Text style={{color:"black"}}>   ({customerInformation?.CustomerId})</Text>
         {/* <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text> */}
       </View>
 
@@ -547,12 +553,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userInformation: {
+    flexDirection: "row",
     justifyContent: "center",
     textAlign: "center",
     alignItems: "center",
+    marginTop:10,
+    gap:3
   },
   userText1: {
     fontSize: 16,
+    color:"black",
+    // marginTop:10,
   },
   userText2: {
     fontSize: 16,
