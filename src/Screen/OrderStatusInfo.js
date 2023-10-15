@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList,ScrollView } from "react-native";
 
 const OrderStatusInfo = ({ route }) => {
   const { OrderStatus } = route.params; // Retrieve the order data passed as a parameter
@@ -7,160 +7,172 @@ const OrderStatusInfo = ({ route }) => {
   // Render the order data here
 
   return (
-    <View style={styles.container}>
-      {/* <Text style={styles.title}>Status Order Screen</Text> */}
-      {/* <FlatList
-        data={OrderStatus} // Pass your order data array here
-        keyExtractor={(item) => item.OrderNo.toString()} // Assuming "OrderNo" is a unique identifier
-        renderItem={({ item }) => (
-          <View style={styles.orderItemContainer}>
-            <View style={styles.orderItem}>
-              <View style={styles.innerBox}>
-                <Text style={styles.label}>Order Number:</Text>
-                <Text style={styles.value}>{item.OrderNo}</Text>
-
-                <Text style={styles.label}>Order Date:</Text>
-                <Text style={styles.value}>{item.OrderDate}</Text>
-
-                <Text style={styles.label}>Delivery Date:</Text>
-                <Text style={styles.value}>{item.DeliveryDate}</Text>
-
-                <Text style={styles.label}>Order Status:</Text>
-                <Text style={styles.value}>{item.OrderStatus}</Text>
-              </View>
-            </View>
-
-            <View style={styles.gap} />
-          </View>
-        )}
-      /> */}
-
-      <View style={styles.orderItemContainer}>
-        {OrderStatus.map((item) => (
-          <View key={item.OrderNo} style={styles.orderItem}>
-            <View style={styles.innerBox}>
-              <Text style={styles.label}> Order Number </Text>
-              <Text style={styles.value}>{item.OrderNo}</Text>
-
-              <Text style={styles.label}>Order Date</Text>
-              <Text style={styles.value}>{item.OrderDate}</Text>
-
-              <Text style={styles.label}>Delivery Date</Text>
-              <Text style={styles.value}>{item.DeliveryDate}</Text>
-
-              <Text style={styles.label}>Order Status</Text>
-              <Text style={styles.value}>{item.OrderStatus}</Text>
-            </View>
+    <ScrollView style={styles.scrollContainer}> 
+      <View style={styles.container}>
+        <View style={styles.headerRow}>
+          <Text style={styles.headerCell}>Order No</Text>
+          <Text style={styles.headerCell}>Order Date</Text>
+          <Text style={styles.headerCell}>Delivery Date</Text>
+          <Text style={styles.headerCell}>Status</Text>
+        </View>
+        {OrderStatus?.map((item) => (
+          <View key={item.OrderNo} style={styles.row}>
+            <Text style={styles.cell}>{item.OrderNo}</Text>
+            <Text style={styles.cell}>
+              {new Date(item.OrderDate).toLocaleDateString()}
+            </Text>
+            <Text style={styles.cell}>
+              {new Date(item.DeliveryDate).toLocaleDateString()}
+            </Text>
+            {/* <Text style={styles.cell}>{item.OrderDate}</Text>
+        <Text style={styles.cell}>{item.DeliveryDate}</Text> */}
+            <Text style={styles.cell}>{item.OrderStatus}</Text>
           </View>
         ))}
+
+        <View style={styles.totalRow}>
+          <Text style={styles.totalText1}>
+            Total: {OrderStatus?.length} records
+          </Text>
+        </View>
+
+        <View style={styles.backbutton }>
+          <Text style={styles.backbtn}>
+              Back
+           </Text>
+        </View>
       </View>
-    </View>
+    </ScrollView>
 
-    //     <View style={styles.container}>
-    //     <Text style={styles.title}>Status Order Screen</Text>
-    //     <FlatList
-    //       data={OrderStatus} // Pass your order data array here
-    //       keyExtractor={(item) => item.OrderNo.toString()} // Assuming "OrderNo" is a unique identifier
-    //       renderItem={({ item }) => (
-    //         <View style={styles.orderItem}>
-
-    //           <Text style={styles.label}>Order Number:</Text>
+    // <View style={styles.container}>
+    //    <View style={styles.orderItemContainer}>
+    //     {OrderStatus.map((item) => (
+    //       <View key={item.OrderNo} style={styles.orderItem}>
+    //         <View style={styles.innerBox}>
+    //           <Text style={styles.label}> Order No</Text>
     //           <Text style={styles.value}>{item.OrderNo}</Text>
 
-    //           <Text style={styles.label}>Order Date:</Text>
+    //           <Text style={styles.label}>Order Date</Text>
     //           <Text style={styles.value}>{item.OrderDate}</Text>
 
-    //           <Text style={styles.label}>Delivery Date:</Text>
+    //           <Text style={styles.label}>Delivery Date</Text>
     //           <Text style={styles.value}>{item.DeliveryDate}</Text>
 
-    //           <Text style={styles.label}>Order Status:</Text>
+    //           <Text style={styles.label}>Status</Text>
     //           <Text style={styles.value}>{item.OrderStatus}</Text>
-    //           </View>
-
-    //       )}
-    //     />
+    //         </View>
+    //       </View>
+    //     ))}
     //   </View>
+    // </View>
   );
 };
 
 export default OrderStatusInfo;
 
 const styles = StyleSheet.create({
-  container: {
+  scrollContainer: {
     flex: 1,
-    padding: 5,
-    marginTop:10
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  orderItemContainer: {
-    width: "100%",
-    height: "30%",
-    // padding: 5,
+  // container: {
+  //   flex: 1,
+  //   // borderWidth: 1,
+  //   // borderColor: '#000',
+  //   //margin: 10,
+  // },
+  headerRow: {
     flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  orderItem: {
-    width: "50%",
-    height: "100%",
+    backgroundColor: "#f9c74f",
     padding: 5,
-
   },
-
-  innerBox: {
+  headerCell: {
     flex: 1,
-    backgroundColor: "#90e0ef",
-    alignItems: "center",
-    justifyContent: "center",
-    padding:5,
-    borderBottomEndRadius:20,
-    borderTopLeftRadius:30,
-
-  },
-  gap: {
-    width: "5%",
-  },
-  label: {
+    padding: 10,
     color: "black",
-    // fontWeight: "bold",
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  value: {
-    marginTop: 4,
+  row: {
+    flexDirection: "row",
+    borderBottomWidth: 0.5,
+    borderColor: "#000",
+    backgroundColor: "#bde0fe",
+    marginTop: 10,
+  },
+  cell: {
+    flex: 1,
+    padding: 10,
+    textAlign: "center",
     color: "black",
   },
+  totalRow: {
+    flexDirection: "row",
+    backgroundColor: "#333",
+    // width:"50%"
+  },
+  totalText1: {
+    flex: 1,
+    padding: 10,
+    color: "#fff",
+    textAlign: "center",
+    width:"40%"
+  },
 
-  //   container: {
-  //     flex: 1,
-  //     padding: 16,
-  //   },
-  //   title: {
-  //     fontSize: 18,
-  //     fontWeight: 'bold',
-  //     marginBottom: 10,
-  //   },
-  //   orderItem: {
-  //     marginBottom: 20,
+  totalText2: {
+    flex: 1,
+    padding: 10,
+    color: "#fff",
+    textAlign: "center",
+    width:"40%"
 
-  //     // flexDirection:"row",
+  },
+  backbutton:{
+     
+  }
 
-  //   },
-  //   label: {
-  //     fontSize: 16,
-  //     fontWeight: 'bold',
-  //   },
-  //   value: {
-  //     fontSize: 16,
-  //     marginBottom: 5,
-  //   },
-  //   card:{
-  //     width: '30%', // Three cards in a row
-  //     padding: 16,
-  //     borderWidth: 1,
-  //     borderColor: '#ccc',
-  //     marginBottom: 16,
-  //     borderBottomEndRadius:15
-  //   }
+  // container: {
+  //   flex: 1,
+  //   padding: 5,
+  //   marginTop:10
+  // },
+  // title: {
+  //   fontSize: 20,
+  //   fontWeight: "bold",
+  //   marginBottom: 16,
+  // },
+  // orderItemContainer: {
+  //   width: "100%",
+  //   height: "30%",
+  //   // padding: 5,
+  //   flexDirection: "row",
+  //   flexWrap: "wrap",
+  // },
+  // orderItem: {
+  //   width: "50%",
+  //   height: "100%",
+  //   padding: 5,
+
+  // },
+
+  // innerBox: {
+  //   flex: 1,
+  //   backgroundColor: "#90e0ef",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   padding:5,
+  //   borderBottomEndRadius:20,
+  //   borderTopLeftRadius:30,
+
+  // },
+  // gap: {
+  //   width: "5%",
+  // },
+  // label: {
+  //   color: "black",
+  //   // fontWeight: "bold",
+  // },
+  // value: {
+  //   marginTop: 4,
+  //   color: "black",
+  // },
 });

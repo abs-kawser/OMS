@@ -154,6 +154,7 @@ export default function CustomerList() {
           ))}
         </ScrollView>
       </View>
+      
       {/* total */}
       <View style={styles.bottomTextContainer}>
         <Text style={styles.bottomText}>
