@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
+  ToastAndroid
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
@@ -96,20 +97,19 @@ const OrderStatus = () => {
     try {
       // const emp = "U21080273";
       // const customer = "300255";
-
-      console.log({
-        orderDate,
-        deliveryDate,
-        baseUrl: `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${
-          userDetails.EmpCode
-        }&OrderDate=${orderDate
-          .toISOString()
-          .substring(0, 10)}&DeliveryDate=${deliveryDate
-          .toISOString()
-          .substring(0, 10)}&CustomerId=${customerId}`,
-        PASSWORD,
-        USERNAME,
-      });
+      // console.log({
+      //   orderDate,
+      //   deliveryDate,
+      //   baseUrl: `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${
+      //     userDetails.EmpCode
+      //   }&OrderDate=${orderDate
+      //     .toISOString()
+      //     .substring(0, 10)}&DeliveryDate=${deliveryDate
+      //     .toISOString()
+      //     .substring(0, 10)}&CustomerId=${customerId}`,
+      //   PASSWORD,
+      //   USERNAME,
+      // });
 
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
       const response = await fetch(
@@ -127,21 +127,41 @@ const OrderStatus = () => {
           },
         }
       );
-      console.log(response);
-      const jsonData = await response.json();
-      console.log(JSON.stringify(jsonData, null, 2));
-      navigation.navigate("Order Status Info", { OrderStatus: jsonData });
+      
+      if (!response.ok) {
+        setError("An error occurred while fetching data.");
+        console.log(response.statusText);
+      } else {
+        setError(""); // Clear the error state
+        const jsonData = await response.json();
+  
+        if (jsonData.status === "No Data Found !") {
+          // setError(jsonData.status);
+          ToastAndroid.show(
+            jsonData.status,
+            ToastAndroid.SHORT
+          );
+        } else {
+          navigation.navigate("Order Status Info", { OrderStatus: jsonData });
+        }
+      }
 
+
+
+      // console.log(response);
+      // const jsonData = await response.json();
+      // console.log(JSON.stringify(jsonData, null, 2));
+      // navigation.navigate("Order Status Info", { OrderStatus: jsonData });
       //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
       // setData(jsonData);
       // setFilteredData(jsonData);
       // setIsLoading(false);
       //return jsonData;
     } catch (error) {
+      setError("An error occurred while fetching data.");      
       console.error("Error fetching data:", error);
-      // setIsLoading(false);
-      // setIsLoading(false);
-      throw error;
+      
+       throw error;
     }
   };
 
@@ -276,8 +296,6 @@ const OrderStatus = () => {
           <Text>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
 
         </TouchableOpacity> */}
-
-        {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
       </View>
 
       {/* ===================================================================================================== */}
@@ -291,7 +309,8 @@ const OrderStatus = () => {
           placeholder="Enter customer ID"
           onChangeText={(text) => setCustomerId(text)}
           value={customerId}
-        />
+          keyboardType="numeric"        
+          />
         {/* Search Button */}
         <Button
           mode="contained"
@@ -300,7 +319,13 @@ const OrderStatus = () => {
         >
           Search
         </Button>
+
+   
+   
       </View>
+
+      {error ? <Text style={{ color: "red",marginTop:20,alignSelf:"center" }}>{error}</Text> : null}
+
     </View>
   );
 };

@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   },
   grayText: {
     //color: "#323031",
-    color:"gray",
+    // color:"gray",
     fontSize: 18,
     marginLeft:30
 

@@ -219,9 +219,6 @@ export default function CreateOrder() {
     //setDropDown(item.Name)
   }, [customerInfoList]);
 
-  // useEffect(()=>{
-  //   setDropDown(item)
-  // },[])
 
   return (
     <View style={styles.container}>
@@ -372,6 +369,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 8,
+    color:"black"
   },
   input: {
     // borderWidth: 1,

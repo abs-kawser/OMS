@@ -11,7 +11,7 @@ import NoOrder from "../../Screen/NoOrder";
 import OrderStatus from "../../Screen/OrderStatus";
 import DrawerItems from "./DrawerItems";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from "react-native-vector-icons/FontAwesome5";
 
 const Drawer = createDrawerNavigator();
 
@@ -32,31 +32,92 @@ const DrawerNavigator = () => {
         },
       }}
     >
-      <Drawer.Screen name="Home" component={Home} 
-           options={{
-            drawerIcon: ({ focused, size }) => (
-              <FontAwesome name="home" size={size} color={focused ? 'black' : 'gray'} />
-            ),
-          }}
-      
+      <Drawer.Screen
+        name="Home"
+        component={Home}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <FontAwesome
+              name="home"
+              size={size}
+              color={focused ? "black" : "gray"}
+            />
+          ),
+        }}
       />
 
-      <Drawer.Screen name="Create Order" component={CreateOrder} 
-             options={{
-              drawerLabel: 'Create Order',
-              drawerIcon: ({ focused, size }) => (
-                <FontAwesome
-                  name="plus-square" // Change this to the actual icon name
-                  size={size}
-                  color={focused ? 'blue' : 'black'}
-                />
-              ),
-            }}
-       />
-      <Drawer.Screen name="Customer List" component={CustomerList} />
-      <Drawer.Screen name="Product List" component={ProductList} />
-      <Drawer.Screen name="Order Status" component={OrderStatus} />
-      <Drawer.Screen name="No Order" component={NoOrder} />
+      <Drawer.Screen
+        name="Create Order"
+        component={CreateOrder}
+        options={{
+          drawerLabel: "Create Order",
+          drawerIcon: ({ focused, size }) => (
+            <FontAwesome
+              name="plus-circle" // Change this to the actual icon name
+              size={size}
+              color={focused ? "black" : "gray"}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Customer List"
+        component={CustomerList}
+        options={{
+           drawerLabel: "Customer List",
+          drawerIcon: ({ focused, size }) => (
+            <FontAwesome
+              name="address-book" // Change this to the actual icon name
+              size={size}
+              color={focused ? "black" : "gray"}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen name="Product List" component={ProductList} 
+         options={{
+          // drawerLabel: "Customer List",
+         drawerIcon: ({ focused, size }) => (
+           <FontAwesome
+             name="briefcase-medical" // Change this to the actual icon name
+             size={size}
+             color={focused ? "black" : "gray"}
+           />
+         ),
+       }}
+       
+      />
+      <Drawer.Screen name="Order Status" component={OrderStatus} 
+       options={{
+        // drawerLabel: "Customer List",
+       drawerIcon: ({ focused, size }) => (
+         <FontAwesome
+           name="user-clock" // Change this to the actual icon name
+           size={size}
+           color={focused ? "black" : "gray"}
+         />
+       ),
+     }}
+       
+      />
+
+
+      
+      <Drawer.Screen name="No Order" component={NoOrder} 
+       options={{
+        // drawerLabel: "Customer List",
+       drawerIcon: ({ focused, size }) => (
+         <FontAwesome
+           name="bell-slash" // Change this to the actual icon name
+           size={size}
+           color={focused ? "black" : "gray"}
+         />
+       ),
+     }}
+      
+      
+      
+      />
       {/* <Drawer.Screen name="Order Collection" component={OrderCollection} /> */}
     </Drawer.Navigator>
   );
