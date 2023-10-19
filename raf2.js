@@ -333,7 +333,13 @@ export default function CreateOrder() {
         </View>
 
         {/* Display error message */}
+       
 
+
+
+
+
+       
         {/* ================================================================= */}
         <View style={{ marginTop: 20 }}>
           <Text style={styles.label}>Order Date</Text>
