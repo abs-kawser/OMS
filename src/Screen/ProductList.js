@@ -4,6 +4,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import { fetchProductData } from "../Api/ProductListApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProductList() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
@@ -23,26 +24,64 @@ export default function ProductList() {
     setFilteredData(filtered);
   }, [searchTerm]);
 
+  
   //fetch api from Api folder
+  // useEffect(() => {
+  //   const getProductList = async () => {
+  //     try {
+  //       const productList = await fetchProductData(setIsLoading);
+  //       // setProducts(productList);
+
+  //       setFilteredData(productList);
+  //       setProducts(productList);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       // Handle the error gracefully
+  //       console.error("Error fetching product list:", error);
+  //     }
+  //   };
+
+  //   getProductList();
+
+  // }, []);  
+
+
+
   useEffect(() => {
+    // Function to fetch data from AsyncStorage
+    const fetchDataFromStorage = async () => {
+      try {
+        const storedData = await AsyncStorage.getItem("ProductList");
+        if (storedData !== null) {
+          // Data was found in AsyncStorage, parse and set it
+          const parsedData = JSON.parse(storedData);
+          setProducts(parsedData);
+          setFilteredData(parsedData);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("Error retrieving data from AsyncStorage:", error);
+      }
+    };
+  
+    // Call the function to fetch data from AsyncStorage
+    fetchDataFromStorage();
+  
+    // Continue with fetching data from the API
     const getProductList = async () => {
       try {
         const productList = await fetchProductData(setIsLoading);
-        // setProducts(productList);
-
         setFilteredData(productList);
         setProducts(productList);
         setIsLoading(false);
       } catch (error) {
-        // Handle the error gracefully
-        console.error("Error fetching product list:", error);
+        // console.error("Error fetching product list:", error);
       }
     };
-
+  
     getProductList();
-
-    //fetchProductData();
   }, []);
+  
 
   return (
     <>

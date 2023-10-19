@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   ScrollView,
   ToastAndroid,
-  ActivityIndicator,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -46,8 +45,6 @@ export default function CreateOrder() {
   //===//
   const [data, setData] = useState([]);
   const [value, setValue] = useState(customerInfoList?.CustomerId);
-  const [isLoading, setIsLoading] = useState(false);
-
   //const [dropDown, setDropDown] = useState(null);
 
   //checking on log
@@ -68,8 +65,7 @@ export default function CreateOrder() {
   const { userDetails } = isLoggedIn;
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
- console.log("customerIn formation",JSON.stringify(customerInformation, null, 2));
-  
+  console.log("customerIn formation", customerInformation);
 
   // ================================================
   const handleOrderDate = (event, selectedDate) => {
@@ -131,7 +127,7 @@ export default function CreateOrder() {
     }
   };
 
-
+  // ========= api calling =========
   // const fetchCreatenewOrderData = async () => {
   //   const requestData = {
   //     CustomerId: value,
@@ -141,48 +137,74 @@ export default function CreateOrder() {
   //     Note: note,
   //     TerritoryId: userDetails?.TerritoryId,
   //   };
-
   //   console.log("Posting loan data:", JSON.stringify(requestData, null, 2));
   //   const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+  //   const response = await fetch(`${BASE_URL}/api/NewOrderApi/CreateNewOrder`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: authHeader,
+  //     },
+  //     body: JSON.stringify(requestData),
+  //   });
+  //   // .then(response => response.json())
+  //   const result = await response.json();
+  //   setOutput(result);
+  //   navigation.navigate("Order Details", { data: result });
+  //   //navigation.navigate("Order Details", { data: result,dropDown:dropDown });
 
-  //   try {
-  //     const response = await fetch(
-  //       `${BASE_URL}/api/NewOrderApi/CreateNewOrder`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: authHeader,
-  //         },
-  //         body: JSON.stringify(requestData),
-  //       }
-  //     );
-  //     console.log(response);
-  //     if (response.status === 200) {
-  //       const result = await response.json();
-  //       setOutput(result);
-  //       navigation.navigate("Order Details", { data: result });
-  //       console.log("this is result", JSON.stringify(result, null, 2));
+  //   console.log("this is result", JSON.stringify(result, null, 2));
 
-  //       Toast.show({
-  //         text1: result.Status,
-  //         type: "success",
-  //       });
-  //     } else {
-  //       // Handle errors here if needed
-  //       console.error("API request failed with status code:", response.status);
-  //       ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
-  //     }
-  //   } catch (error) {
-  //     // Handle network errors here if needed
-  //     console.error("Network error:", error);
-  //     ToastAndroid.show("Network error", ToastAndroid.LONG);
-  //   }
+  //   ToastAndroid.show(result.Status, ToastAndroid.SHORT);
   // };
 
+  const fetchCreatenewOrderData = async () => {
+    const requestData = {
+      CustomerId: value,
+      OrderDate: orderDate,
+      DeliveryDate: deliveryDate,
+      EntryBy: userDetails?.EmpId,
+      Note: note,
+      TerritoryId: userDetails?.TerritoryId,
+    };
+
+    console.log("Posting loan data:", JSON.stringify(requestData, null, 2));
+    const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/api/NewOrderApi/CreateNewOrder`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authHeader,
+          },
+          body: JSON.stringify(requestData),
+        }
+      );
+
+      if (response.status === 200) {
+        const result = await response.json();
+        setOutput(result);
+        navigation.navigate("Order Details", { data: result });
+        Toast.show({
+          text1: result.Status,
+          type: "success",
+        });
+      } else {
+        // Handle errors here if needed
+        console.error("API request failed with status code:", response.status);
+        ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
+      }
+    } catch (error) {
+      // Handle network errors here if needed
+      console.error("Network error:", error);
+      ToastAndroid.show("Network error", ToastAndroid.LONG);
+    }
+  };
+
   //customert api call
- 
- 
   const fetchCustomerData = async () => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
@@ -197,10 +219,10 @@ export default function CreateOrder() {
         }
       );
       const jsonData = await response.json();
-      // console.log(
-      //   "this from create order page ",
-      //   JSON.stringify(jsonData, null, 2)
-      // );
+      console.log(
+        "this from create order page ",
+        JSON.stringify(jsonData, null, 2)
+      );
       await AsyncStorage.setItem("customerData", JSON.stringify(jsonData));
       setData(jsonData);
       return jsonData;
@@ -243,22 +265,6 @@ export default function CreateOrder() {
 
     //setDropDown(item.Name)
   }, [customerInfoList]);
-
-
-  // =====================
-
-  const requestData = {
-    CustomerId: value,
-    OrderDate: orderDate,
-    DeliveryDate: deliveryDate,
-    EntryBy: userDetails?.EmpId,
-    Note: note,
-    TerritoryId: userDetails?.TerritoryId,
-  };
-
-  const nextPageComponent = ()=>{
-    navigation.navigate("Order Details",{data:requestData})
-  }
 
   return (
     <View style={styles.container}>
@@ -393,9 +399,7 @@ export default function CreateOrder() {
         >
          <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity>
-          <Button onPress={nextPageComponent}>Next</Button>
-        </TouchableOpacity>
+        <Button onPress={fetchCreatenewOrderData}>Next</Button>
       </ScrollView>
     </View>
   );
@@ -513,37 +517,3 @@ const styles = StyleSheet.create({
     color: "#22223b",
   },
 });
-
-
-
-
-  // ========= api calling =========
-  // const fetchCreatenewOrderData = async () => {
-  //   const requestData = {
-  //     CustomerId: value,
-  //     OrderDate: orderDate,
-  //     DeliveryDate: deliveryDate,
-  //     EntryBy: userDetails?.EmpId,
-  //     Note: note,
-  //     TerritoryId: userDetails?.TerritoryId,
-  //   };
-  //   console.log("Posting loan data:", JSON.stringify(requestData, null, 2));
-  //   const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-  //   const response = await fetch(`${BASE_URL}/api/NewOrderApi/CreateNewOrder`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: authHeader,
-  //     },
-  //     body: JSON.stringify(requestData),
-  //   });
-  //   // .then(response => response.json())
-  //   const result = await response.json();
-  //   setOutput(result);
-  //   navigation.navigate("Order Details", { data: result });
-  //   //navigation.navigate("Order Details", { data: result,dropDown:dropDown });
-
-  //   console.log("this is result", JSON.stringify(result, null, 2));
-
-  //   ToastAndroid.show(result.Status, ToastAndroid.SHORT);
-  // };

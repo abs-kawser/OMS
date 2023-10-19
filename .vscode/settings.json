@@ -1,3 +1,6 @@
 {
-  "java.compile.nullAnalysis.mode": "disabled"
+  "java.compile.nullAnalysis.mode": "disabled",
+  "editor.inlineCompletionsAccessibilityVerbose": true,
+  "editor.inlayHints.enabled": "on",
+  "editor.inlineSuggest.showToolbar": "always"
 }

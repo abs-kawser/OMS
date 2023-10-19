@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Button } from "@rneui/themed";
 import { useCustomerInfo } from "../Context/CustomerProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { Button } from "react-native-elements";
 
 export default function CustomerList() {
@@ -60,11 +61,12 @@ export default function CustomerList() {
       );
       const jsonData = await response.json();
       console.log(JSON.stringify(jsonData, null, 2));
+      await AsyncStorage.setItem("customerData", JSON.stringify(jsonData));
       //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
       setData(jsonData);
       setFilteredData(jsonData);
       setIsLoading(false);
-      //return jsonData;
+      return jsonData;
     } catch (error) {
       console.error("Error fetching data:", error);
       setIsLoading(false);
@@ -74,8 +76,27 @@ export default function CustomerList() {
   };
 
   useEffect(() => {
+    // Fetch data from AsyncStorage
+    AsyncStorage.getItem("customerData")
+      .then((storedData) => {
+        if (storedData) {
+          const jsonData = JSON.parse(storedData);
+          setData(jsonData);
+          setFilteredData(jsonData);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error retrieving data from AsyncStorage:", error);
+      });
+
+    // Fetch data from the API
     fetchCustomerData();
   }, []);
+
+  // useEffect(() => {
+  //   fetchCustomerData();
+  // }, []);
 
   const CreateOrder = (customerInfoList) => {
     navigation.navigate("Create Order", { customerInfoList: customerInfoList });
@@ -154,7 +175,7 @@ export default function CustomerList() {
           ))}
         </ScrollView>
       </View>
-      
+
       {/* total */}
       <View style={styles.bottomTextContainer}>
         <Text style={styles.bottomText}>
@@ -213,7 +234,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#caf0f8",
     padding: 2,
     alignSelf: "center",
-    
   },
   bottomText: {
     color: "black",

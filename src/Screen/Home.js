@@ -19,7 +19,7 @@ export default function Home() {
       <ScrollView> 
       <View style={styles.container}>
         <Text style={styles.Details}>User Details Details</Text>
-        <Text style={styles.text}> FullName:{userDetails.FullName}</Text>
+        <Text style={styles.text}>Name:{userDetails.FullName}</Text>
         <Text style={styles.text}> EmpId:{userDetails.EmpId}</Text>
         <Text style={styles.text}> Email:{userDetails.Email}</Text>
         <Text style={styles.text}> MobileNo:{userDetails.MobileNo}</Text>

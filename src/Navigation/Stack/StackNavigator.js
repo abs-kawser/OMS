@@ -7,6 +7,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import CreateOrderDetails from "../../Screen/CreateOrderDetails";
 import OrderInfo from "../../Screen/OrderInfo";
 import OrderStatusInfo from "../../Screen/OrderStatusInfo";
+import Darft from "../../Screen/Darft";
+import DraftRequest from "../../Screen/DraftRequest";
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +64,18 @@ const StackNavigator = () => {
         }}
       />
 
+      <Stack.Screen
+        name="Draft Request"
+        component={DraftRequest}
+        options={{
+          headerShown: true,
+          headerBackVisible: true,
+          title: "Draft Request",
+          headerStyle: { backgroundColor: "#8338ec" },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+        }}
+      />
     </Stack.Navigator>
   );
 };

@@ -1,5 +1,3 @@
-// =======================
-
 import React, { useState, useMemo, useEffect } from "react";
 import {
   StyleSheet,
@@ -24,18 +22,17 @@ import base64 from "base-64";
 import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
 
-const CreateOrderDetails = ({ route }) => {
-  const data = route.params?.data;
 
-  console.log("create order page data", data?.DeliveryDate);
 
-  //const customerInfo = route.params?.dropDown;
-  //console.log("this customerInfo data ", customerInfo.Name);
-
-  const { customerInformation, setCustomerInformation } = useCustomerInfo();
-  console.log(customerInformation, "customerInformation");
+const DraftRequest = ({ route }) => {
 
   const navigation = useNavigation();
+  const { selectedItem, onDeleteItem } = route.params;
+
+console.log("selected item infooo",selectedItem)
+
+  const { customerInformation, setCustomerInformation } = useCustomerInfo();
+//   console.log(customerInformation, "customerInformation");
 
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
@@ -67,25 +64,6 @@ const CreateOrderDetails = ({ route }) => {
     "selected Products item :",
     JSON.stringify(selectedProduct, null, 2)
   );
-
-  // Api calling  related work
-  // useEffect(() => {
-  //   const getProductList = async () => {
-  //     try {
-  //       const productList = await fetchProductData(setIsLoading);
-  //       // setProducts(productList);
-
-  //       //setFilteredData(productList);
-  //       setProducts(productList);
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       // Handle the error gracefully
-  //       console.error("Error fetching product list:", error);
-  //     }
-  //   };
-
-  //   getProductList();
-  // }, []);
 
   useEffect(() => {
     // Check if data is already in AsyncStorage
@@ -121,19 +99,6 @@ const CreateOrderDetails = ({ route }) => {
     setShowOrderData(false);
   };
 
-  //old code when check box useing and its perfetcly working
-  // const handleOrderButtonPress = () => {
-  // setShowProductData(false);
-  // setShowOrderData(true);
-  // const updatedOrderQuantities = {};
-  // selectedProductIds.forEach((productId) => {
-  //   updatedOrderQuantities[productId] = productQuantities[productId] || 0;
-  // });
-
-  // setOrderQuantities(updatedOrderQuantities);
-  // console.log(updatedOrderQuantities);
-  // };
-
   const handleOrderButtonPress = () => {
     setShowProductData(false);
     setShowOrderData(true);
@@ -150,77 +115,6 @@ const CreateOrderDetails = ({ route }) => {
     //setSelectedProductIds(Object.keys(updatedOrderQuantities),);
     setOrderQuantities(updatedOrderQuantities);
   };
-
-  //togglecheck product
-  // const toggleProductCheckbox = useMemo(() => {
-  //   return (name) => {
-  //     const updatedCheckedProducts = [...checkedProducts];
-  //     if (updatedCheckedProducts.includes(name)) {
-  //       // Product is already checked, uncheck it
-  //       updatedCheckedProducts.splice(updatedCheckedProducts.indexOf(name), 1);
-  //     } else {
-  //       // Product is not checked, check it
-  //       updatedCheckedProducts.push(name);
-  //     }
-  //     setCheckedProducts(updatedCheckedProducts);
-
-  //     // Toggle the selected product IDs
-  //     setSelectedProductIds((prevIds) =>
-  //       updatedCheckedProducts.map(
-  //         (name) => products.find((product) => product.Name === name).ProductId
-  //       )
-  //     );
-  //   };
-  // }, [checkedProducts, products]);
-
-  //old code
-  // const handleQuantityChange = (productId, text) => {
-  //   if (text === "") {
-  //     // If the input is empty, clear the quantity
-  //     setProductQuantities((prevQuantities) => {
-  //       const updatedQuantities = { ...prevQuantities };
-  //       delete updatedQuantities[productId];
-  //       return updatedQuantities;
-  //     });
-  //   } else {
-  //     const value = parseInt(text, 10);
-  //     if (!isNaN(value)) {
-  //       setProductQuantities((prevQuantities) => ({
-  //         ...prevQuantities,
-  //         [productId]: value,
-  //       }));
-  //     }
-  //   }
-  // };
-
-  // const handleQuantityChange = (productId, text) => {
-  //   if (text === "") {
-  //     // If the input is empty, clear the quantity
-  //     setProductQuantities((prevQuantities) => {
-  //       const updatedQuantities = { ...prevQuantities };
-  //       delete updatedQuantities[productId];
-  //       return updatedQuantities;
-  //     });
-  //   } else {
-  //     const value = parseInt(text, 10);
-  //     if (!isNaN(value)) {
-  //       setProductQuantities((prevQuantities) => ({
-  //         ...prevQuantities,
-  //         [productId]: value,
-  //       }));
-
-  //       // If the entered quantity is greater than zero, add the productId to selectedProductIds
-  //       if (value > 0) {
-  //         setSelectedProductIds((prevIds) => [...prevIds, productId]);
-  //       } else {
-  //         // If the quantity is zero, remove the productId from selectedProductIds
-  //         setSelectedProductIds((prevIds) =>
-  //           prevIds.filter((id) => id !== productId)
-  //         );
-  //       }
-  //     }
-  //   }
-  // };
 
   const handleQuantityChange = (productId, text) => {
     if (text === "") {
@@ -338,100 +232,6 @@ const CreateOrderDetails = ({ route }) => {
     }
   };
 
-  // ============================================================================================
-
-  // api calling
-  // const fetchOrderInfoData = async (userDetails) => {
-  //   try {
-  //     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-
-  //     const response = await fetch(
-  //       `${BASE_URL}/api/NewOrderApi/GetPoInfo?orderNo=${data?.OrderNo}&verId=1`,
-  //       {
-  //         headers: {
-  //           Authorization: authHeader,
-  //         },
-  //       }
-  //     );
-  //     const jsonData = await response.json();
-
-  //     navigation.navigate("Order Info", { data: jsonData });
-
-  //     // await AsyncStorage.setItem('AttendanceSummary', JSON.stringify(jsonData));
-  //     console.log("data xyz", JSON.stringify(jsonData, null, 2));
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     // setIsLoading(false);
-  //     throw error;
-  //   }
-  // };
-
-  // const handleSubmit = async () => {
-  //   try {
-  //     // Assuming you have the order number in route.params.data.OrderNo
-  //     const orderNumber = route.params?.data?.OrderNo;
-
-  //     if (orderNumber) {
-  //       const orderInfo = await fetchOrderInfoData(orderNumber);
-  //       // Do something with the fetched orderInfo
-  //       console.log("Order Info:", orderInfo);
-  //       navigation.navigate("Order Info", );
-  //     } else {
-  //       // Handle the case where there is no order number
-  //       console.error("No valid order number found");
-  //     }
-  //   } catch (error) {
-  //     // Handle any errors that may occur during the fetch or submission
-  //     console.error("Error handling submission:", error);
-  //   }
-  // };
-
-  // const handleDraftSave = () => {
-  //   navigation.navigate("Darft");
-  // };
-
-// ============== draft save =================
-
-  const handleDraftSave = async () => {
-    const requestData = {
-      OrderDetails: transformedOrderDetails,
-      CustomerId: data?.CustomerId,
-      OrderDate: data?.OrderDate,
-      DeliveryDate: data?.DeliveryDate,
-      EntryBy: data?.EntryBy,
-      Note: data?.Note,
-      TerritoryId: data?.TerritoryId,
-      CustomerName:customerInformation?.Name,
-      CustomerAddress:customerInformation?.Address,
-    };
-    try {
-      // Retrieve the existing data from AsyncStorage
-      const existingData = await AsyncStorage.getItem("customerInformation");
-
-      console.log("existing data in async storage", existingData);
-
-      // Parse the existing data (or initialize an empty array)
-      const customerInfoArray = existingData ? JSON.parse(existingData) : [];
-
-      // Add the current customerInformation to the array
-      customerInfoArray.push(requestData);
-
-      // Save the updated array to AsyncStorage
-      await AsyncStorage.setItem(
-        "customerInformation",
-        JSON.stringify(customerInfoArray)
-      );
-
-      navigation.navigate("Darft Screen");
-
-      // Alert.alert('Data saved successfully.');
-    } catch (error) {
-      console.error("Error saving data:", error);
-    }
-  };
-
-  // c==================================
-
   useEffect(() => {
     // Inside this effect, filter and set the selected products based on product IDs
     const selectedProducts = selectedProductIds.map((productId) => {
@@ -447,9 +247,9 @@ const CreateOrderDetails = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.userInformation}>
         {/* Import contex for show name dynamicly*/}
-        <Text style={styles.userText1}>{customerInformation?.Name}</Text>
+        <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
         <Text style={{ color: "black" }}>
-          ({customerInformation?.CustomerId})
+          ({selectedItem?.CustomerId})
         </Text>
         {/* <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text> */}
       </View>
@@ -551,67 +351,6 @@ const CreateOrderDetails = ({ route }) => {
                   </View>
 
                   <>
-                    {/* {selectedProductIds.map((productId) => {
-                    // console.log("seleceted productssssss",productId);
-
-                    // const specificProduct = products.find((product) =>(
-
-                    //   product.ProductId === productId )
-                    // )
-
-                    // const specificProduct = products.find(
-                    //   (product) => product.ProductId === productId
-                    // )
-
-                    // if (specificProduct) {
-                    //   setSelectedProduct((prevSelectedProducts) => [
-                    //     ...prevSelectedProducts,
-                    //     specificProduct,
-                    //   ])
-
-
-
-                    const specificProduct = products.find(
-                      (product) => product.ProductId === productId
-                    );
-            
-                    // if (specificProduct) {
-                    //   setSelectedProduct((prevSelectedProducts) => [
-                    //     ...prevSelectedProducts,
-                    //     specificProduct,
-                    //   ]);
-                    // }
-
-                    console.log("Selected productsssssss:", JSON.stringify(specificProduct,null,2));
-
-
-                    // Check if the product has a quantity value
-                    const quantity = productQuantities[productId] || 0;
-                    if (quantity > 0) {
-                      return (
-                        <View style={styles.tableRow} key={productId}>
-                          <Text style={styles.cellText} numberOfLines={2}>
-                            {specificProduct.Name}
-                          </Text>
-
-                          <Text style={styles.cellText}>{quantity}</Text>
-
-                          <Text style={styles.cellText}>
-                            {specificProduct.MRP * quantity}
-                          </Text>
-                          <TouchableOpacity
-                            style={styles.actionButton}
-                            onPress={() => console.log("Delete button pressed")}
-                          >
-                            <Icon name="trash" size={25} color="tomato" />
-                          </TouchableOpacity>
-                        </View>
-                      );
-                    }
-
-                    return null;
-                  })} */}
-
                     {selectedProduct.map((specificProduct) => {
                       // Check if the product has a quantity value
                       const quantity =
@@ -648,7 +387,7 @@ const CreateOrderDetails = ({ route }) => {
                   </>
 
                   <View style={styles.btngrp}>
-                    <Button onPress={handleDraftSave}>Save</Button>
+                    <Button>Cancel</Button>
                     <Button onPress={fetchCreatenewOrderData}>Submit</Button>
                   </View>
                 </View>
@@ -665,87 +404,7 @@ const CreateOrderDetails = ({ route }) => {
   );
 };
 
-export default CreateOrderDetails;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   buttonContainer: {
-//     display: "flex",
-//     flexDirection: "row",
-//     justifyContent: "space-between", // Center the buttons vertically
-//     gap: 5,
-//     top: 15,
-//     padding: 20,
-//   },
-//   dataContainer: {
-//     marginTop: 20,
-//   },
-
-//   //
-
-//   row: {
-//     flexDirection: "row",
-//     //justifyContent: "space-between",
-//     alignItems: "center",
-//     paddingHorizontal: 16,
-//     paddingVertical: 8,
-//     borderBottomWidth: 1,
-//     borderBottomColor: "#ccc",
-//   },
-//   infoContainer: {
-//     // flex: 1,
-//     // flexDirection: 'row',
-//     // alignItems: 'center',
-//   },
-//   name: {
-//     fontSize: 12,
-
-//     marginRight: 10,
-//   },
-//   price: {
-//     fontSize: 16,
-//     color: "green",
-//   },
-//   quantityContainer: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   underline: {
-//     textDecorationLine: "underline",
-//   },
-//   checkboxContainer: {
-//     flex: 0.2,
-//     alignItems: "flex-end",
-//   },
-
-//   // ===================//
-//   containerx: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//   },
-//   label: {
-//     fontSize: 16,
-//     marginRight: 10,
-//   },
-//   inputContainer: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//   },
-//   button: {
-//     fontSize: 24,
-//     paddingHorizontal: 10,
-//   },
-//   input: {
-//     fontSize: 16,
-//     borderWidth: 1,
-//     borderColor: "gray",
-//     padding: 5,
-//     minWidth: 40,
-//   },
-// });
+export default DraftRequest;
 
 const styles = StyleSheet.create({
   container: {
