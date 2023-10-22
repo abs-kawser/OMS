@@ -5,12 +5,14 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import FontAwesome from "react-native-vector-icons/FontAwesome5";
 
-const Draft = ({navigation}) => {
+const Draft = ({ navigation }) => {
   const [draftData, setDraftData] = useState([]);
 
   console.log("this is draft data", JSON.stringify(draftData, null, 2));
@@ -60,14 +62,13 @@ const Draft = ({navigation}) => {
     }
   };
 
-  // handle press 
+  // handle press
 
-  const handleItemPress = selectedItem => {
+  const handleItemPress = (selectedItem) => {
     // Navigate to the target component with the selected item's data
-
     // console.log('leave request', selectedItem);
 
-    navigation.navigate('Draft Request', {
+    navigation.navigate("Draft Request", {
       selectedItem,
       onDeleteItem: handleDeleteItem,
     });
@@ -77,72 +78,88 @@ const Draft = ({navigation}) => {
 
   return (
     <ScrollView>
-      <View style={styles.table}>
-        <View style={styles.row}>
-          <Text style={styles.header}>Customer</Text>
-          <Text style={styles.header}>View</Text>
-          <Text style={styles.header}>Action</Text>
-        </View>
-        {draftData.map((item, index) => (
-          <View style={styles.row} key={item.id}>
-            <View style={styles.cell}>
-              <Text style={styles.textColor}>{item.CustomerName}</Text>
-              <Text style={styles.textColor}>({item.CustomerId})</Text>
-              <Text style={styles.textColor}>{item.CustomerAddress}</Text>
+      <SafeAreaView>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.headerColumn60}>
+              <Text style={styles.headerText}>Customer Info</Text>
             </View>
-
-            <TouchableOpacity style={styles.iconCell} onPress={() => handleItemPress(item)}>
-              <Icon name="search" size={22} color="black" />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.iconCell}
-              onPress={() => handleDeleteItem(item)}
-            >
-              <Icon name="trash" size={25} color="black" />
-            </TouchableOpacity>
+            <View style={styles.headerColumn}>
+              <Text style={styles.headerText}>View</Text>
+            </View>
+            <View style={styles.headerColumn}>
+              <Text style={styles.headerText}>Action</Text>
+            </View>
           </View>
-        ))}
-      </View>
+          {draftData.map((item, index) => (
+            <View style={styles.row} key={index}>
+              <View style={styles.column60}>
+                <Text style={styles.textColor}>{item.CustomerName}</Text>
+                <Text style={styles.textColor}>({item.CustomerId})</Text>
+                <Text style={styles.textColor}>{item.CustomerAddress}</Text>
+              </View>
+
+              <View style={styles.iconColumn}>
+                <TouchableOpacity
+                  style={styles.iconCell}
+                  onPress={() => handleItemPress(item)}
+                >
+                  {/* <FontAwesome name="eye" size={24} color="blue" /> */}
+                  <Icon name="search" size={18} color="black" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.iconColumn}>
+                <TouchableOpacity
+                  style={styles.iconCell}
+                  onPress={() => handleDeleteItem(item)}
+                >
+                  <FontAwesome name="trash" size={18} color="black" />
+                  {/* <Icon name="trash" size={25} color="black" /> */}
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </View>
+      </SafeAreaView>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  table: {
-    // backgroundColor: "#fff",
-    // borderWidth: 1,
-    borderColor: "#0077b6",
-    flexDirection: "column",
-    padding: 15,
+  container: {
+    marginTop: 10,
+    flex: 1,
+    padding: 10,
+  },
+  header: {
+    flexDirection: "row",
+    backgroundColor: "lightgray",
+    padding: 10,
+  },
+  headerText: {
+    fontWeight: "bold",
+  },
+  headerColumn60: {
+    width: "60%",
+  },
+  headerColumn: {
+    flex: 2,
   },
   row: {
     flexDirection: "row",
-    // borderBottomWidth: 1,
-    borderBottomColor: "#0077b6",
-    paddingVertical: 8,
-    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderColor: "lightgray",
+    padding: 15,
   },
-  header: {
-    flex: 1,
-    padding: 8,
-    textAlign: "center",
-    // fontWeight: "bold",
-    backgroundColor: "#0077b6",
-    color: "#fff",
+  column60: {
+    flex: 6,
   },
-  cell: {
-    flex: 1,
-    padding: 1,
-
-    // width:"60%"
-  },
-  iconCell: {
-    flex: 1,
+  iconColumn: {
+    flex: 2,
     justifyContent: "center",
     alignItems: "center",
   },
-
   textColor: {
     color: "black",
   },

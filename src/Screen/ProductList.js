@@ -114,7 +114,7 @@ export default function ProductList() {
             <View style={styles.textContainer}>
               <Text style={styles.productName}>{product.Name}</Text>
               <Text style={styles.productInfo}>
-                ( {product.ProductCode})
+                ({product.ProductCode})
               </Text>
             </View>
 

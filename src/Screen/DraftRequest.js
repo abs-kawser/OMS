@@ -22,17 +22,14 @@ import base64 from "base-64";
 import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
 
-
-
 const DraftRequest = ({ route }) => {
-
   const navigation = useNavigation();
   const { selectedItem, onDeleteItem } = route.params;
 
-console.log("selected item infooo",selectedItem)
+  console.log("selected item infooo", JSON.stringify(selectedItem, null, 2));
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
-//   console.log(customerInformation, "customerInformation");
+  //   console.log(customerInformation, "customerInformation");
 
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
@@ -41,16 +38,16 @@ console.log("selected item infooo",selectedItem)
   const [showOrderData, setShowOrderData] = useState(false);
 
   const [productQuantities, setProductQuantities] = useState({});
-  const [checkedProducts, setCheckedProducts] = useState([]);
   const [products, setProducts] = useState([]);
-
+  
+  const [checkedProducts, setCheckedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [orderQuantities, setOrderQuantities] = useState({});
   // Add a state variable to keep track of selected products
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   console.log("selectedProductIds:", selectedProductIds);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [orderQuantities, setOrderQuantities] = useState({});
   // console.log(`Quantities`, orderQuantities);
 
   const [orderNo, setOrderNo] = useState(""); // Initialize with an empty string
@@ -169,11 +166,11 @@ console.log("selected item infooo",selectedItem)
 
   // ================================== main api calling ========================================================
 
-  const transformedOrderDetails = selectedProduct.map((product) => {
+  const transformedOrderDetails = selectedItem.OrderDetails.map((product) => {
     return {
       ProductId: product.ProductId,
       Quantity: product.Quantity, // You can set the desired quantity here
-      UnitPrice: product.TradePrice, // Use the trade price or any other desired price
+      UnitPrice: product.UnitPrice, // Use the unit price or any other desired price
       Status: 0, // Set the desired status
     };
   });
@@ -181,12 +178,12 @@ console.log("selected item infooo",selectedItem)
   const fetchCreatenewOrderData = async () => {
     const requestData = {
       OrderDetails: transformedOrderDetails,
-      CustomerId: data?.CustomerId,
-      OrderDate: data?.OrderDate,
-      DeliveryDate: data?.DeliveryDate,
-      EntryBy: data?.EntryBy,
-      Note: data?.Note,
-      TerritoryId: data?.TerritoryId,
+      CustomerId: selectedItem?.CustomerId,
+      OrderDate: selectedItem?.OrderDate,
+      DeliveryDate: selectedItem?.DeliveryDate,
+      EntryBy: selectedItem?.EntryBy,
+      Note: selectedItem?.Note,
+      TerritoryId: selectedItem?.TerritoryId,
     };
 
     console.log(
@@ -213,7 +210,10 @@ console.log("selected item infooo",selectedItem)
         const result = await response.json();
         // setOutput(result);
 
-        console.log("this is result", JSON.stringify(result, null, 2));
+        console.log(
+          "this is result from draft",
+          JSON.stringify(result, null, 2)
+        );
 
         navigation.navigate("Order Info");
         Toast.show({
@@ -248,9 +248,7 @@ console.log("selected item infooo",selectedItem)
       <View style={styles.userInformation}>
         {/* Import contex for show name dynamicly*/}
         <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
-        <Text style={{ color: "black" }}>
-          ({selectedItem?.CustomerId})
-        </Text>
+        <Text style={{ color: "black" }}>({selectedItem?.CustomerId})</Text>
         {/* <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text> */}
       </View>
 
@@ -341,7 +339,7 @@ console.log("selected item infooo",selectedItem)
             </>
 
             <View>
-              {showOrderData && (
+              {showOrderData && selectedItem?.OrderDetails && (
                 <View style={styles.dataContainer}>
                   <View style={styles.tableHeader}>
                     <Text style={styles.headerText}>Name</Text>
@@ -351,7 +349,7 @@ console.log("selected item infooo",selectedItem)
                   </View>
 
                   <>
-                    {selectedProduct.map((specificProduct) => {
+                    {/* {selectedItem.OrderDetails.map((specificProduct) => {
                       // Check if the product has a quantity value
                       const quantity =
                         productQuantities[specificProduct.ProductId] || 0;
@@ -363,11 +361,11 @@ console.log("selected item infooo",selectedItem)
                             key={specificProduct.ProductId}
                           >
                             <Text style={styles.cellText} numberOfLines={2}>
-                              {specificProduct.Name}
+                              {specificProduct.ProductName}
                             </Text>
-                            <Text style={styles.cellText}>{quantity}</Text>
+                            <Text style={styles.cellText}>{specificProduct.Quantity}</Text>
                             <Text style={styles.cellText}>
-                              {specificProduct.MRP * quantity}
+                              {specificProduct.TotalAmount}
                             </Text>
 
                             <TouchableOpacity
@@ -383,11 +381,35 @@ console.log("selected item infooo",selectedItem)
                       }
 
                       return null;
-                    })}
+                    })} */}
+
+                    {selectedItem.OrderDetails.map((specificProduct) => (
+                      <View
+                        style={styles.tableRow}
+                        key={specificProduct.ProductId}
+                      >
+                        <Text style={styles.cellText} numberOfLines={2}>
+                          {specificProduct.ProductName}
+                        </Text>
+                        <Text style={styles.cellText}>
+                          {specificProduct.Quantity}
+                        </Text>
+                        <Text style={styles.cellText}>
+                          {specificProduct.TotalAmount}
+                        </Text>
+
+                        <TouchableOpacity
+                          style={styles.actionButton}
+                          onPress={() => console.log("Delete button pressed")}
+                        >
+                          <Icon name="trash" size={25} color="tomato" />
+                        </TouchableOpacity>
+                      </View>
+                    ))}
                   </>
 
                   <View style={styles.btngrp}>
-                    <Button>Cancel</Button>
+                    <Button>Back</Button>
                     <Button onPress={fetchCreatenewOrderData}>Submit</Button>
                   </View>
                 </View>
