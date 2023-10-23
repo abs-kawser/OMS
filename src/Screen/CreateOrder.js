@@ -256,6 +256,7 @@ export default function CreateOrder() {
     TerritoryId: userDetails?.TerritoryId,
   };
 
+  //Routing 
   const nextPageComponent = ()=>{
     navigation.navigate("Order Details",{data:requestData})
   }

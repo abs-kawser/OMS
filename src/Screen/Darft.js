@@ -91,6 +91,7 @@ const Draft = ({ navigation }) => {
               <Text style={styles.headerText}>Action</Text>
             </View>
           </View>
+          
           {draftData.map((item, index) => (
             <View style={styles.row} key={index}>
               <View style={styles.column60}>

@@ -29,9 +29,6 @@ const CreateOrderDetails = ({ route }) => {
 
   console.log("create order page data", data?.DeliveryDate);
 
-  //const customerInfo = route.params?.dropDown;
-  //console.log("this customerInfo data ", customerInfo.Name);
-
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
   console.log(customerInformation, "customerInformation");
 
@@ -255,7 +252,12 @@ const CreateOrderDetails = ({ route }) => {
 
         console.log("this is result", JSON.stringify(result, null, 2));
 
-        navigation.navigate("Order Info");
+        // navigation.navigate("Order Info");
+
+        navigation.navigate("Order Info", {
+          orderNo: result.OrderNo, // Pass OrderNo as a parameter
+        });
+
         Toast.show({
           text1: result.Status,
           type: "success",

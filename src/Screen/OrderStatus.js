@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
-  ToastAndroid
+  ToastAndroid,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
@@ -19,9 +19,12 @@ import { Text } from "react-native-paper";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import { useLogin } from "../Context/LoginProvider";
 import { useNavigation } from "@react-navigation/native";
+import { useCustomerInfo } from "../Context/CustomerProvider";
 
 const OrderStatus = () => {
   const navigation = useNavigation();
+
+  const { customerInformation, setCustomerInformation } = useCustomerInfo();
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
@@ -127,26 +130,21 @@ const OrderStatus = () => {
           },
         }
       );
-      
+
       if (!response.ok) {
         setError("An error occurred while fetching data.");
         console.log(response.statusText);
       } else {
         setError(""); // Clear the error state
         const jsonData = await response.json();
-  
+
         if (jsonData.status === "No Data Found !") {
           // setError(jsonData.status);
-          ToastAndroid.show(
-            jsonData.status,
-            ToastAndroid.SHORT
-          );
+          ToastAndroid.show(jsonData.status, ToastAndroid.SHORT);
         } else {
           navigation.navigate("Order Status Info", { OrderStatus: jsonData });
         }
       }
-
-
 
       // console.log(response);
       // const jsonData = await response.json();
@@ -158,13 +156,17 @@ const OrderStatus = () => {
       // setIsLoading(false);
       //return jsonData;
     } catch (error) {
-      setError("An error occurred while fetching data.");      
+      setError("An error occurred while fetching data.");
       console.error("Error fetching data:", error);
-      
-       throw error;
+
+      throw error;
     }
   };
-
+  useEffect(() => {
+    if (customerInformation?.CustomerId) {
+      setCustomerId(customerInformation.CustomerId);
+    }
+  }, [customerInformation]);
   // useEffect(() => {
   //   // declare the data fetching function
   //   const fetchData = async () => {
@@ -302,15 +304,18 @@ const OrderStatus = () => {
 
       {/* Customer ID Input */}
       <View style={{ marginTop: 20 }}>
-        <Text style={styles.label}>Customer ID</Text>
+        <Text style={styles.label}>
+          Customer ID
+          {/* ({customerInformation?.CustomerId}) */}
+        </Text>
         <PaperTextInput
           mode="outlined"
           label="Customer ID"
           placeholder="Enter customer ID"
           onChangeText={(text) => setCustomerId(text)}
           value={customerId}
-          keyboardType="numeric"        
-          />
+          keyboardType="numeric"
+        />
         {/* Search Button */}
         <Button
           mode="contained"
@@ -319,13 +324,13 @@ const OrderStatus = () => {
         >
           Search
         </Button>
-
-   
-   
       </View>
 
-      {error ? <Text style={{ color: "red",marginTop:20,alignSelf:"center" }}>{error}</Text> : null}
-
+      {error ? (
+        <Text style={{ color: "red", marginTop: 20, alignSelf: "center" }}>
+          {error}
+        </Text>
+      ) : null}
     </View>
   );
 };

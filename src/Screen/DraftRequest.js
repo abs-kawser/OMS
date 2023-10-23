@@ -26,10 +26,12 @@ const DraftRequest = ({ route }) => {
   const navigation = useNavigation();
   const { selectedItem, onDeleteItem } = route.params;
 
-  console.log("selected item infooo", JSON.stringify(selectedItem, null, 2));
+  const data = route.params?.data;
+
+  console.log("draft page data", JSON.stringify(selectedItem, null, 2));
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
-  //   console.log(customerInformation, "customerInformation");
+  console.log(customerInformation, "customerInformation");
 
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
@@ -37,31 +39,37 @@ const DraftRequest = ({ route }) => {
   const [showProductData, setShowProductData] = useState(true);
   const [showOrderData, setShowOrderData] = useState(false);
 
-  const [productQuantities, setProductQuantities] = useState({});
-  const [products, setProducts] = useState([]);
-  
-  const [checkedProducts, setCheckedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [orderQuantities, setOrderQuantities] = useState({});
-  // Add a state variable to keep track of selected products
+
+  const [products, setProducts] = useState([]);
+
+  const [productQuantities, setProductQuantities] = useState([]);
+  console.log("product quantities", productQuantities);
+
   const [selectedProductIds, setSelectedProductIds] = useState([]);
-  console.log("selectedProductIds:", selectedProductIds);
+  // console.log("selected  ProductIds:", selectedProductIds);
 
   const [searchTerm, setSearchTerm] = useState("");
-  // console.log(`Quantities`, orderQuantities);
+  const [orderQuantities, setOrderQuantities] = useState(null);
+  console.log(`Quantities`, orderQuantities);
 
-  const [orderNo, setOrderNo] = useState(""); // Initialize with an empty string
-  // console.log("check order No ", orderNo);
+  const [quantity, setQuantity] = useState([]); // Initialize with an empty string
+  console.log("this is quantity value ", quantity);
 
   const [isLoadingProductData, setIsLoadingProductData] = useState(true);
 
   const [selectedProduct, setSelectedProduct] = useState([]);
+
+  const [totalAmount, setTotalAmount] = useState([]);
+
+  // console.log("total ammount",totalAmount);
 
   console.log(
     "selected Products item :",
     JSON.stringify(selectedProduct, null, 2)
   );
 
+  // product api calling
   useEffect(() => {
     // Check if data is already in AsyncStorage
     const getProductList = async () => {
@@ -96,6 +104,25 @@ const DraftRequest = ({ route }) => {
     setShowOrderData(false);
   };
 
+  const logQuantityValues = () => {
+    const quantityValues = selectedProduct.map((product) => {
+      const quantity = productQuantities[product.ProductId] || 0;
+      return quantity;
+    });
+
+    const totalAmountValues = selectedProduct.map((product, index) => {
+      const quantity = quantityValues[index];
+      return product.MRP * quantity;
+    });
+
+    setQuantity(quantityValues);
+    setTotalAmount(totalAmountValues);
+
+    // Log both quantity and totalAmount
+    console.log("Quantity:", quantityValues);
+    console.log("Total Amount:", totalAmountValues);
+  };
+
   const handleOrderButtonPress = () => {
     setShowProductData(false);
     setShowOrderData(true);
@@ -108,8 +135,8 @@ const DraftRequest = ({ route }) => {
         updatedOrderQuantities[productId] = quantity;
       }
     });
-    // Update state with the selected product IDs and order quantities
-    //setSelectedProductIds(Object.keys(updatedOrderQuantities),);
+
+    logQuantityValues();
     setOrderQuantities(updatedOrderQuantities);
   };
 
@@ -166,7 +193,7 @@ const DraftRequest = ({ route }) => {
 
   // ================================== main api calling ========================================================
 
-  const transformedOrderDetails = selectedItem.OrderDetails.map((product) => {
+  const draftOrderDetails = selectedItem.OrderDetails.map((product) => {
     return {
       ProductId: product.ProductId,
       Quantity: product.Quantity, // You can set the desired quantity here
@@ -175,9 +202,22 @@ const DraftRequest = ({ route }) => {
     };
   });
 
+  const transformedOrderDetails = selectedProduct.map((product, index) => {
+    return {
+      ProductId: product.ProductId,
+      Quantity: quantity[index], // You can set the desired quantity here
+      UnitPrice: product.MRP, // Use the trade price or any other desired price
+      Status: 0, // Set the desired status
+    };
+  });
+
+  const mergedOrderDetails = [...draftOrderDetails, ...transformedOrderDetails];
+
+  console.log("merge data", JSON.stringify(mergedOrderDetails, null, 2));
+
   const fetchCreatenewOrderData = async () => {
     const requestData = {
-      OrderDetails: transformedOrderDetails,
+      OrderDetails: mergedOrderDetails,
       CustomerId: selectedItem?.CustomerId,
       OrderDate: selectedItem?.OrderDate,
       DeliveryDate: selectedItem?.DeliveryDate,
@@ -215,7 +255,12 @@ const DraftRequest = ({ route }) => {
           JSON.stringify(result, null, 2)
         );
 
-        navigation.navigate("Order Info");
+        // navigation.navigate("Order Info");
+
+        navigation.navigate("Order Info", {
+          orderNo: result.OrderNo, // Pass OrderNo as a parameter
+        });
+
         Toast.show({
           text1: result.Status,
           type: "success",
@@ -232,6 +277,8 @@ const DraftRequest = ({ route }) => {
     }
   };
 
+  // ==================================
+
   useEffect(() => {
     // Inside this effect, filter and set the selected products based on product IDs
     const selectedProducts = selectedProductIds.map((productId) => {
@@ -247,8 +294,10 @@ const DraftRequest = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.userInformation}>
         {/* Import contex for show name dynamicly*/}
-        <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
-        <Text style={{ color: "black" }}>({selectedItem?.CustomerId})</Text>
+        <Text style={styles.userText1}>{customerInformation?.Name}</Text>
+        <Text style={{ color: "black" }}>
+          ({customerInformation?.CustomerId})
+        </Text>
         {/* <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text> */}
       </View>
 
@@ -338,8 +387,8 @@ const DraftRequest = ({ route }) => {
               )}
             </>
 
-            <View>
-              {showOrderData && selectedItem?.OrderDetails && (
+            {/* <View>
+              {showOrderData && (
                 <View style={styles.dataContainer}>
                   <View style={styles.tableHeader}>
                     <Text style={styles.headerText}>Name</Text>
@@ -349,7 +398,7 @@ const DraftRequest = ({ route }) => {
                   </View>
 
                   <>
-                    {/* {selectedItem.OrderDetails.map((specificProduct) => {
+                    {selectedProduct.map((specificProduct) => {
                       // Check if the product has a quantity value
                       const quantity =
                         productQuantities[specificProduct.ProductId] || 0;
@@ -361,11 +410,11 @@ const DraftRequest = ({ route }) => {
                             key={specificProduct.ProductId}
                           >
                             <Text style={styles.cellText} numberOfLines={2}>
-                              {specificProduct.ProductName}
+                              {specificProduct.Name}
                             </Text>
-                            <Text style={styles.cellText}>{specificProduct.Quantity}</Text>
+                            <Text style={styles.cellText}>{quantity}</Text>
                             <Text style={styles.cellText}>
-                              {specificProduct.TotalAmount}
+                              {specificProduct.MRP * quantity}
                             </Text>
 
                             <TouchableOpacity
@@ -381,35 +430,80 @@ const DraftRequest = ({ route }) => {
                       }
 
                       return null;
-                    })} */}
-
-                    {selectedItem.OrderDetails.map((specificProduct) => (
-                      <View
-                        style={styles.tableRow}
-                        key={specificProduct.ProductId}
-                      >
-                        <Text style={styles.cellText} numberOfLines={2}>
-                          {specificProduct.ProductName}
-                        </Text>
-                        <Text style={styles.cellText}>
-                          {specificProduct.Quantity}
-                        </Text>
-                        <Text style={styles.cellText}>
-                          {specificProduct.TotalAmount}
-                        </Text>
-
-                        <TouchableOpacity
-                          style={styles.actionButton}
-                          onPress={() => console.log("Delete button pressed")}
-                        >
-                          <Icon name="trash" size={25} color="tomato" />
-                        </TouchableOpacity>
-                      </View>
-                    ))}
+                    })}
                   </>
 
                   <View style={styles.btngrp}>
-                    <Button>Back</Button>
+                    <Button>Cancel</Button>
+                    <Button onPress={fetchCreatenewOrderData}>Submit</Button>
+                  </View>
+                </View>
+              )}
+            </View> */}
+
+            <View>
+              {showOrderData && (
+                <View style={styles.dataContainer}>
+                  <View style={styles.tableHeader}>
+                    <Text style={styles.headerText}>Name</Text>
+                    <Text style={styles.headerText}>Quantity</Text>
+                    <Text style={styles.headerText}>Amount</Text>
+                    <Text style={styles.headerText}>Action</Text>
+                  </View>
+
+                  {/* Render selectedProduct */}
+                  {selectedProduct.map((specificProduct) => {
+                    const quantity =
+                      productQuantities[specificProduct.ProductId] || 0;
+
+                    if (quantity > 0) {
+                      return (
+                        <View
+                          style={styles.tableRow}
+                          key={specificProduct.ProductId}
+                        >
+                          <Text style={styles.cellText} numberOfLines={2}>
+                            {specificProduct.Name}
+                          </Text>
+                          <Text style={styles.cellText}>{quantity}</Text>
+                          <Text style={styles.cellText}>
+                            {specificProduct.MRP * quantity}
+                          </Text>
+                          <TouchableOpacity
+                            style={styles.actionButton}
+                            onPress={() => console.log("Delete button pressed")}
+                          >
+                            <Icon name="trash" size={25} color="tomato" />
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    }
+
+                    return null;
+                  })}
+
+                  {/* Render OrderDetails */}
+                  {selectedItem.OrderDetails.map((orderItem) => (
+                    <View style={styles.tableRow} key={orderItem.ProductId}>
+                      <Text style={styles.cellText} numberOfLines={2}>
+                        {orderItem.ProductName}
+                      </Text>
+                      <Text style={styles.cellText}>{orderItem.Quantity}</Text>
+                      <Text style={styles.cellText}>
+                        {orderItem.TotalAmount}
+                      </Text>
+                      {/* You can add an action button for OrderDetails as well */}
+                      <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => console.log("Delete button pressed")}
+                      >
+                        <Icon name="trash" size={25} color="tomato" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+
+                  <View style={styles.btngrp}>
+                    <Button>Cancel</Button>
                     <Button onPress={fetchCreatenewOrderData}>Submit</Button>
                   </View>
                 </View>
