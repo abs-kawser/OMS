@@ -68,6 +68,7 @@ export default function CreateOrder() {
   const { userDetails } = isLoggedIn;
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
+  
  console.log("customerIn formation",JSON.stringify(customerInformation, null, 2));
   
 

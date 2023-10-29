@@ -5,14 +5,17 @@ import { PaperProvider } from "react-native-paper";
 import LoginProvider from "./src/Context/LoginProvider";
 import AppNav from "./src/Navigation/Auth/AppNav";
 import CustomerProvider from "./src/Context/CustomerProvider";
+import DraftProvider from "./src/Context/DraftProvider";
 
 const App = () => {
   return (
     <LoginProvider>
       <CustomerProvider>
-        <PaperProvider>
-          <AppNav />
-        </PaperProvider>
+        <DraftProvider>
+          <PaperProvider>
+            <AppNav />
+          </PaperProvider>
+        </DraftProvider>
       </CustomerProvider>
     </LoginProvider>
   );

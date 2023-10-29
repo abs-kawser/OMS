@@ -30,7 +30,7 @@ const CreateOrderDetails = ({ route }) => {
   console.log("create order page data", data?.DeliveryDate);
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
-  console.log(customerInformation, "customerInformation");
+  console.log("customerInformation from contex api ", customerInformation, );
 
   const navigation = useNavigation();
 
@@ -41,21 +41,21 @@ const CreateOrderDetails = ({ route }) => {
   const [showOrderData, setShowOrderData] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-
   const [products, setProducts] = useState([]);
 
   const [productQuantities, setProductQuantities] = useState([]);
+  const [quantity, setQuantity] = useState([]);
+
   console.log("product quantities", productQuantities);
+  console.log("this is quantity value ", quantity);
 
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   // console.log("selected  ProductIds:", selectedProductIds);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [orderQuantities, setOrderQuantities] = useState(null);
-  console.log(`Quantities`, orderQuantities);
 
-  const [quantity, setQuantity] = useState([]); // Initialize with an empty string
-  console.log("this is quantity value ", quantity);
+  const [orderQuantities, setOrderQuantities] = useState(null);
+  console.log(`orderQuantities`, orderQuantities);
 
   const [isLoadingProductData, setIsLoadingProductData] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState([]);
@@ -99,25 +99,6 @@ const CreateOrderDetails = ({ route }) => {
     getProductList();
   }, []);
 
-  const handleProductButtonPress = () => {
-    setShowProductData(true);
-    setShowOrderData(false);
-  };
-
-  // find quantity value
-
-  // const logQuantityValues = () => {
-  //   const quantityValues = selectedProduct.map(
-  //     (product) => productQuantities[product.ProductId] || 0
-  //   );
-
-  //   const ammount = selectedProduct.map((item)=>setTotalAmount(item.MRP))
-
-  //   setTotalAmount(ammount)
-
-  //   setQuantity(quantityValues);
-  // };
-
   const logQuantityValues = () => {
     const quantityValues = selectedProduct.map((product) => {
       const quantity = productQuantities[product.ProductId] || 0;
@@ -137,6 +118,15 @@ const CreateOrderDetails = ({ route }) => {
     console.log("Total Amount:", totalAmountValues);
   };
 
+  // =====================
+  const handleProductButtonPress = () => {
+    setShowProductData(true);
+    setShowOrderData(false);
+
+    // setIsLoading(false);
+  };
+
+  //=================== order Details  part=================
   const handleOrderButtonPress = () => {
     setShowProductData(false);
     setShowOrderData(true);
@@ -152,6 +142,7 @@ const CreateOrderDetails = ({ route }) => {
 
     logQuantityValues();
     setOrderQuantities(updatedOrderQuantities);
+    // setIsLoading(false);
   };
 
   const handleQuantityChange = (productId, text) => {
@@ -159,7 +150,7 @@ const CreateOrderDetails = ({ route }) => {
       // If the input is empty, clear the quantity
       setProductQuantities((prevQuantities) => {
         const updatedQuantities = { ...prevQuantities };
-        delete updatedQuantities[productId];
+        // delete updatedQuantities[productId];
         return updatedQuantities;
       });
     } else {
@@ -204,6 +195,20 @@ const CreateOrderDetails = ({ route }) => {
       product.Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [products, searchTerm]);
+
+  //delete product
+  const handleDeleteProduct = (productId) => {
+    // Remove the product from selectedProductIds
+    setSelectedProductIds((prevIds) =>
+      prevIds.filter((id) => id !== productId)
+    );
+
+    // Remove the product quantity from productQuantities
+    setProductQuantities((prevQuantities) => {
+      const updatedQuantities = { ...prevQuantities };
+      return updatedQuantities;
+    });
+  };
 
   // ================================== main api calling ========================================================
   const transformedOrderDetails = selectedProduct.map((product, index) => {
@@ -273,6 +278,8 @@ const CreateOrderDetails = ({ route }) => {
       ToastAndroid.show("Network error", ToastAndroid.LONG);
     }
   };
+
+  // ================================== main api calling end ==================================================
 
   // ============== draft save =================
 
@@ -365,16 +372,29 @@ const CreateOrderDetails = ({ route }) => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+        <View style={{ width: "50%" }}>
+         
+          <Button style={styles.button} onPress={handleProductButtonPress}>
+            Product List
+          </Button>
+        </View>
+
+        {/* <TouchableOpacity style={styles.button}>
+
           <Text style={styles.buttonText} onPress={handleProductButtonPress}>
             Product List
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button2}>
+        </TouchableOpacity> */}
+        <View style={{ width: "50%" }}>
+          <Button color="#FF5733" onPress={handleOrderButtonPress}>
+            Order Details
+          </Button>
+        </View>
+        {/* <TouchableOpacity style={styles.button2}>
           <Text style={styles.buttonText} onPress={handleOrderButtonPress}>
             Order Details
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <>
@@ -467,8 +487,10 @@ const CreateOrderDetails = ({ route }) => {
 
                             <TouchableOpacity
                               style={styles.actionButton}
-                              onPress={() =>
-                                console.log("Delete button pressed")
+                              onPress={
+                                () =>
+                                  handleDeleteProduct(specificProduct.ProductId)
+                                // console.log("Delete button pressed")
                               }
                             >
                               <Icon name="trash" size={25} color="tomato" />
@@ -500,6 +522,8 @@ const CreateOrderDetails = ({ route }) => {
 };
 
 export default CreateOrderDetails;
+
+
 
 const styles = StyleSheet.create({
   container: {

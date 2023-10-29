@@ -53,16 +53,22 @@ const RegistrationPage = () => {
       <View style={styles.container}>
         <ScrollView>
           <View>
-            <View>
+
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={styles.commontextContainer}>
                 <Text style={styles.commonText}>Here's</Text>
-                <Text style={styles.commonText}>your first </Text>
-                <Text style={styles.commonText}>step with </Text>
-                <Text style={styles.commonText}>us </Text>
+                <Text style={styles.commonText}>your first</Text>
+                <Text style={styles.commonText}>step with</Text>
+                <Text style={styles.commonText}>us</Text>
               </View>
 
-              <View>
-                <Image />
+              <View style={styles.imageContainer}>
+                <Image
+                  source={{
+                    uri: "https://i.postimg.cc/76T31pPv/register.png",
+                  }}
+                  style={styles.image}
+                />
               </View>
             </View>
 
@@ -143,8 +149,8 @@ const styles = StyleSheet.create({
   },
 
   commonText: {
-    fontSize: 30,
-    fontWeight: "bold",
+    fontSize: 35,
+    // fontWeight: "bold",
     color: "white",
     marginLeft: 30,
     //marginRight: "50%",
@@ -159,8 +165,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
     resizeMode: "cover",
   },
   form: {

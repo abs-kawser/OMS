@@ -24,11 +24,14 @@ import { useCustomerInfo } from "../Context/CustomerProvider";
 
 const DraftRequest = ({ route }) => {
   const navigation = useNavigation();
-  const { selectedItem, onDeleteItem } = route.params;
 
+  //const { selectedItem, onDeleteItem } = route.params;
+
+   const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
+
+
+  console.log("draft page data", JSON.stringify(selectedItem, null, 2));  
   const data = route.params?.data;
-
-  console.log("draft page data", JSON.stringify(selectedItem, null, 2));
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
   console.log(customerInformation, "customerInformation");
@@ -60,10 +63,13 @@ const DraftRequest = ({ route }) => {
 
   const [selectedProduct, setSelectedProduct] = useState([]);
 
+  const [orderItems, setOrderItems] = useState([]);
+
+  //const [orderItems, setOrderItems] = useState(selectedItem.OrderDetails);
+
   const [totalAmount, setTotalAmount] = useState([]);
 
   // console.log("total ammount",totalAmount);
-
   console.log(
     "selected Products item :",
     JSON.stringify(selectedProduct, null, 2)
@@ -290,6 +296,45 @@ const DraftRequest = ({ route }) => {
     );
   }, [selectedProductIds, products]);
 
+  // ============================
+  const handleDeleteProduct = (productId) => {
+    setSelectedProductIds((prevIds) =>
+      prevIds.filter((id) => id !== productId)
+    );
+  };
+
+  // const handleDeleteProduct = (productId) => {
+  //   console.log("Deleting product with ID:", productId);
+
+  //   setSelectedProductIds((prevIds) => {
+  //     const newIds = prevIds.filter((id) => id !== productId);
+  //     console.log("New selectedProductIds:", newIds);
+  //     return newIds;
+  //   });
+  // };
+
+  // =========================================================
+
+  // const handleDeleteOrderItem = (productId) => {
+  //   setOrderItems((prevItems) => prevItems.filter((item) => item.ProductId !== productId));
+  //   console.log("Deleting product with ID:", productId);
+  // };
+
+
+
+  
+  const handleDeleteOrderItem = (productId) => {
+    const updatedOrderDetails = selectedItem.OrderDetails.filter(
+      (orderItem) => orderItem.ProductId !== productId
+    );
+    setSelectedItem((prevSelectedItem) => ({
+      ...prevSelectedItem,
+      OrderDetails: updatedOrderDetails,
+    }));
+  };
+ 
+    
+
   return (
     <View style={styles.container}>
       <View style={styles.userInformation}>
@@ -388,58 +433,58 @@ const DraftRequest = ({ route }) => {
             </>
 
             {/* <View>
-              {showOrderData && (
-                <View style={styles.dataContainer}>
-                  <View style={styles.tableHeader}>
-                    <Text style={styles.headerText}>Name</Text>
-                    <Text style={styles.headerText}>Quantity</Text>
-                    <Text style={styles.headerText}>Amount</Text>
-                    <Text style={styles.headerText}>Action</Text>
-                  </View>
+{showOrderData && (
+<View style={styles.dataContainer}>
+<View style={styles.tableHeader}>
+  <Text style={styles.headerText}>Name</Text>
+  <Text style={styles.headerText}>Quantity</Text>
+  <Text style={styles.headerText}>Amount</Text>
+  <Text style={styles.headerText}>Action</Text>
+</View>
 
-                  <>
-                    {selectedProduct.map((specificProduct) => {
-                      // Check if the product has a quantity value
-                      const quantity =
-                        productQuantities[specificProduct.ProductId] || 0;
+<>
+  {selectedProduct.map((specificProduct) => {
+    // Check if the product has a quantity value
+    const quantity =
+      productQuantities[specificProduct.ProductId] || 0;
 
-                      if (quantity > 0) {
-                        return (
-                          <View
-                            style={styles.tableRow}
-                            key={specificProduct.ProductId}
-                          >
-                            <Text style={styles.cellText} numberOfLines={2}>
-                              {specificProduct.Name}
-                            </Text>
-                            <Text style={styles.cellText}>{quantity}</Text>
-                            <Text style={styles.cellText}>
-                              {specificProduct.MRP * quantity}
-                            </Text>
+    if (quantity > 0) {
+      return (
+        <View
+          style={styles.tableRow}
+          key={specificProduct.ProductId}
+        >
+          <Text style={styles.cellText} numberOfLines={2}>
+            {specificProduct.Name}
+          </Text>
+          <Text style={styles.cellText}>{quantity}</Text>
+          <Text style={styles.cellText}>
+            {specificProduct.MRP * quantity}
+          </Text>
 
-                            <TouchableOpacity
-                              style={styles.actionButton}
-                              onPress={() =>
-                                console.log("Delete button pressed")
-                              }
-                            >
-                              <Icon name="trash" size={25} color="tomato" />
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      }
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() =>
+              console.log("Delete button pressed")
+            }
+          >
+            <Icon name="trash" size={25} color="tomato" />
+          </TouchableOpacity>
+        </View>
+      );
+    }
 
-                      return null;
-                    })}
-                  </>
+    return null;
+  })}
+</>
 
-                  <View style={styles.btngrp}>
-                    <Button>Cancel</Button>
-                    <Button onPress={fetchCreatenewOrderData}>Submit</Button>
-                  </View>
-                </View>
-              )}
-            </View> */}
+<View style={styles.btngrp}>
+  <Button>Cancel</Button>
+  <Button onPress={fetchCreatenewOrderData}>Submit</Button>
+</View>
+</View>
+)}
+              </View> */}
 
             <View>
               {showOrderData && (
@@ -471,9 +516,13 @@ const DraftRequest = ({ route }) => {
                           </Text>
                           <TouchableOpacity
                             style={styles.actionButton}
-                            onPress={() => console.log("Delete button pressed")}
+                            onPress={() =>
+                              handleDeleteProduct(specificProduct.ProductId)
+                            }
+
+                            //onPress={() => console.log("Delete button pressed")}
                           >
-                            <Icon name="trash" size={25} color="tomato" />
+                            <Icon name="trash" size={20} color="#212529" />
                           </TouchableOpacity>
                         </View>
                       );
@@ -495,17 +544,20 @@ const DraftRequest = ({ route }) => {
                       {/* You can add an action button for OrderDetails as well */}
                       <TouchableOpacity
                         style={styles.actionButton}
-                        onPress={() => console.log("Delete button pressed")}
+                        //onPress={() => handleDeleteOrderItem(orderItem.ProductId)}
+                        onPress={() =>
+                          handleDeleteOrderItem(orderItem.ProductId)
+                        }
                       >
-                        <Icon name="trash" size={25} color="tomato" />
+                        <Icon name="trash" size={20} color="#212529" />
                       </TouchableOpacity>
                     </View>
                   ))}
 
                   <View style={styles.btngrp}>
-                    <Button>Cancel</Button>
                     <Button onPress={fetchCreatenewOrderData}>Submit</Button>
                   </View>
+
                 </View>
               )}
             </View>
@@ -586,7 +638,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginRight: 10,
     color: "gray",
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
   price: {
     fontSize: 16,
@@ -631,7 +683,7 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
     fontSize: 15,
-    fontWeight: "bold",
+    // fontWeight: "bold",
   },
   searchBox: {
     // marginLeft: 50,
@@ -668,8 +720,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2", // Header background color
   },
   headerText: {
-    fontWeight: "bold",
+    // fontWeight: "bold",
     fontSize: 16,
+    color: "black",
   },
   tableRow: {
     flexDirection: "row",

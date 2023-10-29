@@ -11,8 +11,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
+import { useDraft } from "../Context/DraftProvider";
 
 const Draft = ({ navigation }) => {
+
+  // const { draftData, setDraftData } = useDraft();
+
   const [draftData, setDraftData] = useState([]);
 
   console.log("this is draft data", JSON.stringify(draftData, null, 2));
@@ -54,9 +58,6 @@ const Draft = ({ navigation }) => {
 
       // Update the state to reflect the changes
       setDraftData(updatedDraftData);
-
-      // Optionally, you can show an alert or confirmation message
-      // Alert.alert('Item deleted successfully');
     } catch (error) {
       console.error("Error deleting item:", error);
     }
@@ -91,7 +92,7 @@ const Draft = ({ navigation }) => {
               <Text style={styles.headerText}>Action</Text>
             </View>
           </View>
-          
+
           {draftData.map((item, index) => (
             <View style={styles.row} key={index}>
               <View style={styles.column60}>
