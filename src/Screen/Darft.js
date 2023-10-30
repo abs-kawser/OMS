@@ -18,7 +18,7 @@ const Draft = ({ navigation }) => {
   // const { draftData, setDraftData } = useDraft();
 
   const [draftData, setDraftData] = useState([]);
-
+                                                     
   console.log("this is draft data", JSON.stringify(draftData, null, 2));
 
   // retrive data from asyncstorage
@@ -106,7 +106,6 @@ const Draft = ({ navigation }) => {
                   style={styles.iconCell}
                   onPress={() => handleItemPress(item)}
                 >
-                  {/* <FontAwesome name="eye" size={24} color="blue" /> */}
                   <Icon name="search" size={18} color="black" />
                 </TouchableOpacity>
               </View>
@@ -117,7 +116,6 @@ const Draft = ({ navigation }) => {
                   onPress={() => handleDeleteItem(item)}
                 >
                   <FontAwesome name="trash" size={18} color="black" />
-                  {/* <Icon name="trash" size={25} color="black" /> */}
                 </TouchableOpacity>
               </View>
             </View>

@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import React, { useState, useMemo, useEffect } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button } from "react-native-paper";
 
 const OrderInfo = ({ route, navigation }) => {
@@ -12,12 +11,11 @@ const OrderInfo = ({ route, navigation }) => {
 
   const [data, setData] = useState(null);
 
+  //======================= Api Calling ==========================
   const fetchOrderInfoData = async () => {
     try {
-      // Construct the URL with query parameters
       const url = `${BASE_URL}/api/NewOrderApi/GetPoInfo?orderNo=${orderNo}&verId=1`;
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-
       // Fetch data from the URL
       const response = await fetch(url, {
         method: "GET",
@@ -26,18 +24,14 @@ const OrderInfo = ({ route, navigation }) => {
           Authorization: authHeader,
         },
       });
-
       const Result = await response.json();
-
       console.log("order info", JSON.stringify(Result, null, 2));
-
       setData(Result);
     } catch (error) {
-      console.error("Fetch error:", error);
-      throw error; // You can handle the error further up the call stack if needed
+      // console.error("Fetch error:", error);
+      // throw error;
     }
   };
-
   useEffect(() => {
     fetchOrderInfoData();
   }, []);

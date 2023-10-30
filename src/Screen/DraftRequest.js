@@ -6,8 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  ActivityIndicator,
-  Alert,
   ToastAndroid,
 } from "react-native";
 import { fetchProductData } from "../Api/ProductListApi";
@@ -18,15 +16,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
-
 import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
+
+
 
 const DraftRequest = ({ route }) => {
   const navigation = useNavigation();
 
   //const { selectedItem, onDeleteItem } = route.params;
-
    const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
 
 
@@ -64,9 +62,7 @@ const DraftRequest = ({ route }) => {
   const [selectedProduct, setSelectedProduct] = useState([]);
 
   const [orderItems, setOrderItems] = useState([]);
-
   //const [orderItems, setOrderItems] = useState(selectedItem.OrderDetails);
-
   const [totalAmount, setTotalAmount] = useState([]);
 
   // console.log("total ammount",totalAmount);
@@ -218,8 +214,11 @@ const DraftRequest = ({ route }) => {
   });
 
   const mergedOrderDetails = [...draftOrderDetails, ...transformedOrderDetails];
-
   console.log("merge data", JSON.stringify(mergedOrderDetails, null, 2));
+
+
+
+
 
   const fetchCreatenewOrderData = async () => {
     const requestData = {
@@ -322,7 +321,7 @@ const DraftRequest = ({ route }) => {
 
 
 
-  
+
   const handleDeleteOrderItem = (productId) => {
     const updatedOrderDetails = selectedItem.OrderDetails.filter(
       (orderItem) => orderItem.ProductId !== productId
@@ -338,12 +337,10 @@ const DraftRequest = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.userInformation}>
-        {/* Import contex for show name dynamicly*/}
         <Text style={styles.userText1}>{customerInformation?.Name}</Text>
         <Text style={{ color: "black" }}>
           ({customerInformation?.CustomerId})
         </Text>
-        {/* <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text> */}
       </View>
 
       <View style={styles.searchBox}>
@@ -432,60 +429,7 @@ const DraftRequest = ({ route }) => {
               )}
             </>
 
-            {/* <View>
-{showOrderData && (
-<View style={styles.dataContainer}>
-<View style={styles.tableHeader}>
-  <Text style={styles.headerText}>Name</Text>
-  <Text style={styles.headerText}>Quantity</Text>
-  <Text style={styles.headerText}>Amount</Text>
-  <Text style={styles.headerText}>Action</Text>
-</View>
-
-<>
-  {selectedProduct.map((specificProduct) => {
-    // Check if the product has a quantity value
-    const quantity =
-      productQuantities[specificProduct.ProductId] || 0;
-
-    if (quantity > 0) {
-      return (
-        <View
-          style={styles.tableRow}
-          key={specificProduct.ProductId}
-        >
-          <Text style={styles.cellText} numberOfLines={2}>
-            {specificProduct.Name}
-          </Text>
-          <Text style={styles.cellText}>{quantity}</Text>
-          <Text style={styles.cellText}>
-            {specificProduct.MRP * quantity}
-          </Text>
-
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() =>
-              console.log("Delete button pressed")
-            }
-          >
-            <Icon name="trash" size={25} color="tomato" />
-          </TouchableOpacity>
-        </View>
-      );
-    }
-
-    return null;
-  })}
-</>
-
-<View style={styles.btngrp}>
-  <Button>Cancel</Button>
-  <Button onPress={fetchCreatenewOrderData}>Submit</Button>
-</View>
-</View>
-)}
-              </View> */}
-
+          
             <View>
               {showOrderData && (
                 <View style={styles.dataContainer}>
@@ -565,9 +509,9 @@ const DraftRequest = ({ route }) => {
         )}
       </>
 
-      <Text style={styles.totalPriceText}>
+      {/* <Text style={styles.totalPriceText}>
         Total Price: {calculateTotalPrice()}
-      </Text>
+      </Text> */}
     </View>
   );
 };

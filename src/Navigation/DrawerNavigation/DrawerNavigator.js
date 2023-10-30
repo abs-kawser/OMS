@@ -10,7 +10,6 @@ import ProductList from "../../Screen/ProductList";
 import NoOrder from "../../Screen/NoOrder";
 import OrderStatus from "../../Screen/OrderStatus";
 import DrawerItems from "./DrawerItems";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import Darft from "../../Screen/Darft";
 
