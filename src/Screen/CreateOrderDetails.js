@@ -23,156 +23,155 @@ import base64 from "base-64";
 
 import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
+import TransitionLoader from "../../components/TransitionLoader";
 
 const CreateOrderDetails = ({ route }) => {
-const data = route.params?.data;
+  const data = route.params?.data;
 
-console.log("create order page data", data?.DeliveryDate);
+  const { customerInformation, setCustomerInformation } = useCustomerInfo();
 
-const { customerInformation, setCustomerInformation } = useCustomerInfo();
-console.log("customerInformation from contex api ", customerInformation, );
+  const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
 
-const navigation = useNavigation();
+  const { isLoggedIn, setIsLoggedIn } = useLogin();
+  const { userDetails } = isLoggedIn;
 
-const { isLoggedIn, setIsLoggedIn } = useLogin();
-const { userDetails } = isLoggedIn;
+  const [showProductData, setShowProductData] = useState(true);
+  const [showOrderData, setShowOrderData] = useState(false);
 
-const [showProductData, setShowProductData] = useState(true);
-const [showOrderData, setShowOrderData] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [productQuantities, setProductQuantities] = useState([]);
+  const [quantity, setQuantity] = useState([]);
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
 
-const [isLoading, setIsLoading] = useState(false);
-const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [orderQuantities, setOrderQuantities] = useState(null);
+  const [isLoadingProductData, setIsLoadingProductData] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [totalAmount, setTotalAmount] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
 
-const [productQuantities, setProductQuantities] = useState([]);
-const [quantity, setQuantity] = useState([]);
+  // console.log("create order page data", data?.DeliveryDate);
+  // console.log("customerInformation from contex api ", customerInformation);
+  // console.log("product quantities", productQuantities);
+  // console.log("this is quantity value ", quantity);
+  //console.log("productxx", JSON.stringify(products, null, 2))
+  // console.log("selected  ProductIds:", selectedProductIds);
+  //console.log(`orderQuantities`, orderQuantities);
+  // console.log("total ammount",totalAmount);
+  // console.log(
+  //   "selected Products item :",
+  //   JSON.stringify(selectedProduct, null, 2)
+  // );
 
-console.log("product quantities", productQuantities);
-console.log("this is quantity value ", quantity);
-
-const [selectedProductIds, setSelectedProductIds] = useState([]);
-// console.log("selected  ProductIds:", selectedProductIds);
-
-const [searchTerm, setSearchTerm] = useState("");
-
-const [orderQuantities, setOrderQuantities] = useState(null);
-console.log(`orderQuantities`, orderQuantities);
-
-const [isLoadingProductData, setIsLoadingProductData] = useState(true);
-const [selectedProduct, setSelectedProduct] = useState([]);
-
-const [totalAmount, setTotalAmount] = useState([]);
-
-// console.log("total ammount",totalAmount);
-
-console.log(
-"selected Products item :",
-JSON.stringify(selectedProduct, null, 2)
-);
-
-// product api calling
-useEffect(() => {
-// Check if data is already in AsyncStorage
-const getProductList = async () => {
-  try {
-    const storedData = await AsyncStorage.getItem("ProductList");
-    if (storedData) {
-      setProducts(JSON.parse(storedData));
-      setIsLoadingProductData(false);
-    } else {
-      // Data not in AsyncStorage, fetch from API
+  // product api calling
+  useEffect(() => {
+    // Check if data is already in AsyncStorage
+    const getProductList = async () => {
       try {
-        const jsonData = await fetchProductData();
-        setProducts(jsonData);
-        setIsLoadingProductData(false);
+        const storedData = await AsyncStorage.getItem("ProductList");
+        if (storedData) {
+          setProducts(JSON.parse(storedData));
+          setIsLoadingProductData(false);
+        } else {
+          // Data not in AsyncStorage, fetch from API
+          try {
+            const jsonData = await fetchProductData();
+            setProducts(jsonData);
+            setIsLoadingProductData(false);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error reading stored data:", error);
+      } finally {
+        setIsLoadingProductData(false); // Set loading to false when fetch is complete
+      }
+    };
+
+    // Call the function to check stored data or fetch from API
+    getProductList();
+  }, []);
+
+  const logQuantityValues = () => {
+    const quantityValues = selectedProduct.map((product) => {
+      const quantity = productQuantities[product.ProductId] || 0;
+      return quantity;
+    });
+
+    const totalAmountValues = selectedProduct.map((product, index) => {
+      const quantity = quantityValues[index];
+      return product.MRP * quantity;
+    });
+
+    setQuantity(quantityValues);
+    setTotalAmount(totalAmountValues);
+
+    // Log both quantity and totalAmount
+    // console.log("Quantity:", quantityValues);
+    // console.log("Total Amount:", totalAmountValues);
+  };
+
+  // =====================
+  const handleProductButtonPress = () => {
+    setShowProductData(true);
+    setShowOrderData(false);
+
+    setShowLoader(true);
+    setTimeout(() => {
+      setShowLoader(false);
+    }, 1000);
+  };
+
+  //=================== order Details  part=================
+  const handleOrderButtonPress = () => {
+    setShowProductData(false);
+    setShowOrderData(true);
+
+    // Initialize an object to store updated order quantities
+    const updatedOrderQuantities = {};
+    // Iterate over selected products and update order quantities
+    selectedProductIds.forEach((productId) => {
+      const quantity = productQuantities[productId] || 0;
+      if (quantity > 0) {
+        updatedOrderQuantities[productId] = quantity;
+      }
+    });
+
+    logQuantityValues();
+    setOrderQuantities(updatedOrderQuantities);
+    // setIsLoading(false);
+  };
+
+  const handleQuantityChange = (productId, text) => {
+    if (text === "") {
+      // If the input is empty, clear the quantity
+      setProductQuantities((prevQuantities) => {
+        const updatedQuantities = { ...prevQuantities };
+        // delete updatedQuantities[productId];
+        return updatedQuantities;
+      });
+    } else {
+      const value = parseInt(text, 10);
+      if (!isNaN(value)) {
+        setProductQuantities((prevQuantities) => ({
+          ...prevQuantities,
+          [productId]: value,
+        }));
+
+        // If the entered quantity is greater than zero, add the productId to selectedProductIds
+        if (value > 0 && !selectedProductIds.includes(productId)) {
+          setSelectedProductIds((prevIds) => [...prevIds, productId]);
+        } else if (value === 0 && selectedProductIds.includes(productId)) {
+          // If the quantity is zero, remove the productId from selectedProductIds
+          setSelectedProductIds((prevIds) =>
+            prevIds.filter((id) => id !== productId)
+          );
+        }
       }
     }
-  } catch (error) {
-    console.error("Error reading stored data:", error);
-  } finally {
-    setIsLoadingProductData(false); // Set loading to false when fetch is complete
-  }
-};
-
-// Call the function to check stored data or fetch from API
-getProductList();
-}, []);
-
-const logQuantityValues = () => {
-const quantityValues = selectedProduct.map((product) => {
-  const quantity = productQuantities[product.ProductId] || 0;
-  return quantity;
-});
-
-const totalAmountValues = selectedProduct.map((product, index) => {
-  const quantity = quantityValues[index];
-  return product.MRP * quantity;
-});
-
-setQuantity(quantityValues);
-setTotalAmount(totalAmountValues);
-
-// Log both quantity and totalAmount
-console.log("Quantity:", quantityValues);
-console.log("Total Amount:", totalAmountValues);
-};
-
-// =====================
-const handleProductButtonPress = () => {
-setShowProductData(true);
-setShowOrderData(false);
-
-// setIsLoading(false);
-};
-
-//=================== order Details  part=================
-const handleOrderButtonPress = () => {
-setShowProductData(false);
-setShowOrderData(true);
-// Initialize an object to store updated order quantities
-const updatedOrderQuantities = {};
-// Iterate over selected products and update order quantities
-selectedProductIds.forEach((productId) => {
-  const quantity = productQuantities[productId] || 0;
-  if (quantity > 0) {
-    updatedOrderQuantities[productId] = quantity;
-  }
-});
-
-logQuantityValues();
-setOrderQuantities(updatedOrderQuantities);
-// setIsLoading(false);
-};
-
-const handleQuantityChange = (productId, text) => {
-if (text === "") {
-  // If the input is empty, clear the quantity
-  setProductQuantities((prevQuantities) => {
-    const updatedQuantities = { ...prevQuantities };
-    // delete updatedQuantities[productId];
-    return updatedQuantities;
-  });
-} else {
-  const value = parseInt(text, 10);
-  if (!isNaN(value)) {
-    setProductQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: value,
-    }));
-
-    // If the entered quantity is greater than zero, add the productId to selectedProductIds
-    if (value > 0 && !selectedProductIds.includes(productId)) {
-      setSelectedProductIds((prevIds) => [...prevIds, productId]);
-    } else if (value === 0 && selectedProductIds.includes(productId)) {
-      // If the quantity is zero, remove the productId from selectedProductIds
-      setSelectedProductIds((prevIds) =>
-        prevIds.filter((id) => id !== productId)
-      );
-    }
-  }
-}
-};
+  };
 
   // Function to calculate total price
   const calculateTotalPrice = () => {
@@ -304,7 +303,10 @@ if (text === "") {
       // Retrieve the existing data from AsyncStorage
       const existingData = await AsyncStorage.getItem("customerInformation");
 
-      console.log("existing data in async storage", existingData);
+      console.log(
+        "existing data in async storage",
+        JSON.stringify(existingData, null, 2)
+      );
 
       // Parse the existing data (or initialize an empty array)
       const customerInfoArray = existingData ? JSON.parse(existingData) : [];
@@ -342,12 +344,10 @@ if (text === "") {
   return (
     <View style={styles.container}>
       <View style={styles.userInformation}>
-        {/* Import contex for show name dynamicly*/}
         <Text style={styles.userText1}>{customerInformation?.Name}</Text>
         <Text style={{ color: "black" }}>
           ({customerInformation?.CustomerId})
         </Text>
-        {/* <Text style={styles.userText2}> UserID :{userDetails.EmpId}</Text> */}
       </View>
 
       <View style={styles.searchBox}>
@@ -366,30 +366,24 @@ if (text === "") {
       </View>
 
       <View style={styles.buttonContainer}>
-        <View style={{ width: "50%" }}>
-         
-          <Button style={styles.button} onPress={handleProductButtonPress}>
+        <TouchableOpacity style={{ width: "50%" }}>
+          <Button
+            style={styles.button}
+            onPress={handleProductButtonPress}
+            // disabled={isLoading} // Disable the button when loading
+          >
             Product List
           </Button>
-        </View>
+        </TouchableOpacity>
 
-        {/* <TouchableOpacity style={styles.button}>
-
-          <Text style={styles.buttonText} onPress={handleProductButtonPress}>
-            Product List
-          </Text>
-        </TouchableOpacity> */}
-        <View style={{ width: "50%" }}>
+        <TouchableOpacity style={{ width: "50%" }}>
           <Button color="#FF5733" onPress={handleOrderButtonPress}>
             Order Details
           </Button>
-        </View>
-        {/* <TouchableOpacity style={styles.button2}>
-          <Text style={styles.buttonText} onPress={handleOrderButtonPress}>
-            Order Details
-          </Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
+
+      {/* {showLoader && <TransitionLoader />} */}
 
       <>
         {isLoadingProductData ? (
@@ -452,10 +446,11 @@ if (text === "") {
             <View>
               {showOrderData && (
                 <View style={styles.dataContainer}>
-
                   <View style={styles.tableHeader}>
-                    <Text style={styles.headerText}>Name</Text>                    
-                    <Text style={[styles.headerText,styles.quantity]}>Quantity</Text>
+                    <Text style={styles.headerText}>Name</Text>
+                    <Text style={[styles.headerText, styles.quantity]}>
+                      Quantity
+                    </Text>
                     <Text style={styles.headerText}>Amount</Text>
                     <Text style={styles.headerText}>Action</Text>
                   </View>
@@ -474,14 +469,14 @@ if (text === "") {
                             <Text style={styles.cellText} numberOfLines={2}>
                               {specificProduct.Name}
                             </Text>
- 
+
                             {/* <View style={{  alignItems: 'center' }}>
-                           <Text style={styles.cellText}>{quantity}</Text>
-                            </View> */}
-                   
-                             <Text style={[styles.cellText,styles.quantity]}  >{quantity}</Text>
+                  <Text style={styles.cellText}>{quantity}</Text>
+                  </View> */}
 
-
+                            <Text style={[styles.cellText, styles.quantity]}>
+                              {quantity}
+                            </Text>
 
                             <Text style={styles.cellText}>
                               {specificProduct.MRP * quantity}
@@ -497,7 +492,6 @@ if (text === "") {
                             >
                               {/* <Icon name="trash" size={25} color="tomato" /> */}
                               <Icon name="trash" size={20} color="#212529" />
-
                             </TouchableOpacity>
                           </View>
                         );
@@ -526,8 +520,6 @@ if (text === "") {
 };
 
 export default CreateOrderDetails;
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -560,12 +552,12 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: "50%", 
+    width: "50%",
     backgroundColor: "#3498db",
     padding: 10,
   },
   button2: {
-    width: "50%", 
+    width: "50%",
     backgroundColor: "#e74c3c",
     padding: 10,
   },
@@ -682,18 +674,21 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc", // Border color
-
   },
-  cellText: {   
+  cellText: {
     fontSize: 13,
     flex: 1,
+    fontWeight: "bold",
+    color: "#00050e",
+
+    // color: "#1985a1",
     // textAlign: 'center',
   },
 
   quantity: {
     marginLeft: 25,
   },
-// ===================
+  // ===================
   actionButton: {
     backgroundColor: "#dee2e6", // Button background color
     padding: 5,

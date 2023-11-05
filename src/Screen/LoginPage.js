@@ -117,7 +117,7 @@ const LoginPage = () => {
           {error && <Text style={styles.warning}>{error}</Text>}
 
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            {isLoading && <ActivityIndicator size="small" color="red" />}
+          {isLoading && <ActivityIndicator size="small" color="red" />}
             <Text style={styles.loginButtonTextX}>Loginn</Text>
           </TouchableOpacity>
 

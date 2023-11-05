@@ -11,13 +11,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
+ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
 import { useDraft } from "../Context/DraftProvider";
 
 const Draft = ({ navigation }) => {
 
-  // const { draftData, setDraftData } = useDraft();
+  const { draftData, setDraftData } = useDraft();
 
-  const [draftData, setDraftData] = useState([]);
+  // const [draftData, setDraftData] = useState([]);
                                                      
   console.log("this is draft data", JSON.stringify(draftData, null, 2));
 
@@ -30,6 +32,7 @@ const Draft = ({ navigation }) => {
           const savedData = await AsyncStorage.getItem("customerInformation");
           if (savedData) {
             const parsedData = JSON.parse(savedData);
+
             setDraftData(parsedData);
           }
         } catch (error) {
@@ -83,7 +86,7 @@ const Draft = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerColumn60}>
-              <Text style={styles.headerText}>Customer Info</Text>
+              <Text style={styles.headerText}>Customer</Text>
             </View>
             <View style={styles.headerColumn}>
               <Text style={styles.headerText}>View</Text>
@@ -92,8 +95,9 @@ const Draft = ({ navigation }) => {
               <Text style={styles.headerText}>Action</Text>
             </View>
           </View>
-
-          {draftData.map((item, index) => (
+     {/* {draftData && Array.isArray(draftData) && draftData.map((item, index)  => ( */}
+           
+           {draftData && draftData?.map((item, index) => (
             <View style={styles.row} key={index}>
               <View style={styles.column60}>
                 <Text style={styles.textColor}>{item.CustomerName}</Text>
@@ -106,7 +110,7 @@ const Draft = ({ navigation }) => {
                   style={styles.iconCell}
                   onPress={() => handleItemPress(item)}
                 >
-                  <Icon name="search" size={18} color="black" />
+                  <MaterialCommunityIcons name="file-find-outline" size={30} color="black" />
                 </TouchableOpacity>
               </View>
 
@@ -115,7 +119,7 @@ const Draft = ({ navigation }) => {
                   style={styles.iconCell}
                   onPress={() => handleDeleteItem(item)}
                 >
-                  <FontAwesome name="trash" size={18} color="black" />
+                  <FontAwesome name="trash" size={20} color="black" />
                 </TouchableOpacity>
               </View>
             </View>

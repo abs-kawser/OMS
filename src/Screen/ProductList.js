@@ -1,10 +1,18 @@
-import { StyleSheet, Text, View, ScrollView, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TextInput,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import { fetchProductData } from "../Api/ProductListApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LottieView from "lottie-react-native";
 
 export default function ProductList() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
@@ -13,7 +21,7 @@ export default function ProductList() {
 
   const [products, setProducts] = useState([]);
   //filter part
-  const [filteredData, setFilteredData] = useState(products);
+  const [filteredData, setFilteredData] = useState([products]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -23,29 +31,6 @@ export default function ProductList() {
     );
     setFilteredData(filtered);
   }, [searchTerm]);
-
-  
-  //fetch api from Api folder
-  // useEffect(() => {
-  //   const getProductList = async () => {
-  //     try {
-  //       const productList = await fetchProductData(setIsLoading);
-  //       // setProducts(productList);
-
-  //       setFilteredData(productList);
-  //       setProducts(productList);
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       // Handle the error gracefully
-  //       console.error("Error fetching product list:", error);
-  //     }
-  //   };
-
-  //   getProductList();
-
-  // }, []);  
-
-
 
   useEffect(() => {
     // Function to fetch data from AsyncStorage
@@ -63,11 +48,8 @@ export default function ProductList() {
         console.error("Error retrieving data from AsyncStorage:", error);
       }
     };
-  
-    // Call the function to fetch data from AsyncStorage
+
     fetchDataFromStorage();
-  
-    // Continue with fetching data from the API
     const getProductList = async () => {
       try {
         const productList = await fetchProductData(setIsLoading);
@@ -78,10 +60,9 @@ export default function ProductList() {
         // console.error("Error fetching product list:", error);
       }
     };
-  
+
     getProductList();
   }, []);
-  
 
   return (
     <>
@@ -99,48 +80,65 @@ export default function ProductList() {
         />
       </View>
 
-      <ScrollView>
-        <Text style={styles.header}>Product  List</Text>
-        {filteredData.map((product, index) => (
-          <View
-            key={index}
-            style={[
-              styles.productCard,
-              {
-                backgroundColor: rainbowColors[index % rainbowColors.length],
-              },
-            ]}
-          >
-            <View style={styles.textContainer}>
-              <Text style={styles.productName}>{product.Name}</Text>
-              <Text style={styles.productInfo}>
-                ({product.ProductCode})
-              </Text>
-            </View>
+      {isLoading ? (
+        // <ActivityIndicator
+        //   size="large"
+        //   color="#0000ff"
+        //   // colors={COLORS.primary}
+        //   style={styles.activityIndicator}
+        // />
 
-            {/* <Text style={styles.productName}>Name:{product.Name}</Text>
+        <View style={styles.loadingContainer}>
+          {/* <ActivityIndicator size="large" color="#0077b6" /> */}
+          <LottieView
+            source={require("../../Lottie/Animation8.json")} // Replace with your animation file path
+            autoPlay
+            loop
+            style={styles.lottiContainer}
+          />
+        </View>
+      ) : (
+        <ScrollView>
+          <Text style={styles.header}>Product List</Text>
+          {filteredData.map((product, index) => (
+            <View
+              key={index}
+              style={[
+                styles.productCard,
+                {
+                  backgroundColor: rainbowColors[index % rainbowColors.length],
+                },
+              ]}
+            >
+              <View style={styles.textContainer}>
+                <Text style={styles.productName}>{product.Name}</Text>
+                <Text style={styles.productInfo}>({product.ProductCode})</Text>
+              </View>
+
+              {/* <Text style={styles.productName}>Name:{product.Name}</Text>
             <Text style={styles.productInfo}>
               ProductCode:{product.ProductCode}
             </Text> */}
 
-            <Text style={styles.Category}>
-               Category: {product.ProductCategory}
-            </Text>
+              <Text style={styles.Category}>
+                Category: {product.ProductCategory}
+              </Text>
 
-            <View style={styles.textContainer}> 
-            <Text style={styles.productInfo}>Trade Price : Tk {product.MRP}</Text>
-            <Text style={styles.tradeLicense}>
-            Pack Size: {product.PackSize}
-            </Text>
-            </View>
-            {/* <Text style={styles.tradeLicense}>
+              <View style={styles.textContainer}>
+                <Text style={styles.productInfo}>
+                  Trade Price : Tk {product.MRP}
+                </Text>
+                <Text style={styles.tradeLicense}>
+                  Pack Size: {product.PackSize}
+                </Text>
+              </View>
+              {/* <Text style={styles.tradeLicense}>
               Trade License: {product.ProductFamilyName}
             </Text> */}
-
-            
-          </View>
-        ))}
-      </ScrollView>
+            </View>
+          ))}
+        </ScrollView>
+      )}
 
       {/* total */}
       <View style={styles.bottomTextContainer}>
@@ -162,7 +160,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 16,
-    marginLeft:25
+    marginLeft: 25,
   },
   productCard: {
     marginLeft: 22,
@@ -180,15 +178,14 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 16,
-    color: "black"
+    color: "black",
     // fontWeight: "bold",
   },
   productInfo: {
-    color: "black"
+    color: "black",
     // marginTop: 8,
   },
   tradeLicense: {
-     
     color: "black", // You can customize the color as needed
   },
 
@@ -235,16 +232,30 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   textContainer: {
-    flexDirection: 'row',
-    gap:10 ,
-   
-     
+    flexDirection: "row",
+    gap: 10,
   },
-  Category:{
-    color:"black",
-    marginTop:8,
-    marginBottom:8
-  }
+  Category: {
+    color: "black",
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  loadingContainer: {
+    alignSelf: "center",
+    flex: 1,
+    // justifyContent:"center",
+    // alignItems:"center"
+  },
+  lottiContainer: {
+    height: 50,
+    width: 100,
+  },
 });
 
 // ============Fetch Api manualy ==================\\

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React from "react";
 import { Button } from "react-native-paper";
 import { lightBlue100 } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
@@ -12,37 +12,19 @@ export default function Home() {
   const { userDetails } = isLoggedIn;
 
   return (
-
-
-    <View>
-      {/* <Header/> */}
-      <ScrollView> 
+    <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.Details}>User Details Details</Text>
+        <Text style={styles.Details}>User Details</Text>
         <Text style={styles.text}>Name:{userDetails.FullName}</Text>
         <Text style={styles.text}> EmpId:{userDetails.EmpId}</Text>
         <Text style={styles.text}> Email:{userDetails.Email}</Text>
         <Text style={styles.text}> MobileNo:{userDetails.MobileNo}</Text>
         <Text style={styles.text}>
-          DesignationName:{userDetails.DesignationName}
+          Designation:{userDetails.DesignationName}
         </Text>
-        <Text style={styles.text}>
-          FulRegionNamelName:{userDetails.RegionName}
-        </Text>
+        <Text style={styles.text}>Full Region:{userDetails.RegionName}</Text>
       </View>
-
-      {/* <FanseCards /> */}
-      {/* <ElevatedCards /> */}
-      </ScrollView>
-    </View>
- 
-    // <View> 
-       
-    //      <Text> abc </Text>
-    // </View>
-
-
-
+    </ScrollView>
   );
 }
 
@@ -58,9 +40,10 @@ const styles = StyleSheet.create({
     color: "#00a6fb",
   },
   Details: {
-    marginLeft: 50,
+    alignSelf: "center",
     color: "black",
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 25,
+    // marginLeft: 50,
+    // fontWeight: "bold",
   },
 });

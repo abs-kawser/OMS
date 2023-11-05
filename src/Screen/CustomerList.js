@@ -18,6 +18,7 @@ import { Button } from "@rneui/themed";
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { Button } from "react-native-elements";
+import LottieView from "lottie-react-native";
 
 export default function CustomerList() {
   const navigation = useNavigation();
@@ -32,7 +33,7 @@ export default function CustomerList() {
   const [isLoading, setIsLoading] = useState(true);
 
   //filter part
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState([data]);
   const [searchTerm, setSearchTerm] = useState("");
 
   // Initialize with null
@@ -126,7 +127,25 @@ export default function CustomerList() {
             {/* <Button onPress={CreateOrder}>Create  Order</Button> */}
           </TouchableOpacity>
         </View>
-        <ScrollView keyboardShouldPersistTaps={"handled"}>
+
+      {isLoading ? (
+        // <ActivityIndicator
+        //   size="large"
+        //   color="#0000ff"
+        //   // colors={COLORS.primary}
+        //   style={styles.activityIndicator}
+        // />
+
+        <View style={styles.loadingContainer}>
+        {/* <ActivityIndicator size="large" color="#0077b6" /> */}
+        <LottieView
+          source={require("../../Lottie/Animation6.json")} // Replace with your animation file path
+          autoPlay
+          loop
+          style={styles.lottiContainer}
+        />
+      </View>
+      ) :  (<ScrollView keyboardShouldPersistTaps={"handled"}>
           {filteredData.map((Customer, index) => (
             // <TouchableOpacity key={index}>
             <View
@@ -173,7 +192,9 @@ export default function CustomerList() {
             </View>
             // </TouchableOpacity>
           ))}
-        </ScrollView>
+        </ScrollView>)}
+
+
       </View>
 
       {/* total */}
@@ -188,6 +209,8 @@ export default function CustomerList() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    // backgroundColor: "#caf0f8",
     padding: 16,
   },
   headerAndButton: {
@@ -270,5 +293,15 @@ const styles = StyleSheet.create({
   Address: {
     marginTop: 10,
     color: "black",
+  }, 
+  loadingContainer: {
+    alignSelf: "center",
+    flex: 1,
+    // justifyContent:"center",
+    // alignItems:"center"
+  },
+  lottiContainer: {
+    height: 50,
+    width: 50,
   },
 });

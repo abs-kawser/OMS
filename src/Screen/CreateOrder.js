@@ -49,7 +49,6 @@ export default function CreateOrder() {
   const [isLoading, setIsLoading] = useState(false);
 
   //const [dropDown, setDropDown] = useState(null);
-
   //checking on log
   // console.log("client name ", client);
   // console.log("orderDate name ", orderDate);
@@ -304,8 +303,8 @@ export default function CreateOrder() {
             />
           </TouchableOpacity>
 
-          {/*           
-          {isClientNameTouched && !isClientNameValid && client === "" && (
+                    
+          {/* {isClientNameTouched && !isClientNameValid && client === "" && (
             <Text style={styles.errorMessage}>Client name is required ***</Text>
           )} */}
 

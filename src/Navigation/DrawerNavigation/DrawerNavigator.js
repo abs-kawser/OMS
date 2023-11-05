@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -7,11 +7,13 @@ import CreateOrder from "../../Screen/CreateOrder";
 // import OrderCollection from "../../Screen/OrderCollection";
 import CustomerList from "../../Screen/CustomerList";
 import ProductList from "../../Screen/ProductList";
-import NoOrder from "../../Screen/NoOrder";
+import NoOrder from "../../Screen/ChangePassword";
 import OrderStatus from "../../Screen/OrderStatus";
 import DrawerItems from "./DrawerItems";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import Darft from "../../Screen/Darft";
+import ChangePassword from "../../Screen/ChangePassword";
+// import { Image } from "react-native-paper/lib/typescript/components/Avatar/Avatar";
 
 const Drawer = createDrawerNavigator();
 
@@ -19,8 +21,7 @@ const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
-      drawerContent={(props) => 
-      <DrawerItems {...props} />}
+      drawerContent={(props) => <DrawerItems {...props} />}
       screenOptions={{
         headerTitleAlign: "center",
         headerTintColor: "#ffffff",
@@ -38,10 +39,14 @@ const DrawerNavigator = () => {
         component={Home}
         options={{
           drawerIcon: ({ focused, size }) => (
-            <FontAwesome
-              name="home"
-              size={size}
-              color={focused ? "black" : "gray"}
+            // <FontAwesome
+            //   name="home"
+            //   size={size}
+            //   color={focused ? "black" : "gray"}
+            // />
+            <Image
+              style={{ height: 20, width: 20, resizeMode: "contain" }}
+              source={require("../../../assets/lodge.png")}
             />
           ),
         }}
@@ -53,10 +58,15 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: "Create Order",
           drawerIcon: ({ focused, size }) => (
-            <FontAwesome
-              name="plus-circle" // Change this to the actual icon name
-              size={size}
-              color={focused ? "black" : "gray"}
+            // <FontAwesome
+            //   name="plus-circle" // Change this to the actual icon name
+            //   size={size}
+            //   color={focused ? "black" : "gray"}
+            // />
+
+            <Image
+              style={{ height: 25, width: 25, resizeMode: "contain" }}
+              source={require("../../../assets/delivery-service.png")}
             />
           ),
         }}
@@ -67,10 +77,14 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: "Customer List",
           drawerIcon: ({ focused, size }) => (
-            <FontAwesome
-              name="address-book" // Change this to the actual icon name
-              size={size}
-              color={focused ? "black" : "gray"}
+            // <FontAwesome
+            //   name="address-book" // Change this to the actual icon name
+            //   size={size}
+            //   color={focused ? "black" : "gray"}
+            // />
+            <Image
+              style={{ height: 25, width: 25, resizeMode: "contain" }}
+              source={require("../../../assets/customer.png")}
             />
           ),
         }}
@@ -81,10 +95,15 @@ const DrawerNavigator = () => {
         options={{
           // drawerLabel: "Customer List",
           drawerIcon: ({ focused, size }) => (
-            <FontAwesome
-              name="briefcase-medical" // Change this to the actual icon name
-              size={size}
-              color={focused ? "black" : "gray"}
+            // <FontAwesome
+            //   name="briefcase-medical" // Change this to the actual icon name
+            //   size={size}
+            //   color={focused ? "black" : "gray"}
+            // />
+
+            <Image
+              style={{ height: 25, width: 25, resizeMode: "contain" }}
+              source={require("../../../assets/list.png")}
             />
           ),
         }}
@@ -95,25 +114,35 @@ const DrawerNavigator = () => {
         options={{
           // drawerLabel: "Customer List",
           drawerIcon: ({ focused, size }) => (
-            <FontAwesome
-              name="user-clock" // Change this to the actual icon name
-              size={size}
-              color={focused ? "black" : "gray"}
+            // <FontAwesome
+            //   name="user-clock" // Change this to the actual icon name
+            //   size={size}
+            //   color={focused ? "black" : "gray"}
+            // />
+
+            <Image
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
+              source={require("../../../assets/order-refund.png")}
             />
           ),
         }}
       />
 
       <Drawer.Screen
-        name="No Order"
-        component={NoOrder}
+        name="Change Password"
+        component={ChangePassword}
         options={{
           // drawerLabel: "Customer List",
           drawerIcon: ({ focused, size }) => (
-            <FontAwesome
-              name="bell-slash" // Change this to the actual icon name
-              size={size}
-              color={focused ? "black" : "gray"}
+            // <FontAwesome
+            //   name="bell-slash" // Change this to the actual icon name
+            //   size={size}
+            //   color={focused ? "black" : "gray"}
+            // />
+
+            <Image
+              style={{ height: 25, width: 25, resizeMode: "contain" }}
+              source={require("../../../assets/password.png")}
             />
           ),
         }}
@@ -130,12 +159,16 @@ const DrawerNavigator = () => {
           headerTintColor: "white",
           headerTitleAlign: "center",
 
-
           drawerIcon: ({ focused, size }) => (
-            <FontAwesome
-              name="file-export" // Change this to the actual icon name
-              size={size}
-              color={focused ? "black" : "gray"}
+            // <FontAwesome
+            //   name="file-export" // Change this to the actual icon name
+            //   size={size}
+            //   color={focused ? "black" : "gray"}
+            // />
+
+            <Image
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
+              source={require("../../../assets/drafts.png")}
             />
           ),
         }}

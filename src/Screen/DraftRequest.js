@@ -18,20 +18,25 @@ import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
+import { useDraft } from "../Context/DraftProvider";
 
 
 
 const DraftRequest = ({ route }) => {
+
+
   const navigation = useNavigation();
 
+  const { draftData, setDraftData } = useDraft();
   //const { selectedItem, onDeleteItem } = route.params;
-   const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
+  const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
 
+  console.log("draft page data", JSON.stringify(selectedItem, null, 2));
 
-  console.log("draft page data", JSON.stringify(selectedItem, null, 2));  
   const data = route.params?.data;
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
+  
   console.log(customerInformation, "customerInformation");
 
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -198,31 +203,30 @@ const DraftRequest = ({ route }) => {
   const draftOrderDetails = selectedItem.OrderDetails.map((product) => {
     return {
       ProductId: product.ProductId,
-      Quantity: product.Quantity, // You can set the desired quantity here
-      UnitPrice: product.UnitPrice, // Use the unit price or any other desired price
-      Status: 0, // Set the desired status
+      Quantity: product.Quantity,
+      UnitPrice: product.UnitPrice,
+      Status: 0,
     };
   });
 
   const transformedOrderDetails = selectedProduct.map((product, index) => {
     return {
       ProductId: product.ProductId,
-      Quantity: quantity[index], // You can set the desired quantity here
-      UnitPrice: product.MRP, // Use the trade price or any other desired price
-      Status: 0, // Set the desired status
+      Quantity: quantity[index],
+      UnitPrice: product.MRP,
+      Status: 0,
     };
   });
 
-  const mergedOrderDetails = [...draftOrderDetails, ...transformedOrderDetails];
-  console.log("merge data", JSON.stringify(mergedOrderDetails, null, 2));
-
-
-
-
+  const initialMergedOrderDetails = [
+    ...draftOrderDetails,
+    ...transformedOrderDetails,
+  ];
+  console.log("merge data", JSON.stringify(initialMergedOrderDetails, null, 2));
 
   const fetchCreatenewOrderData = async () => {
     const requestData = {
-      OrderDetails: mergedOrderDetails,
+      OrderDetails: initialMergedOrderDetails,
       CustomerId: selectedItem?.CustomerId,
       OrderDate: selectedItem?.OrderDate,
       DeliveryDate: selectedItem?.DeliveryDate,
@@ -319,28 +323,126 @@ const DraftRequest = ({ route }) => {
   //   console.log("Deleting product with ID:", productId);
   // };
 
+  //this code is for draft save product delete  semi working ocde
 
+  // const handleDeleteOrderItem = async (productId) => {
+  //   const updatedOrderDetails = selectedItem.OrderDetails.filter(
+  //     (orderItem) => orderItem.ProductId !== productId
+  //   );
+  //   setSelectedItem((prevSelectedItem) => ({
+  //     ...prevSelectedItem,
+  //     OrderDetails: updatedOrderDetails,
+  //   }));
 
+  //   // Update the AsyncStorage data
+  //   // await AsyncStorage.setItem("customerInformation", JSON.stringify(updatedOrderDetails));
 
-  const handleDeleteOrderItem = (productId) => {
-    const updatedOrderDetails = selectedItem.OrderDetails.filter(
-      (orderItem) => orderItem.ProductId !== productId
-    );
-    setSelectedItem((prevSelectedItem) => ({
-      ...prevSelectedItem,
-      OrderDetails: updatedOrderDetails,
-    }));
+  //     // Update the state with the modified data
+  //     // setDraftData(updatedOrderDetails);
+
+  // };
+
+  // ============== amar kaj kora ============
+
+  // const handleDeleteOrderItem = async (productId) => {
+  //   try {
+  //     // Create a copy of the selected item and its OrderDetails
+  //     const updatedOrderDetails = [...selectedItem.OrderDetails];
+
+  //     // Filter out the item with the specified productId
+  //     const updatedOrderDetailsFiltered = updatedOrderDetails.filter(
+  //       (orderItem) => orderItem.ProductId !== productId
+  //     );
+
+  //     // Update the selected item's OrderDetails with the filtered data
+  //     setSelectedItem((prevSelectedItem) => ({
+  //       ...prevSelectedItem,
+  //       OrderDetails: updatedOrderDetailsFiltered,
+  //     }));
+
+  //     // Update the AsyncStorage data with the modified OrderDetails
+  //     const updatedData = { ...draftData, OrderDetails: updatedOrderDetailsFiltered };
+  //     await AsyncStorage.setItem("customerInformation", JSON.stringify(updatedData));
+
+  //     setDraftData(updatedData);
+
+  //   } catch (error) {
+  //     console.error("Error deleting item:", error);
+  //   }
+  // };
+
+  // const handleDeleteOrderItem = async (productId) => {
+  //   try {
+  //     // Create a copy of the selected item
+  //     const updatedSelectedItem = { ...selectedItem };
+
+  //     // Filter out the item with the specified productId from OrderDetails
+  //     const updatedOrderDetailsFiltered = updatedSelectedItem.OrderDetails.filter(
+  //       (orderItem) => orderItem.ProductId !== productId
+  //     );
+
+  //     // Update the selected item's OrderDetails with the filtered data
+  //     updatedSelectedItem.OrderDetails = updatedOrderDetailsFiltered;
+
+  //     setSelectedItem(updatedSelectedItem)
+
+  //     // Update the AsyncStorage data with the modified selected item
+  //     await AsyncStorage.setItem("customerInformation", JSON.stringify(updatedSelectedItem));
+
+  //     // Update the state with the modified data
+  //     setDraftData(updatedSelectedItem);
+  //   } catch (error) {
+  //     console.error("Error deleting item:", error);
+  //   }
+  // };
+
+  const handleDeleteOrderItem = async (productId) => {
+    try {
+      // Create a copy of the draftData array
+      const updatedDraftData = [...draftData];
+
+      // Find the specific item within the cloned array
+      const itemIndex = updatedDraftData.findIndex(
+        (item) => item.CustomerId === selectedItem.CustomerId
+      );
+
+      if (itemIndex !== -1) {
+        // Clone the selected item within the array
+        const updatedSelectedItem = { ...updatedDraftData[itemIndex] };
+
+        // Filter out the item with the specified productId from OrderDetails
+        const updatedOrderDetailsFiltered =
+          updatedSelectedItem.OrderDetails.filter(
+            (orderItem) => orderItem.ProductId !== productId
+          );
+
+        // Update the selected item's OrderDetails with the filtered data
+        updatedSelectedItem.OrderDetails = updatedOrderDetailsFiltered;
+
+        setSelectedItem(updatedSelectedItem);
+
+        // Update the draftData array with the modified item
+        updatedDraftData[itemIndex] = updatedSelectedItem;
+
+        // Update the AsyncStorage data with the modified draftData
+        await AsyncStorage.setItem(
+          "customerInformation",
+          JSON.stringify(updatedDraftData)
+        );
+
+        // Update the state with the modified data
+        setDraftData(updatedDraftData);
+      }
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
   };
- 
-    
 
   return (
     <View style={styles.container}>
       <View style={styles.userInformation}>
-        <Text style={styles.userText1}>{customerInformation?.Name}</Text>
-        <Text style={{ color: "black" }}>
-          ({customerInformation?.CustomerId})
-        </Text>
+        <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
+        <Text style={{ color: "black" }}>({selectedItem?.CustomerId})</Text>
       </View>
 
       <View style={styles.searchBox}>
@@ -359,15 +461,20 @@ const DraftRequest = ({ route }) => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText} onPress={handleProductButtonPress}>
+        <TouchableOpacity style={{ width: "50%" }}>
+          <Button
+            style={styles.button}
+            onPress={handleProductButtonPress}
+            // disabled={isLoading} // Disable the button when loading
+          >
             Product List
-          </Text>
+          </Button>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button2}>
-          <Text style={styles.buttonText} onPress={handleOrderButtonPress}>
+
+        <TouchableOpacity style={{ width: "50%" }}>
+          <Button color="#FF5733" onPress={handleOrderButtonPress}>
             Order Details
-          </Text>
+          </Button>
         </TouchableOpacity>
       </View>
 
@@ -429,13 +536,17 @@ const DraftRequest = ({ route }) => {
               )}
             </>
 
-          
             <View>
               {showOrderData && (
                 <View style={styles.dataContainer}>
                   <View style={styles.tableHeader}>
                     <Text style={styles.headerText}>Name</Text>
-                    <Text style={styles.headerText}>Quantity</Text>
+
+                    {/* <Text style={styles.headerText}>Quantity</Text> */}
+                    <Text style={[styles.headerText, styles.quantity]}>
+                      Quantity
+                    </Text>
+
                     <Text style={styles.headerText}>Amount</Text>
                     <Text style={styles.headerText}>Action</Text>
                   </View>
@@ -454,7 +565,12 @@ const DraftRequest = ({ route }) => {
                           <Text style={styles.cellText} numberOfLines={2}>
                             {specificProduct.Name}
                           </Text>
-                          <Text style={styles.cellText}>{quantity}</Text>
+
+                          {/* <Text style={styles.cellText}>{quantity}</Text> */}
+                          <Text style={[styles.cellText, styles.quantity]}>
+                            {quantity}
+                          </Text>
+
                           <Text style={styles.cellText}>
                             {specificProduct.MRP * quantity}
                           </Text>
@@ -501,7 +617,6 @@ const DraftRequest = ({ route }) => {
                   <View style={styles.btngrp}>
                     <Button onPress={fetchCreatenewOrderData}>Submit</Button>
                   </View>
-
                 </View>
               )}
             </View>
@@ -678,10 +793,12 @@ const styles = StyleSheet.create({
   cellText: {
     fontSize: 13,
     flex: 1,
+    fontWeight: "bold",
+    color: "black",
   },
-  quantity: {
-    marginLeft: 20,
-  },
+  // quantity: {
+  //   marginLeft: 20,
+  // },
 
   actionButton: {
     backgroundColor: "#dee2e6", // Button background color
@@ -711,5 +828,8 @@ const styles = StyleSheet.create({
   lottiContainer: {
     height: 50,
     width: 50,
+  },
+  quantity: {
+    marginLeft: 25,
   },
 });
