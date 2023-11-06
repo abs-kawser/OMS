@@ -17,6 +17,7 @@ import Header from "../../components/Header";
 import { useLogin } from "../Context/LoginProvider";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from "react-native-paper";
 
 const LoginPage = () => {
   const navigation = useNavigation();
@@ -117,16 +118,26 @@ const LoginPage = () => {
           {error && <Text style={styles.warning}>{error}</Text>}
 
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          {isLoading && <ActivityIndicator size="small" color="red" />}
+            {isLoading && <ActivityIndicator size="small" color="red" />}
             <Text style={styles.loginButtonTextX}>Loginn</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.registerNow}
             onPress={handleRegisterNow}
           >
             <Text style={styles.registerNowText}>Register Now</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+          <Button
+            icon="arrow-right"
+            mode="contained"
+            onPress={handleRegisterNow}
+            buttonColor="#0466c8"
+            contentStyle={{ flexDirection: "row-reverse" }}
+          >
+            Register Now
+          </Button>
         </SafeAreaView>
       </View>
     </>
@@ -177,11 +188,11 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: "center",
     justifyContent: "center",
-    width: "40%",
-    backgroundColor: "#ffe66d",
+    width: "25%",
+    backgroundColor: "#00a6fb",
     paddingVertical: 12,
     paddingHorizontal: 24,
-    borderRadius: 15,
+    borderRadius: 5,
     alignItems: "center",
     alignSelf: "center",
     marginBottom: 16,
@@ -189,7 +200,7 @@ const styles = StyleSheet.create({
   loginButtonTextX: {
     fontSize: 15,
     //fontWeight: 'bold',
-    color: "#7d8597",
+    color: "white",
     fontWeight: "bold",
   },
   registerNow: {
@@ -205,8 +216,6 @@ const styles = StyleSheet.create({
     color: "red",
   },
 });
-
-
 
 export default LoginPage;
 //check

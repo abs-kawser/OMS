@@ -11,7 +11,6 @@ const OrderInfo = ({ route, navigation }) => {
 
   const [data, setData] = useState(null);
 
-  
   //======================= Api Calling ==========================
   const fetchOrderInfoData = async () => {
     try {
@@ -47,7 +46,7 @@ const OrderInfo = ({ route, navigation }) => {
 
   return (
     <ScrollView>
-      <View style={{ padding: 10, backgroundColor: "#e9ecef", elevation: 5}}>
+      <View style={{ padding: 10, backgroundColor: "#e9ecef", elevation: 5 }}>
         <View style={styles.pageInfoOne}>
           <Text style={styles.text}>{data?.OrderBaicInfo?.OrderNo}</Text>
           <Text style={styles.text}>{data?.OrderBaicInfo?.OrderDate} </Text>
@@ -95,7 +94,7 @@ const OrderInfo = ({ route, navigation }) => {
           </Text>
         </View>
 
-        <View style={{ width: 100, alignSelf: "center",marginVertical:30 }}>
+        <View style={{ width: 100, alignSelf: "center", marginVertical: 30 }}>
           <Button
             icon="arrow-left"
             mode="contained"
@@ -105,6 +104,7 @@ const OrderInfo = ({ route, navigation }) => {
             Back
           </Button>
         </View>
+
       </View>
     </ScrollView>
   );
@@ -113,6 +113,14 @@ const OrderInfo = ({ route, navigation }) => {
 export default OrderInfo;
 
 const styles = StyleSheet.create({
+
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
+    backgroundColor: "#ffffff",
+    // elevation: 5,
+  },
   pageInfoOne: {
     marginTop: 10,
     // backgroundColor: "#c9cdd0",
@@ -130,26 +138,14 @@ const styles = StyleSheet.create({
     lineHeight: 50,
   },
   divider: {
-    // borderBottomWidth: "10%", // Set the border width to create a line.
-    borderBottomColor: "gray", // Set the color of the line to gray.
-    marginVertical: 8, // Add vertical margin to separate the divider from text.
+    borderBottomColor: "gray", 
+    marginVertical: 8, 
 
-    flex: 1, // Take up available space.
-    height: 1, // Set the height of the divider.
+    flex: 1, 
+    height: 1, 
     width: "60%",
-    backgroundColor: "gray", // Set the color of the line to gray.
-    // marginLeft: "20%",
+    backgroundColor: "gray", 
     alignSelf: "center",
-  },
-
-  container: {
-    // alignSelf:"center",
-    // flex:1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 16,
-    backgroundColor: "#ffffff",
-    // elevation: 5,
   },
   column: {
     // flex: 1,

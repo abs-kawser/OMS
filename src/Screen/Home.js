@@ -11,6 +11,8 @@ export default function Home() {
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
 
+
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -23,7 +25,7 @@ export default function Home() {
           Designation:{userDetails.DesignationName}
         </Text>
         <Text style={styles.text}>Full Region:{userDetails.RegionName}</Text>
-      </View>
+      </View>     
     </ScrollView>
   );
 }
@@ -33,6 +35,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     alignItems: "center",
     gap: 10,
+    flex:1,
   },
   text: {
     fontSize: 16,
@@ -46,4 +49,7 @@ const styles = StyleSheet.create({
     // marginLeft: 50,
     // fontWeight: "bold",
   },
+
+
+  
 });

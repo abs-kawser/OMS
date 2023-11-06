@@ -15,8 +15,11 @@ import { useEffect, useState } from "react";
 import { fetchRegistrationData } from "../Api/RegistrationApi";
 import base64 from "base-64";
 import { Divider } from "react-native-paper";
+import { Button } from "react-native-paper";
 
-const RegistrationPage = () => {
+
+
+const RegistrationPage = ({navigation}) => {
   const [userId, setUserId] = useState("");
   console.log("USer id", userId);
   const [mobile, setMobile] = useState("");
@@ -53,7 +56,6 @@ const RegistrationPage = () => {
       <View style={styles.container}>
         <ScrollView>
           <View>
-
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={styles.commontextContainer}>
                 <Text style={styles.commonText}>Here's</Text>
@@ -119,6 +121,15 @@ const RegistrationPage = () => {
                     {JSON.stringify(registrationResponse.Message)}
                   </Text>
                 )}
+
+                <Button
+                  icon="arrow-left"
+                  mode="contained"
+                  onPress={() => navigation.goBack()}
+                  buttonColor="tomato"
+                >
+                  Back
+                </Button>
               </View>
             </View>
           </View>

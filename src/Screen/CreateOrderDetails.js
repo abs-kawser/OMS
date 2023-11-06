@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 15,
     marginRight: 10,
-    color: "gray",
+    color: "black",
     fontWeight: "bold",
   },
   price: {

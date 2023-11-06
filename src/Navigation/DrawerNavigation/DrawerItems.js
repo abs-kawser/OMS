@@ -66,15 +66,20 @@ const DrawerItems = (props) => {
           }}
         >
           <Image
-            source={{
-              uri: "https://i.postimg.cc/qR60dZkB/user-circle-icon-172814.png",
-            }}
+            // source={{
+            //   uri: "https://i.postimg.cc/qR60dZkB/user-circle-icon-172814.png",
+            // }}
+
+            // style={{ height: 20, width: 20, resizeMode: "contain" }}
+            source={require("../../../assets/user.png")}
+
             style={{
               width: 100,
-              height: 70,
-              // alignSelf: "center",
+              height: 80,
               margin: 10,
               resizeMode: "contain",
+             // alignSelf: "center",
+
             }}
           />
 
@@ -87,8 +92,6 @@ const DrawerItems = (props) => {
             </Text>
           </View>
         </View>
-
-        {/* screens  */}
         <View>
           <DrawerItemList {...props} />
         </View>
@@ -115,14 +118,11 @@ const styles = StyleSheet.create({
     marginLeft:30
   },
   grayText: {
-    //color: "#323031",
-    // color:"gray",
+    
     fontSize: 18,
     marginLeft:30
+    
 
   },
-  // italicText: {
-  //   fontStyle: "italic",
-  //   fontSize: 18,
-  // },
+  
 });
