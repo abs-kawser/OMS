@@ -22,6 +22,8 @@ const OrderStatusInfo = ({ route, navigation }) => {
           <Text style={styles.headerCell}>Order Date</Text>
           <Text style={styles.headerCell}>Delivery Date</Text>
           <Text style={styles.headerCell}>Status</Text>
+       
+           
         </View>
         {OrderStatus?.map((item) => (
           <View key={item.OrderNo} style={styles.row}>
@@ -36,6 +38,8 @@ const OrderStatusInfo = ({ route, navigation }) => {
           </View>
         ))}
       </View>
+
+
       <View style={styles.btngrp}>
         <Button color="#0091ad">   
           <Text style={{ color: "white" }}>
@@ -44,6 +48,7 @@ const OrderStatusInfo = ({ route, navigation }) => {
         </Button>
         <Button color="#0091ad" onPress={() => navigation.goBack()}><Text style={{ color: "white" }}> Back </Text></Button>
       </View>
+      
     </ScrollView>
   );
 };
@@ -90,6 +95,8 @@ const styles = StyleSheet.create({
     gap: 5,
   },
 });
+
+
 
 {
   /* <View styles= {styles.buttons}>

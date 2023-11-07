@@ -666,12 +666,12 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: "50%", // Set width to 50% of screen width
+    width: "50%", 
     backgroundColor: "#3498db",
     padding: 10,
   },
   button2: {
-    width: "50%", // Set width to 50% of screen width
+    width: "50%", 
     backgroundColor: "#e74c3c",
     padding: 10,
   },

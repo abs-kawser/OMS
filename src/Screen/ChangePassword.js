@@ -6,7 +6,9 @@ import base64 from "base-64";
 import { useNavigation } from "@react-navigation/native";
 
 const ChangePassword = () => {
+
   const navigation = useNavigation();
+  
   const [networkId, setNetworkId] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -39,7 +41,7 @@ const ChangePassword = () => {
       console.log("response", result);
       if (result.Success === true) {
         ToastAndroid.show(result.Message, ToastAndroid.SHORT);
-        navigation.navigate("Home");
+        //navigation.navigate("Home");
       }
     } catch (error) {
       // Handle network errors or other exceptions
@@ -126,6 +128,7 @@ const styles = StyleSheet.create({
 });
 
 export default ChangePassword;
+
 
 // import { StyleSheet, Text, View } from 'react-native'
 // import React from 'react'

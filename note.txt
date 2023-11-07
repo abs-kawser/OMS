@@ -21,10 +21,6 @@ http://184.168.127.174:6565/api/HomeApi/Login?networkId=U21080273 &password=1234
 
 
 
-
-
-
-
 //api call for post method and input field 
  const handleApiCall = async () => {
  
@@ -64,6 +60,25 @@ http://184.168.127.174:6565/api/HomeApi/Login?networkId=U21080273 &password=1234
     ToastAndroid.show(result.Status, ToastAndroid.SHORT);
     navigation.navigate('Leave Summary');
   };
+
+
+
+  //button stander design 
+
+   <Button
+        mode="contained"
+        buttonColor="#00a6fb"
+        style={styles.button}
+        onPress={SavePassword}
+      >
+        SAVE
+      </Button>
+
+       button: {
+    width: "25%",
+    marginTop: 20,
+    alignSelf: "center",
+  },
 
 
   

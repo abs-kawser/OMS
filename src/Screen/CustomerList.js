@@ -17,7 +17,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Button } from "@rneui/themed";
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { Button } from "react-native-elements";
 import LottieView from "lottie-react-native";
 
 export default function CustomerList() {
@@ -145,10 +144,12 @@ export default function CustomerList() {
           style={styles.lottiContainer}
         />
       </View>
-      ) :  (<ScrollView keyboardShouldPersistTaps={"handled"}>
+      ) :  (<ScrollView keyboardShouldPersistTaps={"handled"} >
           {filteredData.map((Customer, index) => (
+            
             // <TouchableOpacity key={index}>
             <View
+            key={index} // Set the key here
               style={[
                 styles.productCard,
                 {

@@ -21,7 +21,6 @@ import { Button } from "react-native-paper";
 
 const LoginPage = () => {
   const navigation = useNavigation();
-
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -117,24 +116,28 @@ const LoginPage = () => {
 
           {error && <Text style={styles.warning}>{error}</Text>}
 
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            {isLoading && <ActivityIndicator size="small" color="red" />}
-            <Text style={styles.loginButtonTextX}>Loginn</Text>
-          </TouchableOpacity>
-
-          {/* <TouchableOpacity
-            style={styles.registerNow}
-            onPress={handleRegisterNow}
+          <TouchableOpacity
+          // style={styles.loginButton} onPress={handleLogin}
           >
-            <Text style={styles.registerNowText}>Register Now</Text>
-          </TouchableOpacity> */}
+            <Button
+              mode="contained"
+              buttonColor="#00a6fb"
+              style={styles.button}
+              onPress={handleLogin}
+            >
+              Login
+            </Button>
+            {/* {isLoading && <ActivityIndicator size="small" color="red" />} */}
+            {/* <Text style={styles.loginButtonTextX}>Loginn</Text> */}
+          </TouchableOpacity>
 
           <Button
             icon="arrow-right"
             mode="contained"
             onPress={handleRegisterNow}
-            buttonColor="#0466c8"
+            buttonColor="#00b4d8"
             contentStyle={{ flexDirection: "row-reverse" }}
+            style={styles.buttonRegister}
           >
             Register Now
           </Button>
@@ -215,35 +218,17 @@ const styles = StyleSheet.create({
   warning: {
     color: "red",
   },
+  button: {
+    width: "40%",
+    marginTop: 20,
+    alignSelf: "center",
+  },
+  buttonRegister: {
+    width: "40%",
+    marginTop: 20,
+    alignSelf: "center",
+  },
 });
 
 export default LoginPage;
-//check
 
-//basic authentication
-// const authHeader = "Basic" + base64.encode(USERNAME + ":" + PASSWORD);
-// const fetchData = fetch(
-//   // `http://184.168.127.174:6565/api/HomeApi/Login?networkId=${userId}&password=${password}`,
-//    `${BASE_URL}/api/HomeApi/Login?networkId=${userId}&password=${password}`,
-//   {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: authHeader,
-//     },
-//   }
-// )
-//   .then((response) => {
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! Status: ${response.status}`);
-//     }
-//     return response.json();
-//   })
-//   .then((data) => {
-//     console.log(data); // This will log the JSON data from the response.
-//   })
-//   .catch((error) => {
-//     console.error("Fetch error:", error);
-//   });
-
-// console.log(fetchData);

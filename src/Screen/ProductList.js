@@ -98,7 +98,7 @@ export default function ProductList() {
           />
         </View>
       ) : (
-        <ScrollView>
+        <ScrollView style={{flex:1}}>
           <Text style={styles.header}>Product List</Text>
           {filteredData.map((product, index) => (
             <View
@@ -151,6 +151,10 @@ export default function ProductList() {
 }
 
 const styles = StyleSheet.create({
+  // mainContainer:{
+  //   flex: 1,
+  // },
+  
   container: {
     flex: 1,
     padding: 16,
