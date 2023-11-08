@@ -1,12 +1,11 @@
 import base64 from "base-64";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
 
 
 
 export const fetchProductData = async ( setIsLoading) => {
-   
-
   try {
     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
     const response = await fetch(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
@@ -28,3 +27,33 @@ export const fetchProductData = async ( setIsLoading) => {
     throw error;
   }
 };
+
+
+// export const fetchProductData = async (setIsLoading) => {
+//   try {
+//     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+//     const response = await axios.get(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
+//       headers: {
+//         'Authorization': authHeader,
+//       },
+//     });
+
+//     if (response.status === 200) {
+//       const jsonData = response.data;
+//       await AsyncStorage.setItem('ProductList', JSON.stringify(jsonData));
+//       return jsonData;
+//     } else {
+//       console.error('Error fetching data:', response.status, response.statusText);
+//       setIsLoading(false);
+//       throw new Error('Error fetching data');
+//     }
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//     setIsLoading(false);
+//     throw error;
+//   }
+// };
+
+
+
+

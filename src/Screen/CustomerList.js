@@ -5,6 +5,7 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -18,6 +19,8 @@ import { Button } from "@rneui/themed";
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LottieView from "lottie-react-native";
+
+import axios from "axios";
 
 export default function CustomerList() {
   const navigation = useNavigation();
@@ -75,6 +78,38 @@ export default function CustomerList() {
     }
   };
 
+  //============useing axious ================//
+  // const fetchCustomerData = async () => {
+  //   try {
+  //     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+
+  //     const response = await axios.get(
+  //       `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
+  //         userDetails?.TerritoryId
+  //       }&scId=${userDetails.ScId !== null ? userDetails.ScId : 1}`,
+  //       {
+  //         headers: {
+  //           Authorization: authHeader,
+  //         },
+  //       }
+  //     );
+
+  //     const jsonData = response.data; // Axios response data is directly available as `data` property
+  //     console.log(JSON.stringify(jsonData, null, 2));
+  //     await AsyncStorage.setItem("customerData", JSON.stringify(jsonData));
+  //     // await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
+  //     setData(jsonData);
+  //     setFilteredData(jsonData);
+  //     setIsLoading(false);
+  //     return jsonData;
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setIsLoading(false);
+  //     // setIsLoading(false);
+  //     throw error;
+  //   }
+  // };
+
   useEffect(() => {
     // Fetch data from AsyncStorage
     AsyncStorage.getItem("customerData")
@@ -127,75 +162,129 @@ export default function CustomerList() {
           </TouchableOpacity>
         </View>
 
-      {isLoading ? (
-        // <ActivityIndicator
-        //   size="large"
-        //   color="#0000ff"
-        //   // colors={COLORS.primary}
-        //   style={styles.activityIndicator}
-        // />
+        {isLoading ? (
+          // <ActivityIndicator
+          //   size="large"
+          //   color="#0000ff"
+          //   // colors={COLORS.primary}
+          //   style={styles.activityIndicator}
+          // />
 
-        <View style={styles.loadingContainer}>
-        {/* <ActivityIndicator size="large" color="#0077b6" /> */}
-        <LottieView
-          source={require("../../Lottie/Animation6.json")} // Replace with your animation file path
-          autoPlay
-          loop
-          style={styles.lottiContainer}
-        />
-      </View>
-      ) :  (<ScrollView keyboardShouldPersistTaps={"handled"} >
-          {filteredData.map((Customer, index) => (
-            
-            // <TouchableOpacity key={index}>
-            <View
-            key={index} // Set the key here
-              style={[
-                styles.productCard,
-                {
-                  backgroundColor: rainbowColors[index % rainbowColors.length],
-                },
-              ]}
-            >
-              <View style={styles.textContainer}>
-                <Text style={styles.productName}> {Customer.Name}</Text>
-                <Text style={styles.productInfo}>({Customer.CustomerId})</Text>
+          <View style={styles.loadingContainer}>
+            {/* <ActivityIndicator size="large" color="#0077b6" /> */}
+            <LottieView
+              source={require("../../Lottie/Animation6.json")} // Replace with your animation file path
+              autoPlay
+              loop
+              style={styles.lottiContainer}
+            />
+          </View>
+        ) : (
+          // <ScrollView keyboardShouldPersistTaps={"handled"}>
+          //   {filteredData.map((Customer, index) => (
+          //     // <TouchableOpacity key={index}>
+          //     <View
+          //       key={index} // Set the key here
+          //       style={[
+          //         styles.productCard,
+          //         {
+          //           backgroundColor:
+          //             rainbowColors[index % rainbowColors.length],
+          //         },
+          //       ]}
+          //     >
+          //       <View style={styles.textContainer}>
+          //         <Text style={styles.productName}> {Customer.Name}</Text>
+          //         <Text style={styles.productInfo}>
+          //           ({Customer.CustomerId})
+          //         </Text>
+          //       </View>
+
+          //       <Text style={styles.Address}>
+          //         <Text>Address: </Text>
+          //         {Customer.Address}
+          //       </Text>
+
+          //       <Text style={styles.DepotName}>
+          //         <Text>Depot Name: </Text>
+          //         {Customer.DepotName}
+          //       </Text>
+
+          //       <View style={{ alignSelf: "center" }}>
+          //         <Button
+          //           title="Create Order"
+          //           buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
+          //           containerStyle={{
+          //             height: 40,
+          //             // width: 180,
+          //             marginTop: 20,
+          //             borderRadius: 10,
+          //             // marginLeft:170
+          //           }}
+          //           titleStyle={{
+          //             color: "white",
+          //             // marginHorizontal: 20,
+          //           }}
+          //           onPress={() => CreateOrder(Customer)}
+          //         />
+          //       </View>
+          //     </View>
+          //     // </TouchableOpacity>
+          //   ))}
+          // </ScrollView>
+
+          <FlatList
+            data={filteredData}
+            keyExtractor={(Customer, index) => index.toString()} // You can use a more unique key if available
+            keyboardShouldPersistTaps="handled"
+            renderItem={({ item: Customer, index }) => (
+              <View
+                style={[
+                  styles.productCard,
+                  {
+                    backgroundColor:
+                      rainbowColors[index % rainbowColors.length],
+                  },
+                ]}
+              >
+                <View style={styles.textContainer}>
+                  <Text style={styles.productName}>{Customer.Name}</Text>
+                  <Text style={styles.productInfo}>
+                    ({Customer.CustomerId})
+                  </Text>
+                </View>
+
+                <Text style={styles.Address}>
+                  <Text>Address:</Text>
+                  {Customer.Address}
+                </Text>
+
+                <Text style={styles.DepotName}>
+                  <Text>Depot Name:</Text>
+                  {Customer.DepotName}
+                </Text>
+
+                <View style={{ alignSelf: "flex-start" }}>
+                  <Button
+                    title="Create Order"
+                    buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
+                    containerStyle={{
+                      height: 40,
+                      marginTop: 20,
+                      borderRadius: 10,
+                    }}
+                    titleStyle={{
+                      color: "#ebf2fa",
+
+                    }}
+                    onPress={() => CreateOrder(Customer)}
+                  />
+                </View>
+
               </View>
-
-              <Text style={styles.Address}>
-                <Text>Address: </Text>
-                {Customer.Address}
-              </Text>
-
-              <Text style={styles.DepotName}>
-                <Text>Depot Name: </Text>
-                {Customer.DepotName}
-              </Text>
-
-              <View style={{ alignSelf: "center" }}>
-                <Button
-                  title="Create Order"
-                  buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
-                  containerStyle={{
-                    height: 40,
-                    // width: 180,
-                    marginTop: 20,
-                    borderRadius: 10,
-                    // marginLeft:170
-                  }}
-                  titleStyle={{
-                    color: "white",
-                    // marginHorizontal: 20,
-                  }}
-                  onPress={() => CreateOrder(Customer)}
-                />
-              </View>
-            </View>
-            // </TouchableOpacity>
-          ))}
-        </ScrollView>)}
-
-
+            )}
+          />
+        )}
       </View>
 
       {/* total */}
@@ -294,7 +383,7 @@ const styles = StyleSheet.create({
   Address: {
     marginTop: 10,
     color: "black",
-  }, 
+  },
   loadingContainer: {
     alignSelf: "center",
     flex: 1,

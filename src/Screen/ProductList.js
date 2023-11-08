@@ -5,6 +5,7 @@ import {
   ScrollView,
   TextInput,
   ActivityIndicator,
+  FlatList
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -24,8 +25,8 @@ export default function ProductList() {
   const [filteredData, setFilteredData] = useState([products]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Filter data based on the search term
   useEffect(() => {
-    // Filter data based on the search term
     const filtered = products.filter((item) =>
       item.Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -50,6 +51,7 @@ export default function ProductList() {
     };
 
     fetchDataFromStorage();
+
     const getProductList = async () => {
       try {
         const productList = await fetchProductData(setIsLoading);
@@ -98,11 +100,52 @@ export default function ProductList() {
           />
         </View>
       ) : (
-        <ScrollView style={{flex:1}}>
-          <Text style={styles.header}>Product List</Text>
-          {filteredData.map((product, index) => (
+        // <ScrollView style={{flex:1}}>
+        //   <Text style={styles.header}>Product List</Text>
+
+        //   {filteredData.map((product, index) => (
+        //     <View
+        //       key={index}
+        //       style={[
+        //         styles.productCard,
+        //         {
+        //           backgroundColor: rainbowColors[index % rainbowColors.length],
+        //         },
+        //       ]}
+        //     >
+        //       <View style={styles.textContainer}>
+        //         <Text style={styles.productName}>{product.Name}</Text>
+        //         <Text style={styles.productInfo}>({product.ProductCode})</Text>
+        //       </View>
+
+        //       {/* <Text style={styles.productName}>Name:{product.Name}</Text>
+        //     <Text style={styles.productInfo}>
+        //       ProductCode:{product.ProductCode}
+        //     </Text> */}
+
+        //       <Text style={styles.Category}>
+        //         Category: {product.ProductCategory}
+        //       </Text>
+
+        //       <View style={styles.textContainer}>
+        //         <Text style={styles.productInfo}>
+        //           Trade Price : Tk {product.MRP}
+        //         </Text>
+        //         <Text style={styles.tradeLicense}>
+        //           Pack Size: {product.PackSize}
+        //         </Text>
+        //       </View>
+        //     </View>
+        //   ))}
+        // </ScrollView>
+
+        (<FlatList
+          style={{ flex: 1 }}
+          data={filteredData}
+          keyExtractor={(product, index) => index.toString()}
+          ListHeaderComponent={<Text style={styles.header}>Product List</Text>}
+          renderItem={({ item, index }) => (
             <View
-              key={index}
               style={[
                 styles.productCard,
                 {
@@ -111,33 +154,26 @@ export default function ProductList() {
               ]}
             >
               <View style={styles.textContainer}>
-                <Text style={styles.productName}>{product.Name}</Text>
-                <Text style={styles.productInfo}>({product.ProductCode})</Text>
+                <Text style={styles.productName}>{item.Name}</Text>
+                <Text style={styles.productInfo}>({item.ProductCode})</Text>
               </View>
 
-              {/* <Text style={styles.productName}>Name:{product.Name}</Text>
-            <Text style={styles.productInfo}>
-              ProductCode:{product.ProductCode}
-            </Text> */}
-
               <Text style={styles.Category}>
-                Category: {product.ProductCategory}
+                Category: {item.ProductCategory}
               </Text>
 
               <View style={styles.textContainer}>
                 <Text style={styles.productInfo}>
-                  Trade Price : Tk {product.MRP}
+                  Trade Price : Tk {item.MRP}
                 </Text>
                 <Text style={styles.tradeLicense}>
-                  Pack Size: {product.PackSize}
+                  Pack Size: {item.PackSize}
                 </Text>
               </View>
-              {/* <Text style={styles.tradeLicense}>
-              Trade License: {product.ProductFamilyName}
-            </Text> */}
             </View>
-          ))}
-        </ScrollView>
+          )}
+        />)
+
       )}
 
       {/* total */}
@@ -150,11 +186,14 @@ export default function ProductList() {
   );
 }
 
+
+
+
 const styles = StyleSheet.create({
   // mainContainer:{
   //   flex: 1,
   // },
-  
+
   container: {
     flex: 1,
     padding: 16,

@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Alert,
   ToastAndroid,
+  FlatList,
 } from "react-native";
 import { fetchProductData } from "../Api/ProductListApi";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -118,10 +119,10 @@ const CreateOrderDetails = ({ route }) => {
     setShowProductData(true);
     setShowOrderData(false);
 
-    setShowLoader(true);
-    setTimeout(() => {
-      setShowLoader(false);
-    }, 1000);
+    // setShowLoader(true);
+    // setTimeout(() => {
+    //   setShowLoader(false);
+    // }, 1000);
   };
 
   //=================== order Details  part=================
@@ -149,7 +150,7 @@ const CreateOrderDetails = ({ route }) => {
       // If the input is empty, clear the quantity
       setProductQuantities((prevQuantities) => {
         const updatedQuantities = { ...prevQuantities };
-        // delete updatedQuantities[productId];
+        delete updatedQuantities[productId];
         return updatedQuantities;
       });
     } else {
@@ -188,7 +189,7 @@ const CreateOrderDetails = ({ route }) => {
     return totalPrice;
   };
 
-  // Filter products based on the search term
+  // Filter products based on the search item
   const filteredProducts = useMemo(() => {
     return products.filter((product) =>
       product.Name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -398,9 +399,8 @@ const CreateOrderDetails = ({ route }) => {
           </View>
         ) : (
           <ScrollView>
-            <>
+            {/* <>
               {showProductData && (
-                //key id
                 <View style={styles.dataContainer}>
                   {filteredProducts.map((product, index) => (
                     <View style={styles.row} key={product.ProductId}>
@@ -415,7 +415,6 @@ const CreateOrderDetails = ({ route }) => {
                         </View>
                       </View>
 
-                      {/* quantity   part  start  */}
                       <View style={styles.quantityContainer}>
                         <View style={styles.containerx}>
                           <View style={styles.inputContainer}>
@@ -441,8 +440,55 @@ const CreateOrderDetails = ({ route }) => {
                   ))}
                 </View>
               )}
-            </>
+            </> */}
+            <>
+              {showProductData && (
+                <View style={styles.dataContainer}>
+                  <FlatList
+                    data={filteredProducts}
+                    keyExtractor={(product) => product.ProductId.toString()}
+                    renderItem={({ item: product }) => (
+                      <View style={styles.row}>
+                        <View style={styles.infoContainer}>
+                          <Text style={styles.name}>{product.Name}</Text>
 
+                          <View style={{ flexDirection: "row", gap: 10 }}>
+                            <Text style={styles.price}>
+                              price: {product.MRP}
+                            </Text>
+                            <Text style={styles.price}>
+                              PackSize: {product.PackSize}
+                            </Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.quantityContainer}>
+                          <View style={styles.containerx}>
+                            <View style={styles.inputContainer}>
+                              <TextInput
+                                placeholder="QTY"
+                                style={styles.input}
+                                keyboardType="numeric"
+                                value={
+                                  productQuantities[product.ProductId]
+                                    ? productQuantities[
+                                        product.ProductId
+                                      ].toString()
+                                    : ""
+                                }
+                                onChangeText={(text) =>
+                                  handleQuantityChange(product.ProductId, text)
+                                }
+                              />
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    )}
+                  />
+                </View>
+              )}
+            </>
             <View>
               {showOrderData && (
                 <View style={styles.dataContainer}>

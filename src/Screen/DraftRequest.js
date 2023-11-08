@@ -24,7 +24,6 @@ import { useDraft } from "../Context/DraftProvider";
 
 const DraftRequest = ({ route }) => {
 
-
   const navigation = useNavigation();
 
   const { draftData, setDraftData } = useDraft();
@@ -147,34 +146,34 @@ const DraftRequest = ({ route }) => {
     setOrderQuantities(updatedOrderQuantities);
   };
 
-  const handleQuantityChange = (productId, text) => {
-    if (text === "") {
-      // If the input is empty, clear the quantity
-      setProductQuantities((prevQuantities) => {
-        const updatedQuantities = { ...prevQuantities };
-        delete updatedQuantities[productId];
-        return updatedQuantities;
-      });
-    } else {
-      const value = parseInt(text, 10);
-      if (!isNaN(value)) {
-        setProductQuantities((prevQuantities) => ({
-          ...prevQuantities,
-          [productId]: value,
-        }));
+const handleQuantityChange = (productId, text) => {
+if (text === "") {
+  // If the input is empty, clear the quantity
+  setProductQuantities((prevQuantities) => {
+    const updatedQuantities = { ...prevQuantities };
+    delete updatedQuantities[productId];
+    return updatedQuantities;
+  });
+} else {
+  const value = parseInt(text, 10);
+  if (!isNaN(value)) {
+    setProductQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: value,
+    }));
 
-        // If the entered quantity is greater than zero, add the productId to selectedProductIds
-        if (value > 0 && !selectedProductIds.includes(productId)) {
-          setSelectedProductIds((prevIds) => [...prevIds, productId]);
-        } else if (value === 0 && selectedProductIds.includes(productId)) {
-          // If the quantity is zero, remove the productId from selectedProductIds
-          setSelectedProductIds((prevIds) =>
-            prevIds.filter((id) => id !== productId)
-          );
-        }
-      }
+    // If the entered quantity is greater than zero, add the productId to selectedProductIds
+    if (value > 0 && !selectedProductIds.includes(productId)) {
+      setSelectedProductIds((prevIds) => [...prevIds, productId]);
+    } else if (value === 0 && selectedProductIds.includes(productId)) {
+      // If the quantity is zero, remove the productId from selectedProductIds
+      setSelectedProductIds((prevIds) =>
+        prevIds.filter((id) => id !== productId)
+      );
     }
-  };
+  }
+}
+};
 
   // Function to calculate total price
   const calculateTotalPrice = () => {
@@ -395,6 +394,9 @@ const DraftRequest = ({ route }) => {
   //     console.error("Error deleting item:", error);
   //   }
   // };
+
+
+
 
   const handleDeleteOrderItem = async (productId) => {
     try {
