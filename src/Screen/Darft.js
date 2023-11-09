@@ -11,20 +11,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
- import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { useDraft } from "../Context/DraftProvider";
 
 const Draft = ({ navigation }) => {
-
   const { draftData, setDraftData } = useDraft();
-
   // const [draftData, setDraftData] = useState([]);
-                                                     
+
   console.log("this is draft data", JSON.stringify(draftData, null, 2));
-
   // retrive data from asyncstorage
-
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
@@ -32,14 +28,12 @@ const Draft = ({ navigation }) => {
           const savedData = await AsyncStorage.getItem("customerInformation");
           if (savedData) {
             const parsedData = JSON.parse(savedData);
-
             setDraftData(parsedData);
           }
         } catch (error) {
           console.error("Error loading data:", error);
         }
       };
-
       fetchData();
     }, [])
   );
@@ -95,40 +89,48 @@ const Draft = ({ navigation }) => {
               <Text style={styles.headerText}>Action</Text>
             </View>
           </View>
-     {/* {draftData && Array.isArray(draftData) && draftData.map((item, index)  => ( */}
-           
-           {draftData && draftData?.map((item, index) => (
-            <View style={styles.row} key={index}>
-              <View style={styles.column60}>
-                <Text style={styles.textColor}>{item.CustomerName}</Text>
-                <Text style={styles.textColor}>({item.CustomerId})</Text>
-                <Text style={styles.textColor}>{item.CustomerAddress}</Text>
-              </View>
+          {/* {draftData && Array.isArray(draftData) && draftData.map((item, index)  => ( */}
 
-              <View style={styles.iconColumn}>
-                <TouchableOpacity
-                  style={styles.iconCell}
-                  onPress={() => handleItemPress(item)}
-                >
-                  <MaterialCommunityIcons name="file-find-outline" size={30} color="black" />
-                </TouchableOpacity>
-              </View>
+          {draftData &&
+            draftData?.map((item, index) => (
+              <View style={styles.row} key={index}>
+                <View style={styles.column60}>
+                  <Text style={styles.textColor}>{item.CustomerName}</Text>
+                  <Text style={styles.textColor}>({item.CustomerId})</Text>
+                  <Text style={styles.textColor}>{item.CustomerAddress}</Text>
+                </View>
 
-              <View style={styles.iconColumn}>
-                <TouchableOpacity
-                  style={styles.iconCell}
-                  onPress={() => handleDeleteItem(item)}
-                >
-                  <FontAwesome name="trash" size={20} color="black" />
-                </TouchableOpacity>
+                <View style={styles.iconColumn}>
+                  <TouchableOpacity
+                    style={styles.iconCell}
+                    onPress={() => handleItemPress(item)}
+                  >
+                    <MaterialCommunityIcons
+                      name="file-find-outline"
+                      size={30}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.iconColumn}>
+                  <TouchableOpacity
+                    style={styles.iconCell}
+                    onPress={() => handleDeleteItem(item)}
+                  >
+                    <FontAwesome name="trash" size={20} color="black" />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          ))}
+            ))}
         </View>
       </SafeAreaView>
     </ScrollView>
   );
 };
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -168,5 +170,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
 });
+
+
 
 export default Draft;

@@ -15,12 +15,13 @@ import { fetchProductData } from "../Api/ProductListApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LottieView from "lottie-react-native";
 
+
+
 export default function ProductList() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
-
   const [isLoading, setIsLoading] = useState(true);
-
   const [products, setProducts] = useState([]);
+  
   //filter part
   const [filteredData, setFilteredData] = useState([products]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -83,6 +84,7 @@ export default function ProductList() {
       </View>
 
       {isLoading ? (
+        
         // <ActivityIndicator
         //   size="large"
         //   color="#0000ff"

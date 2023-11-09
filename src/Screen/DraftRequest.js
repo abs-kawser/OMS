@@ -543,6 +543,7 @@ if (text === "") {
                 <View style={styles.dataContainer}>
                   <View style={styles.tableHeader}>
                     <Text style={styles.headerText}>Name</Text>
+                    
 
                     {/* <Text style={styles.headerText}>Quantity</Text> */}
                     <Text style={[styles.headerText, styles.quantity]}>
@@ -570,8 +571,8 @@ if (text === "") {
 
                           {/* <Text style={styles.cellText}>{quantity}</Text> */}
                           <Text style={[styles.cellText, styles.quantity]}>
-                            {quantity}
-                          </Text>
+                              {quantity}
+                            </Text>
 
                           <Text style={styles.cellText}>
                             {specificProduct.MRP * quantity}
@@ -596,10 +597,14 @@ if (text === "") {
                   {/* Render OrderDetails */}
                   {selectedItem.OrderDetails.map((orderItem) => (
                     <View style={styles.tableRow} key={orderItem.ProductId}>
+
                       <Text style={styles.cellText} numberOfLines={2}>
                         {orderItem.ProductName}
                       </Text>
+
                       <Text style={styles.cellText}>{orderItem.Quantity}</Text>
+
+
                       <Text style={styles.cellText}>
                         {orderItem.TotalAmount}
                       </Text>
@@ -635,6 +640,8 @@ if (text === "") {
 
 export default DraftRequest;
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -659,8 +666,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-
-    //marginTop: 15,
     padding: 10,
   },
   dataContainer: {
@@ -668,12 +673,12 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: "50%", 
+    width: "50%",
     backgroundColor: "#3498db",
     padding: 10,
   },
   button2: {
-    width: "50%", 
+    width: "50%",
     backgroundColor: "#e74c3c",
     padding: 10,
   },
@@ -698,8 +703,8 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 15,
     marginRight: 10,
-    color: "gray",
-    // fontWeight: "bold",
+    color: "black",
+    fontWeight: "bold",
   },
   price: {
     fontSize: 16,
@@ -744,7 +749,7 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
     fontSize: 15,
-    // fontWeight: "bold",
+    fontWeight: "bold",
   },
   searchBox: {
     // marginLeft: 50,
@@ -773,7 +778,7 @@ const styles = StyleSheet.create({
   iconx: {
     marginRight: 10,
   },
-  // ===============================
+  // ===============
   tableHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -783,7 +788,6 @@ const styles = StyleSheet.create({
   headerText: {
     // fontWeight: "bold",
     fontSize: 16,
-    color: "black",
   },
   tableRow: {
     flexDirection: "row",
@@ -796,12 +800,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
     flex: 1,
     fontWeight: "bold",
-    color: "black",
-  },
-  // quantity: {
-  //   marginLeft: 20,
-  // },
+    color: "#00050e",
 
+    // color: "#1985a1",
+    // textAlign: 'center',
+  },
+
+  quantity: {
+    marginLeft: 25,
+  },
+  // ===================
   actionButton: {
     backgroundColor: "#dee2e6", // Button background color
     padding: 5,
@@ -831,7 +839,219 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
   },
-  quantity: {
-    marginLeft: 25,
-  },
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//   },
+//   userInformation: {
+//     flexDirection: "row",
+//     justifyContent: "center",
+//     textAlign: "center",
+//     alignItems: "center",
+//     marginTop: 10,
+//     gap: 3,
+//   },
+//   userText1: {
+//     fontSize: 16,
+//     color: "black",
+//     // marginTop:10,
+//   },
+//   userText2: {
+//     fontSize: 16,
+//     color: "#168aad",
+//   },
+//   buttonContainer: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+
+//     //marginTop: 15,
+//     padding: 10,
+//   },
+//   dataContainer: {
+//     marginTop: 20,
+//   },
+
+//   button: {
+//     width: "50%", 
+//     backgroundColor: "#3498db",
+//     padding: 10,
+//   },
+//   button2: {
+//     width: "50%", 
+//     backgroundColor: "#e74c3c",
+//     padding: 10,
+//   },
+//   buttonText: {
+//     color: "white",
+//     textAlign: "center",
+//   },
+
+//   row: {
+//     flexDirection: "row",
+//     //justifyContent: "space-between",
+//     alignItems: "center",
+//     paddingHorizontal: 16,
+//     paddingVertical: 8,
+//     borderBottomWidth: 1,
+//     borderBottomColor: "#ccc",
+//   },
+//   infoContainer: {
+//     flex: 1,
+//     flexDirection: "column",
+//   },
+//   name: {
+//     fontSize: 15,
+//     marginRight: 10,
+//     color: "gray",
+//     // fontWeight: "bold",
+//   },
+//   price: {
+//     fontSize: 16,
+
+//     color: "#403d39",
+//   },
+//   quantityContainer: {
+//     flex: 1,
+//     //justifyContent: "space-between",
+//     alignItems: "flex-end",
+//     paddingHorizontal: 20,
+//   },
+
+//   checkboxContainer: {
+//     flex: 0.2,
+//     alignItems: "flex-end",
+//   },
+//   containerx: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//   },
+//   label: {
+//     fontSize: 16,
+//     marginRight: 10,
+//   },
+//   inputContainer: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//   },
+//   // button: {
+//   //   fontSize: 24,
+//   //   paddingHorizontal: 10,
+//   // },
+//   input: {
+//     fontSize: 13,
+//     borderWidth: 1,
+//     borderColor: "gray",
+//     padding: 5,
+//     minWidth: 40,
+//   },
+//   totalPriceText: {
+//     color: "black",
+//     textAlign: "center",
+//     fontSize: 15,
+//     // fontWeight: "bold",
+//   },
+//   searchBox: {
+//     // marginLeft: 50,
+//     alignSelf: "center",
+//     marginVertical: 10,
+//     background: "#F4F4F4",
+//   },
+
+//   inputContainerx: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     width: "80%",
+//     borderColor: "black",
+//     borderWidth: 1,
+//     margin: 5,
+//     padding: 5,
+//     marginLeft: 5,
+//     borderRadius: 50,
+//   },
+//   inputx: {
+//     flex: 1,
+//     height: 40,
+//     padding: 10,
+//     color: "#80A896",
+//   },
+//   iconx: {
+//     marginRight: 10,
+//   },
+//   // ===============================
+//   tableHeader: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     padding: 10,
+//     backgroundColor: "#f2f2f2", // Header background color
+//   },
+//   headerText: {
+//     // fontWeight: "bold",
+//     fontSize: 16,
+//     color: "black",
+//   },
+//   tableRow: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     padding: 10,
+//     borderBottomWidth: 1,
+//     borderBottomColor: "#ccc", // Border color
+//   },
+//   cellText: {
+//     fontSize: 13,
+//     flex: 1,
+//     fontWeight: "bold",
+//     color: "black",
+//   },
+//   // quantity: {
+//   //   marginLeft: 20,
+//   // },
+
+//   actionButton: {
+//     backgroundColor: "#dee2e6", // Button background color
+//     padding: 5,
+//     borderRadius: 5,
+//   },
+//   actionText: {
+//     color: "white", // Button text color
+//     fontWeight: "bold",
+//   },
+//   // button design for order details
+//   btngrp: {
+//     display: "flex",
+//     flexDirection: "row",
+//     justifyContent: "flex-end",
+//     alignItems: "center",
+//     marginTop: 20,
+//     paddingHorizontal: 10,
+//     gap: 5,
+//   },
+//   loadingContainer: {
+//     alignSelf: "center",
+//     flex: 1,
+//     // justifyContent:"center",
+//     // alignItems:"center"
+//   },
+//   lottiContainer: {
+//     height: 50,
+//     width: 50,
+//   },
+//   quantity: {
+//     marginLeft: 25,
+//   },
+// });

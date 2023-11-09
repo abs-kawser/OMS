@@ -276,7 +276,6 @@ const CreateOrderDetails = ({ route }) => {
   // ================================== main api calling end ==================================================
 
   // ============== draft save =================
-
   const draftTransformedOrderDetails = selectedProduct.map((product, index) => {
     return {
       ProductId: product.ProductId,
@@ -288,6 +287,7 @@ const CreateOrderDetails = ({ route }) => {
     };
   });
 
+  
   const handleDraftSave = async () => {
     const requestData = {
       OrderDetails: draftTransformedOrderDetails,
@@ -330,6 +330,7 @@ const CreateOrderDetails = ({ route }) => {
   };
 
   // ==================================
+
 
   useEffect(() => {
     // Inside this effect, filter and set the selected products based on product IDs
@@ -567,6 +568,8 @@ const CreateOrderDetails = ({ route }) => {
 
 export default CreateOrderDetails;
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -765,3 +768,8 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
+
+
+
+
+

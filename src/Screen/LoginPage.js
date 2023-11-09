@@ -33,6 +33,8 @@ const LoginPage = () => {
   //loading
   const [isLoading, setIsLoading] = useState(false);
 
+
+
   const handleLogin = async () => {
     try {
       setIsLoading(true); // Start loading
@@ -66,7 +68,6 @@ const LoginPage = () => {
         }));
 
         navigation.navigate("DrawerNavigator");
-
         ToastAndroid.show(
           result.EmpId && "Login Successfully",
           ToastAndroid.SHORT
@@ -80,11 +81,17 @@ const LoginPage = () => {
     }
   };
 
+
+
   const handleRegisterNow = () => {
     navigation.navigate("Register");
   };
 
+
+
   return (
+
+    
     <>
       <Header />
 
@@ -144,6 +151,8 @@ const LoginPage = () => {
         </SafeAreaView>
       </View>
     </>
+
+
   );
 };
 
@@ -231,4 +240,5 @@ const styles = StyleSheet.create({
 });
 
 export default LoginPage;
+
 
