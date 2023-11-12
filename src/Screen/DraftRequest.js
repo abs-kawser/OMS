@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   ToastAndroid,
+  FlatList,
 } from "react-native";
 import { fetchProductData } from "../Api/ProductListApi";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -20,10 +21,7 @@ import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import { useDraft } from "../Context/DraftProvider";
 
-
-
 const DraftRequest = ({ route }) => {
-
   const navigation = useNavigation();
 
   const { draftData, setDraftData } = useDraft();
@@ -35,7 +33,7 @@ const DraftRequest = ({ route }) => {
   const data = route.params?.data;
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
-  
+
   console.log(customerInformation, "customerInformation");
 
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -146,34 +144,34 @@ const DraftRequest = ({ route }) => {
     setOrderQuantities(updatedOrderQuantities);
   };
 
-const handleQuantityChange = (productId, text) => {
-if (text === "") {
-  // If the input is empty, clear the quantity
-  setProductQuantities((prevQuantities) => {
-    const updatedQuantities = { ...prevQuantities };
-    delete updatedQuantities[productId];
-    return updatedQuantities;
-  });
-} else {
-  const value = parseInt(text, 10);
-  if (!isNaN(value)) {
-    setProductQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: value,
-    }));
+  const handleQuantityChange = (productId, text) => {
+    if (text === "") {
+      // If the input is empty, clear the quantity
+      setProductQuantities((prevQuantities) => {
+        const updatedQuantities = { ...prevQuantities };
+        delete updatedQuantities[productId];
+        return updatedQuantities;
+      });
+    } else {
+      const value = parseInt(text, 10);
+      if (!isNaN(value)) {
+        setProductQuantities((prevQuantities) => ({
+          ...prevQuantities,
+          [productId]: value,
+        }));
 
-    // If the entered quantity is greater than zero, add the productId to selectedProductIds
-    if (value > 0 && !selectedProductIds.includes(productId)) {
-      setSelectedProductIds((prevIds) => [...prevIds, productId]);
-    } else if (value === 0 && selectedProductIds.includes(productId)) {
-      // If the quantity is zero, remove the productId from selectedProductIds
-      setSelectedProductIds((prevIds) =>
-        prevIds.filter((id) => id !== productId)
-      );
+        // If the entered quantity is greater than zero, add the productId to selectedProductIds
+        if (value > 0 && !selectedProductIds.includes(productId)) {
+          setSelectedProductIds((prevIds) => [...prevIds, productId]);
+        } else if (value === 0 && selectedProductIds.includes(productId)) {
+          // If the quantity is zero, remove the productId from selectedProductIds
+          setSelectedProductIds((prevIds) =>
+            prevIds.filter((id) => id !== productId)
+          );
+        }
+      }
     }
-  }
-}
-};
+  };
 
   // Function to calculate total price
   const calculateTotalPrice = () => {
@@ -395,9 +393,6 @@ if (text === "") {
   //   }
   // };
 
-
-
-
   const handleDeleteOrderItem = async (productId) => {
     try {
       // Create a copy of the draftData array
@@ -438,6 +433,11 @@ if (text === "") {
     } catch (error) {
       console.error("Error deleting item:", error);
     }
+  };
+
+  //css issue
+  const isSelectedProduct = (productId) => {
+    return selectedProductIds.includes(productId);
   };
 
   return (
@@ -492,142 +492,159 @@ if (text === "") {
             />
           </View>
         ) : (
-          <ScrollView>
+          <View>
             <>
               {showProductData && (
                 //key id
                 <View style={styles.dataContainer}>
-                  {filteredProducts.map((product, index) => (
-                    <View style={styles.row} key={product.ProductId}>
-                      <View style={styles.infoContainer}>
-                        <Text style={styles.name}>{product.Name} </Text>
+                  <FlatList
+                    data={filteredProducts}
+                    keyExtractor={(product) => product.ProductId.toString()}
+                    renderItem={({ item: product }) => (
+                      <View style={styles.row}>
+                        <View style={styles.infoContainer}>
+                          <Text style={styles.name}>{product.Name}</Text>
 
-                        <View style={{ flexDirection: "row", gap: 10 }}>
-                          <Text style={styles.price}>price :{product.MRP}</Text>
-                          <Text style={styles.price}>
-                            PackSize :{product.PackSize}
-                          </Text>
+                          <View style={{ flexDirection: "row", gap: 10 }}>
+                            <Text style={styles.price}>
+                              price: {product.MRP}
+                            </Text>
+                            <Text style={styles.price}>
+                              PackSize: {product.PackSize}
+                            </Text>
+                          </View>
                         </View>
-                      </View>
 
-                      {/* quantity   part  start  */}
-                      <View style={styles.quantityContainer}>
-                        <View style={styles.containerx}>
-                          <View style={styles.inputContainer}>
-                            <TextInput
-                              placeholder="QTY"
-                              style={styles.input}
-                              keyboardType="numeric"
-                              value={
-                                productQuantities[product.ProductId]
-                                  ? productQuantities[
-                                      product.ProductId
-                                    ].toString()
-                                  : ""
-                              }
-                              onChangeText={(text) =>
-                                handleQuantityChange(product.ProductId, text)
-                              }
-                            />
+                        <View style={styles.quantityContainer}>
+                          <View style={styles.containerx}>
+                            <View style={styles.inputContainer}>
+                              <TextInput
+                                placeholder="QTY"
+                                style={styles.input}
+                                keyboardType="numeric"
+                                value={
+                                  productQuantities[product.ProductId]
+                                    ? productQuantities[
+                                        product.ProductId
+                                      ].toString()
+                                    : ""
+                                }
+                                onChangeText={(text) =>
+                                  handleQuantityChange(product.ProductId, text)
+                                }
+                              />
+                            </View>
                           </View>
                         </View>
                       </View>
-                    </View>
-                  ))}
+                    )}
+                  />
                 </View>
               )}
             </>
 
-            <View>
-              {showOrderData && (
-                <View style={styles.dataContainer}>
-                  <View style={styles.tableHeader}>
-                    <Text style={styles.headerText}>Name</Text>
-                    
+            <>
+              <View>
+                {showOrderData && (
+                  <View style={styles.dataContainer}>
+                    <View style={styles.tableHeader}>
+                      <Text style={styles.headerText}>Name</Text>
 
-                    {/* <Text style={styles.headerText}>Quantity</Text> */}
-                    <Text style={[styles.headerText, styles.quantity]}>
-                      Quantity
-                    </Text>
+                      {/* <Text style={styles.headerText}>Quantity</Text> */}
+                      <Text style={[styles.headerText, styles.quantity]}>
+                        Quantity
+                      </Text>
 
-                    <Text style={styles.headerText}>Amount</Text>
-                    <Text style={styles.headerText}>Action</Text>
-                  </View>
+                      {/* <Text 
+                style={[styles.cellText, isSelectedProduct(specificProduct.ProductId) && styles.quantityWithMargin]}>
+                    {quantity}
+                    </Text> */}
 
-                  {/* Render selectedProduct */}
-                  {selectedProduct.map((specificProduct) => {
-                    const quantity =
-                      productQuantities[specificProduct.ProductId] || 0;
+                      <Text style={styles.headerText}>Amount</Text>
+                      <Text style={styles.headerText}>Action</Text>
+                    </View>
 
-                    if (quantity > 0) {
-                      return (
-                        <View
-                          style={styles.tableRow}
-                          key={specificProduct.ProductId}
-                        >
-                          <Text style={styles.cellText} numberOfLines={2}>
-                            {specificProduct.Name}
-                          </Text>
+                    {/* Render selectedProduct */}
+                    {selectedProduct.map((specificProduct) => {
+                      const quantity =
+                        productQuantities[specificProduct.ProductId] || 0;
 
-                          {/* <Text style={styles.cellText}>{quantity}</Text> */}
-                          <Text style={[styles.cellText, styles.quantity]}>
+                      if (quantity > 0) {
+                        return (
+                          <View
+                            style={styles.tableRow}
+                            key={specificProduct.ProductId}
+                          >
+                            <Text style={styles.cellText} numberOfLines={2}>
+                              {specificProduct.Name}
+                            </Text>
+
+                            {/* <Text style={styles.cellText}>{quantity}</Text> */}
+                            <Text style={[styles.cellText, styles.quantity]}>
                               {quantity}
                             </Text>
 
-                          <Text style={styles.cellText}>
-                            {specificProduct.MRP * quantity}
-                          </Text>
-                          <TouchableOpacity
-                            style={styles.actionButton}
-                            onPress={() =>
-                              handleDeleteProduct(specificProduct.ProductId)
-                            }
+                            <Text style={styles.cellText}>
+                              {specificProduct.MRP * quantity}
+                            </Text>
 
-                            //onPress={() => console.log("Delete button pressed")}
+                            <View style={{ flex: 1, alignSelf: "center" }}>
+                               <TouchableOpacity
+                              style={styles.actionButton}
+                              onPress={() =>
+                                handleDeleteProduct(specificProduct.ProductId)
+                              }
+
+                              //onPress={() => console.log("Delete button pressed")}
+                            >
+                              <Icon name="trash" size={20} color="#212529" />
+                            </TouchableOpacity>
+                            </View>
+                           
+                          </View>
+                        );
+                      }
+
+                      return null;
+                    })}
+
+                    {/* Render OrderDetails */}
+                    {selectedItem.OrderDetails.map((orderItem) => (
+                      <View style={styles.tableRow} key={orderItem.ProductId}>
+                        <Text style={styles.cellText} numberOfLines={2}>
+                          {orderItem.ProductName}
+                        </Text>
+
+                        <Text style={styles.cellText}>
+                          {orderItem.Quantity}
+                        </Text>
+
+                        <Text style={styles.cellText}>
+                          {orderItem.TotalAmount}
+                        </Text>
+
+                        <View style={{ flex: 1, alignSelf: "center" }}>
+                          <TouchableOpacity
+                            style={[styles.actionButton]}
+                            //onPress={() => handleDeleteOrderItem(orderItem.ProductId)}
+                            onPress={() =>
+                              handleDeleteOrderItem(orderItem.ProductId)
+                            }
                           >
                             <Icon name="trash" size={20} color="#212529" />
                           </TouchableOpacity>
                         </View>
-                      );
-                    }
+                      </View>
+                    ))}
 
-                    return null;
-                  })}
-
-                  {/* Render OrderDetails */}
-                  {selectedItem.OrderDetails.map((orderItem) => (
-                    <View style={styles.tableRow} key={orderItem.ProductId}>
-
-                      <Text style={styles.cellText} numberOfLines={2}>
-                        {orderItem.ProductName}
-                      </Text>
-
-                      <Text style={styles.cellText}>{orderItem.Quantity}</Text>
-
-
-                      <Text style={styles.cellText}>
-                        {orderItem.TotalAmount}
-                      </Text>
-                      {/* You can add an action button for OrderDetails as well */}
-                      <TouchableOpacity
-                        style={styles.actionButton}
-                        //onPress={() => handleDeleteOrderItem(orderItem.ProductId)}
-                        onPress={() =>
-                          handleDeleteOrderItem(orderItem.ProductId)
-                        }
-                      >
-                        <Icon name="trash" size={20} color="#212529" />
-                      </TouchableOpacity>
+                    <View style={styles.btngrp}>
+                      <Button onPress={fetchCreatenewOrderData}>Submit</Button>
                     </View>
-                  ))}
-
-                  <View style={styles.btngrp}>
-                    <Button onPress={fetchCreatenewOrderData}>Submit</Button>
                   </View>
-                </View>
-              )}
-            </View>
-          </ScrollView>
+                )}
+              </View>
+            </>
+          </View>
         )}
       </>
 
@@ -639,8 +656,6 @@ if (text === "") {
 };
 
 export default DraftRequest;
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -781,13 +796,26 @@ const styles = StyleSheet.create({
   // ===============
   tableHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     padding: 10,
-    backgroundColor: "#f2f2f2", // Header background color
+   backgroundColor:"gray",
+   marginHorizontal:10
+
+
+     // backgroundColor: "#f2f2f2", // Header background color
+    //  paddingHorizontal:5
+    // flex:1,
   },
   headerText: {
     // fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 17,
+    color: "white",
+
+    // borderWidth:1,
+
+    flex: 1,
+    textAlign: "center",
+   
   },
   tableRow: {
     flexDirection: "row",
@@ -795,6 +823,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc", // Border color
+    marginHorizontal:10,
   },
   cellText: {
     fontSize: 13,
@@ -802,18 +831,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#00050e",
 
+    // borderWidth:1,
     // color: "#1985a1",
-    // textAlign: 'center',
+    textAlign: "center",
+    
   },
 
   quantity: {
-    marginLeft: 25,
+    // marginLeft: 25,
   },
   // ===================
   actionButton: {
-    backgroundColor: "#dee2e6", // Button background color
+    // backgroundColor: "#dee2e6", // Button background color
     padding: 5,
     borderRadius: 5,
+
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "row",
   },
   actionText: {
     color: "white", // Button text color
@@ -840,218 +875,3 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   userInformation: {
-//     flexDirection: "row",
-//     justifyContent: "center",
-//     textAlign: "center",
-//     alignItems: "center",
-//     marginTop: 10,
-//     gap: 3,
-//   },
-//   userText1: {
-//     fontSize: 16,
-//     color: "black",
-//     // marginTop:10,
-//   },
-//   userText2: {
-//     fontSize: 16,
-//     color: "#168aad",
-//   },
-//   buttonContainer: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-
-//     //marginTop: 15,
-//     padding: 10,
-//   },
-//   dataContainer: {
-//     marginTop: 20,
-//   },
-
-//   button: {
-//     width: "50%", 
-//     backgroundColor: "#3498db",
-//     padding: 10,
-//   },
-//   button2: {
-//     width: "50%", 
-//     backgroundColor: "#e74c3c",
-//     padding: 10,
-//   },
-//   buttonText: {
-//     color: "white",
-//     textAlign: "center",
-//   },
-
-//   row: {
-//     flexDirection: "row",
-//     //justifyContent: "space-between",
-//     alignItems: "center",
-//     paddingHorizontal: 16,
-//     paddingVertical: 8,
-//     borderBottomWidth: 1,
-//     borderBottomColor: "#ccc",
-//   },
-//   infoContainer: {
-//     flex: 1,
-//     flexDirection: "column",
-//   },
-//   name: {
-//     fontSize: 15,
-//     marginRight: 10,
-//     color: "gray",
-//     // fontWeight: "bold",
-//   },
-//   price: {
-//     fontSize: 16,
-
-//     color: "#403d39",
-//   },
-//   quantityContainer: {
-//     flex: 1,
-//     //justifyContent: "space-between",
-//     alignItems: "flex-end",
-//     paddingHorizontal: 20,
-//   },
-
-//   checkboxContainer: {
-//     flex: 0.2,
-//     alignItems: "flex-end",
-//   },
-//   containerx: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//   },
-//   label: {
-//     fontSize: 16,
-//     marginRight: 10,
-//   },
-//   inputContainer: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//   },
-//   // button: {
-//   //   fontSize: 24,
-//   //   paddingHorizontal: 10,
-//   // },
-//   input: {
-//     fontSize: 13,
-//     borderWidth: 1,
-//     borderColor: "gray",
-//     padding: 5,
-//     minWidth: 40,
-//   },
-//   totalPriceText: {
-//     color: "black",
-//     textAlign: "center",
-//     fontSize: 15,
-//     // fontWeight: "bold",
-//   },
-//   searchBox: {
-//     // marginLeft: 50,
-//     alignSelf: "center",
-//     marginVertical: 10,
-//     background: "#F4F4F4",
-//   },
-
-//   inputContainerx: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     width: "80%",
-//     borderColor: "black",
-//     borderWidth: 1,
-//     margin: 5,
-//     padding: 5,
-//     marginLeft: 5,
-//     borderRadius: 50,
-//   },
-//   inputx: {
-//     flex: 1,
-//     height: 40,
-//     padding: 10,
-//     color: "#80A896",
-//   },
-//   iconx: {
-//     marginRight: 10,
-//   },
-//   // ===============================
-//   tableHeader: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     padding: 10,
-//     backgroundColor: "#f2f2f2", // Header background color
-//   },
-//   headerText: {
-//     // fontWeight: "bold",
-//     fontSize: 16,
-//     color: "black",
-//   },
-//   tableRow: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     padding: 10,
-//     borderBottomWidth: 1,
-//     borderBottomColor: "#ccc", // Border color
-//   },
-//   cellText: {
-//     fontSize: 13,
-//     flex: 1,
-//     fontWeight: "bold",
-//     color: "black",
-//   },
-//   // quantity: {
-//   //   marginLeft: 20,
-//   // },
-
-//   actionButton: {
-//     backgroundColor: "#dee2e6", // Button background color
-//     padding: 5,
-//     borderRadius: 5,
-//   },
-//   actionText: {
-//     color: "white", // Button text color
-//     fontWeight: "bold",
-//   },
-//   // button design for order details
-//   btngrp: {
-//     display: "flex",
-//     flexDirection: "row",
-//     justifyContent: "flex-end",
-//     alignItems: "center",
-//     marginTop: 20,
-//     paddingHorizontal: 10,
-//     gap: 5,
-//   },
-//   loadingContainer: {
-//     alignSelf: "center",
-//     flex: 1,
-//     // justifyContent:"center",
-//     // alignItems:"center"
-//   },
-//   lottiContainer: {
-//     height: 50,
-//     width: 50,
-//   },
-//   quantity: {
-//     marginLeft: 25,
-//   },
-// });

@@ -190,14 +190,16 @@ export default function CreateOrder() {
     //fetchCustomerData();
   }, [userDetails]);
 
+
+//Dynamicly set on dropDown 
   useEffect(() => {
     setValue(customerInfoList?.CustomerId);
-
-    //setDropDown(item.Name)
   }, [customerInfoList]);
 
-  // =====================
 
+
+  
+  // =====================
   const requestData = {
     CustomerId: value,
     OrderDate: orderDate,

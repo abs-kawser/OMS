@@ -42,14 +42,16 @@ const CreateOrderDetails = ({ route }) => {
 
   const [products, setProducts] = useState([]);
   const [productQuantities, setProductQuantities] = useState([]);
-  const [quantity, setQuantity] = useState([]);
   const [selectedProductIds, setSelectedProductIds] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [orderQuantities, setOrderQuantities] = useState(null);
   const [isLoadingProductData, setIsLoadingProductData] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState([]);
+
   const [totalAmount, setTotalAmount] = useState([]);
+  const [quantity, setQuantity] = useState([]);
+
   const [showLoader, setShowLoader] = useState(false);
 
   // console.log("create order page data", data?.DeliveryDate);
@@ -67,7 +69,6 @@ const CreateOrderDetails = ({ route }) => {
 
   // product api calling
   useEffect(() => {
-    // Check if data is already in AsyncStorage
     const getProductList = async () => {
       try {
         const storedData = await AsyncStorage.getItem("ProductList");
@@ -177,7 +178,6 @@ const CreateOrderDetails = ({ route }) => {
   // Function to calculate total price
   const calculateTotalPrice = () => {
     let totalPrice = 0;
-
     selectedProductIds.forEach((productId) => {
       const selectedProduct = products.find(
         (product) => product.ProductId === productId
@@ -287,7 +287,6 @@ const CreateOrderDetails = ({ route }) => {
     };
   });
 
-  
   const handleDraftSave = async () => {
     const requestData = {
       OrderDetails: draftTransformedOrderDetails,
@@ -330,7 +329,6 @@ const CreateOrderDetails = ({ route }) => {
   };
 
   // ==================================
-
 
   useEffect(() => {
     // Inside this effect, filter and set the selected products based on product IDs
@@ -399,6 +397,7 @@ const CreateOrderDetails = ({ route }) => {
             />
           </View>
         ) : (
+          //ScrollView
           <ScrollView>
             {/* <>
               {showProductData && (
@@ -568,8 +567,6 @@ const CreateOrderDetails = ({ route }) => {
 
 export default CreateOrderDetails;
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -715,7 +712,8 @@ const styles = StyleSheet.create({
   },
   headerText: {
     // fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 17,
+    color:"black"
   },
   tableRow: {
     flexDirection: "row",
@@ -768,8 +766,3 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
-
-
-
-
-

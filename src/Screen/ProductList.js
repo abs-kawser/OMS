@@ -187,10 +187,6 @@ export default function ProductList() {
     </>
   );
 }
-
-
-
-
 const styles = StyleSheet.create({
   // mainContainer:{
   //   flex: 1,
@@ -302,6 +298,10 @@ const styles = StyleSheet.create({
     width: 100,
   },
 });
+
+
+
+
 
 // ============Fetch Api manualy ==================\\
 // //fetch api

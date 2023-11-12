@@ -181,7 +181,6 @@ const OrderStatus = () => {
 
   return (
     <View style={styles.container}>
-      {/* ================================================================= */}
 
       <View>
         <Text style={styles.label}>Order Date</Text>

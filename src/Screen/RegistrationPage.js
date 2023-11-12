@@ -16,10 +16,13 @@ import { fetchRegistrationData } from "../Api/RegistrationApi";
 import base64 from "base-64";
 import { Divider } from "react-native-paper";
 import { Button } from "react-native-paper";
+import * as Animatable from "react-native-animatable";
+import { color } from "@rneui/base";
 
 
 
-const RegistrationPage = ({navigation}) => {
+
+const RegistrationPage = ({ navigation }) => {
   const [userId, setUserId] = useState("");
   console.log("USer id", userId);
   const [mobile, setMobile] = useState("");
@@ -32,9 +35,7 @@ const RegistrationPage = ({navigation}) => {
 
   const handleRegistration = async () => {
     // Validate user input here if needed
-
     //setIsLoading(true);
-
     try {
       const response = await fetchRegistrationData(
         setIsLoading,
@@ -52,8 +53,8 @@ const RegistrationPage = ({navigation}) => {
 
   return (
     <>
-      <Header />
-      <View style={styles.container}>
+      {/* <Header /> */}
+      {/* <View style={styles.container}>
         <ScrollView>
           <View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -81,7 +82,9 @@ const RegistrationPage = ({navigation}) => {
                   placeholder="User ID"
                   placeholderTextColor="black"
                   value={userId}
-                  onChangeText={(text) => setUserId(text)}
+                  onChangeText={(text) => setUserId(text)
+                  
+                  }
                 />
                 <TextInput
                   style={styles.input}
@@ -98,14 +101,6 @@ const RegistrationPage = ({navigation}) => {
                   value={password}
                   onChangeText={(text) => setPassword(text)}
                 />
-                {/* <TextInput
-              style={styles.input}
-              placeholder="Confirm Password"
-              placeholderTextColor="gray"
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={(text) => setConfirmPassword(text)}
-            /> */}
 
                 <TouchableOpacity
                   style={styles.registerButton}
@@ -134,106 +129,208 @@ const RegistrationPage = ({navigation}) => {
             </View>
           </View>
         </ScrollView>
+      </View> */}
+
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Welcome to OMS  </Text>
+        </View>
+        <Animatable.View animation="fadeInUp" style={styles.formContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="User ID"
+            placeholderTextColor="black"
+            value={userId}
+            onChangeText={(text) => setUserId(text)}
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Mobile"
+            placeholderTextColor="black"
+            value={mobile}
+            onChangeText={(text) => setMobile(text)}
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="black"
+            secureTextEntry
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+
+          <TouchableOpacity
+            style={styles.registerButton}
+            onPress={handleRegistration}
+          >
+            <Text style={styles.registerButtonText}>Registerr</Text>
+          </TouchableOpacity>
+
+          <Text
+            style={{
+              alignSelf: "center",
+              fontSize: 18,
+              color: "#495867",
+              fontWeight: "bold",
+            }}
+          >
+            orr
+          </Text>
+
+          <TouchableOpacity
+            style={styles.registerButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.registerButtonText}>Loginn</Text>
+          </TouchableOpacity>
+
+          {isLoading && <Text>Loading...</Text>}
+          {registrationResponse && (
+            <Text style={{ color: "red", emity: "" }}>
+              {JSON.stringify(registrationResponse.Message)}
+            </Text>
+          )}
+        </Animatable.View>
       </View>
     </>
   );
 };
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "lightblue",
+//     justifyContent: "center",
+//     // alignItems: "center",
+//   },
+//   header: {
+//     //marginBottom: 20,
+//   },
+//   headerText: {
+//     fontSize: 24,
+//     fontWeight: "bold",
+//     color: "white",
+//   },
+//   commontextContainer: {
+//     marginTop: "20%",
+//     //transform: [{ rotate: '-15deg' }]
+//   },
+
+//   commonText: {
+//     fontSize: 35,
+//     // fontWeight: "bold",
+//     color: "white",
+//     marginLeft: 30,
+//     //marginRight: "50%",
+//   },
+
+//   content: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//   },
+//   imageContainer: {
+//     flex: 1,
+//     alignItems: "center",
+//   },
+//   image: {
+//     width: 120,
+//     height: 120,
+//     resizeMode: "cover",
+//   },
+//   form: {
+//     flex: 1,
+//     padding: 10,
+//     backgroundColor: "#cae9ff",
+//     padding: 50,
+//     margin: 10,
+//     borderRadius: 20,
+//     // paddingHorizontal: 20,
+//   },
+//   input: {
+//     height: 40,
+//     // backgroundColor: 'rgba(255, 255, 255, 0.2)',
+//     backgroundColor: "white",
+//     marginBottom: 10,
+//     color: "black",
+//     paddingHorizontal: 10,
+//     borderRadius: 5,
+//     width: 350,
+//     alignSelf: "center",
+//   },
+//   registerButton: {
+//     flexDirection: "row",
+//     padding: 12,
+//     alignItems: "center",
+//     justifyContent: "center",
+//     width: "60%",
+//     backgroundColor: "#ffe66d",
+//     paddingVertical: 12,
+//     paddingHorizontal: 24,
+//     borderRadius: 15,
+//     alignItems: "center",
+//     alignSelf: "center",
+//     marginBottom: 16,
+//   },
+//   registerButtonText: {
+//     fontSize: 15,
+//     //fontWeight: 'bold',
+//     color: "#5c677d",
+//     fontWeight: "bold",
+//   },
+
+//   alredy: {
+//     marginTop: 20, // Adjust the margin as needed
+//     fontSize: 16,
+//     fontWeight: "bold",
+//     color: "white",
+//     textAlign: "center",
+//     color: "black",
+//   },
+// });
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "lightblue",
+    backgroundColor: "#3498db",
     justifyContent: "center",
-    // alignItems: "center",
   },
   header: {
-    //marginBottom: 20,
+    alignItems: "center",
   },
   headerText: {
     fontSize: 24,
+    color: "#fff",
     fontWeight: "bold",
-    color: "white",
+    marginBottom: 20,
   },
-  commontextContainer: {
-    marginTop: "20%",
-    //transform: [{ rotate: '-15deg' }]
-  },
-
-  commonText: {
-    fontSize: 35,
-    // fontWeight: "bold",
-    color: "white",
-    marginLeft: 30,
-    //marginRight: "50%",
-  },
-
-  content: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  imageContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
-  image: {
-    width: 120,
-    height: 120,
-    resizeMode: "cover",
-  },
-  form: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: "#cae9ff",
-    padding: 50,
-    margin: 10,
-    borderRadius: 20,
-    // paddingHorizontal: 20,
+  formContainer: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+    margin: 20,
   },
   input: {
     height: 40,
-    // backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    backgroundColor: "white",
-    marginBottom: 10,
-    color: "black",
-    paddingHorizontal: 10,
+    borderColor: "gray",
+    borderWidth: 1,
     borderRadius: 5,
-    width: 350,
-    alignSelf: "center",
+    marginVertical: 10,
+    padding: 10,
   },
   registerButton: {
-    flexDirection: "row",
-    padding: 12,
+    backgroundColor: "#3498db",
+    borderRadius: 5,
+    padding: 15,
     alignItems: "center",
-    justifyContent: "center",
-    width: "60%",
-    backgroundColor: "#ffe66d",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 15,
-    alignItems: "center",
-    alignSelf: "center",
-    marginBottom: 16,
+    marginTop: 10,
   },
   registerButtonText: {
-    fontSize: 15,
-    //fontWeight: 'bold',
-    color: "#5c677d",
+    color: "#fff",
     fontWeight: "bold",
-  },
-
-  alredy: {
-    marginTop: 20, // Adjust the margin as needed
     fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
-    textAlign: "center",
-    color: "black",
   },
 });
-
-
 export default RegistrationPage;
-
-
-
