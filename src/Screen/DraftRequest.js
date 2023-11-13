@@ -109,6 +109,8 @@ const DraftRequest = ({ route }) => {
   };
 
   const logQuantityValues = () => {
+
+
     const quantityValues = selectedProduct.map((product) => {
       const quantity = productQuantities[product.ProductId] || 0;
       return quantity;
@@ -393,6 +395,8 @@ const DraftRequest = ({ route }) => {
   //   }
   // };
 
+
+  
   const handleDeleteOrderItem = async (productId) => {
     try {
       // Create a copy of the draftData array
@@ -435,7 +439,7 @@ const DraftRequest = ({ route }) => {
     }
   };
 
-  //css issue
+  //css issue 
   const isSelectedProduct = (productId) => {
     return selectedProductIds.includes(productId);
   };

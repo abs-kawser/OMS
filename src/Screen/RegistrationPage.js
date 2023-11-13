@@ -198,6 +198,65 @@ const RegistrationPage = ({ navigation }) => {
   );
 };
 
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#3498db",
+    justifyContent: "center",
+  },
+  header: {
+    alignItems: "center",
+  },
+  headerText: {
+    fontSize: 24,
+    color: "#fff",
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  formContainer: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+    margin: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginVertical: 10,
+    padding: 10,
+  },
+  registerButton: {
+    backgroundColor: "#3498db",
+    borderRadius: 5,
+    padding: 15,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  registerButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+});
+export default RegistrationPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
 // const styles = StyleSheet.create({
 //   container: {
 //     flex: 1,
@@ -289,48 +348,3 @@ const RegistrationPage = ({ navigation }) => {
 //     color: "black",
 //   },
 // });
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#3498db",
-    justifyContent: "center",
-  },
-  header: {
-    alignItems: "center",
-  },
-  headerText: {
-    fontSize: 24,
-    color: "#fff",
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  formContainer: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    elevation: 5,
-    margin: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
-    marginVertical: 10,
-    padding: 10,
-  },
-  registerButton: {
-    backgroundColor: "#3498db",
-    borderRadius: 5,
-    padding: 15,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  registerButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
-export default RegistrationPage;

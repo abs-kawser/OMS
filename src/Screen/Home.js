@@ -25,7 +25,12 @@ export default function Home() {
           Designation:{userDetails.DesignationName}
         </Text>
         <Text style={styles.text}>Full Region:{userDetails.RegionName}</Text>
-      </View>     
+      </View> 
+
+
+       <View>
+           
+        </View>    
     </ScrollView>
   );
 }
