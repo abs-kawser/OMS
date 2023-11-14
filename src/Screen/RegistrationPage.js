@@ -19,15 +19,13 @@ import { Button } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
 import { color } from "@rneui/base";
 
-
-
-
 const RegistrationPage = ({ navigation }) => {
   const [userId, setUserId] = useState("");
-  console.log("USer id", userId);
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  console.log("USer id", userId);
 
   // Add more state variables as needed for handling API response and loading state
   const [isLoading, setIsLoading] = useState(false);
@@ -133,7 +131,7 @@ const RegistrationPage = ({ navigation }) => {
 
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Welcome to OMS  </Text>
+      <Text style={styles.headerText}>Welcome to  OMS  </Text>
         </View>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
           <TextInput
@@ -161,12 +159,22 @@ const RegistrationPage = ({ navigation }) => {
             onChangeText={(text) => setPassword(text)}
           />
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.registerButton}
             onPress={handleRegistration}
           >
-            <Text style={styles.registerButtonText}>Registerr</Text>
-          </TouchableOpacity>
+            <Text style={styles.registerButtonText}>Sign Up</Text>
+          </TouchableOpacity> */}
+          <Button
+            icon="arrow-right"
+            mode="contained"
+            onPress={handleRegistration}
+            buttonColor="#00b4d8"
+            contentStyle={{ flexDirection: "row-reverse" }}
+            style={styles.buttonRegister}
+          >
+            Sign Up
+          </Button>
 
           <Text
             style={{
@@ -179,12 +187,25 @@ const RegistrationPage = ({ navigation }) => {
             orr
           </Text>
 
-          <TouchableOpacity
+
+
+          {/* <TouchableOpacity
             style={styles.registerButton}
             onPress={() => navigation.goBack()}
           >
             <Text style={styles.registerButtonText}>Loginn</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+          <Button
+          mode="contained"
+          buttonColor="#00a6fb"
+          style={styles.button}
+          onPress={() => navigation.goBack()}
+        >
+          Login
+        </Button>
+
+
 
           {isLoading && <Text>Loading...</Text>}
           {registrationResponse && (
@@ -197,8 +218,6 @@ const RegistrationPage = ({ navigation }) => {
     </>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -244,18 +263,6 @@ const styles = StyleSheet.create({
   },
 });
 export default RegistrationPage;
-
-
-
-
-
-
-
-
-
-
-
-
 
 // const styles = StyleSheet.create({
 //   container: {

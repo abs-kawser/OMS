@@ -713,7 +713,7 @@ const styles = StyleSheet.create({
   headerText: {
     // fontWeight: "bold",
     fontSize: 17,
-    color:"black"
+    color: "black",
   },
   tableRow: {
     flexDirection: "row",

@@ -17,8 +17,6 @@ import { useLogin } from "../../Context/LoginProvider";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-
 const DrawerItems = (props) => {
   const navigation = useNavigation();
 
@@ -37,7 +35,7 @@ const DrawerItems = (props) => {
         {
           text: "Yes",
           onPress: async () => {
-            await AsyncStorage.removeItem('userData');
+            await AsyncStorage.removeItem("userData");
             setIsLoggedIn((prevUserDetails) => ({
               ...prevUserDetails,
               login: false,
@@ -59,27 +57,20 @@ const DrawerItems = (props) => {
         <View
           style={{
             borderBottomWidth: 1,
-            // borderColor: "#e9ecef",
-            backgroundColor: "#72ddf7",
+            backgroundColor: "#a9def9",
             marginTop: -4,
             padding: 10,
+            // borderColor: "#e9ecef",
           }}
         >
           <Image
-            // source={{
-            //   uri: "https://i.postimg.cc/qR60dZkB/user-circle-icon-172814.png",
-            // }}
-
-            // style={{ height: 20, width: 20, resizeMode: "contain" }}
             source={require("../../../assets/user.png")}
-
             style={{
               width: 100,
               height: 80,
               margin: 10,
               resizeMode: "contain",
-             // alignSelf: "center",
-
+              // alignSelf: "center",
             }}
           />
 
@@ -115,14 +106,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#323031",
     fontSize: 18,
-    marginLeft:30
+    marginLeft: 30,
   },
   grayText: {
-    
     fontSize: 18,
-    marginLeft:30
-    
-
+    marginLeft: 30,
   },
-  
 });

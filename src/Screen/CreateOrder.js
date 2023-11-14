@@ -190,15 +190,11 @@ export default function CreateOrder() {
     //fetchCustomerData();
   }, [userDetails]);
 
-
-//Dynamicly set on dropDown 
+  //Dynamicly set on dropDown
   useEffect(() => {
     setValue(customerInfoList?.CustomerId);
   }, [customerInfoList]);
 
-
-
-  
   // =====================
   const requestData = {
     CustomerId: value,
@@ -217,18 +213,14 @@ export default function CreateOrder() {
         // Alert.alert("Customer field required", "Please select a customer.");
         setCustomerError("Customer field is required");
       }
-
       if (!note) {
         // Alert.alert("Note field required", "Please enter a note.");
         setNoteError("Note field is required");
       }
-
       return;
     }
-
     setNoteError("");
     setCustomerError("");
-
     navigation.navigate("Order Details", { data: requestData });
   };
 
@@ -476,8 +468,6 @@ const styles = StyleSheet.create({
     color: "#22223b",
   },
 });
-
-
 
 // ========= api calling =========
 // const fetchCreatenewOrderData = async () => {

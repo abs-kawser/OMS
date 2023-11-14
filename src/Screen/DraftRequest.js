@@ -396,7 +396,7 @@ const DraftRequest = ({ route }) => {
   // };
 
 
-  
+
   const handleDeleteOrderItem = async (productId) => {
     try {
       // Create a copy of the draftData array
@@ -660,6 +660,8 @@ const DraftRequest = ({ route }) => {
 };
 
 export default DraftRequest;
+
+
 
 const styles = StyleSheet.create({
   container: {

@@ -18,29 +18,27 @@ import { useLogin } from "../Context/LoginProvider";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native-paper";
+import Icon from "react-native-vector-icons/FontAwesome";
+import * as Animatable from "react-native-animatable";
 
 const LoginPage = () => {
   const navigation = useNavigation();
   const [userId, setUserId] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
 
   //error handleing
   const [error, setError] = useState("");
-
   //useContext api
   const { isLoggedIn, setIsLoggedIn } = useLogin();
-
   //loading
   const [isLoading, setIsLoading] = useState(false);
-
-
 
   const handleLogin = async () => {
     try {
       setIsLoading(true); // Start loading
-
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-
       const response = await fetch(
         `${BASE_URL}/api/HomeApi/Login?networkId=${userId}&password=${password}`,
         {
@@ -51,22 +49,17 @@ const LoginPage = () => {
           },
         }
       );
-
       const result = await response.json();
       setIsLoading(false); // Stop loading
-
       // console.log('this is login details', result.EmployeeId);
-
       if (result.EmpId) {
         // Save user authentication details in AsyncStorage
         await AsyncStorage.setItem("userData", JSON.stringify(result));
-
         setIsLoggedIn((prevUserDetails) => ({
           ...prevUserDetails,
           login: true,
           userDetails: result,
         }));
-
         navigation.navigate("DrawerNavigator");
         ToastAndroid.show(
           result.EmpId && "Login Successfully",
@@ -81,30 +74,83 @@ const LoginPage = () => {
     }
   };
 
-
-
   const handleRegisterNow = () => {
     navigation.navigate("Register");
   };
 
-
-
   return (
+    // <>
+    //   <Header />
+    //   <View style={styles.container}>
+    //     <SafeAreaView>
+    //       <View style={styles.imageContainer}>
+    //         <Image
+    //           source={{
+    //             uri: "https://i.postimg.cc/brxvykCD/login.png",
+    //           }}
+    //           style={styles.image}
+    //         />
+    //       </View>
 
-    
+    //       <TextInput
+    //         style={styles.input}
+    //         placeholder="User Id"
+    //         onChangeText={(text) => setUserId(text)}
+    //         value={userId}
+    //       />
+
+    //       <TextInput
+    //         style={styles.input}
+    //         placeholder="Password"
+    //         secureTextEntry={true}
+    //         onChangeText={(text) => setPassword(text)}
+    //         value={password}
+    //       />
+
+    //       {error && <Text style={styles.warning}>{error}</Text>}
+
+    //       <TouchableOpacity
+    //       // style={styles.loginButton} onPress={handleLogin}
+    //       >
+    //         <Button
+    //           mode="contained"
+    //           buttonColor="#00a6fb"
+    //           style={styles.button}
+    //           onPress={handleLogin}
+    //         >
+    //           Login
+    //         </Button>
+    //         {/* {isLoading && <ActivityIndicator size="small" color="red" />} */}
+    //         {/* <Text style={styles.loginButtonTextX}>Loginn</Text> */}
+    //       </TouchableOpacity>
+
+    //       <Button
+    //         icon="arrow-right"
+    //         mode="contained"
+    //         onPress={handleRegisterNow}
+    //         buttonColor="#00b4d8"
+    //         contentStyle={{ flexDirection: "row-reverse" }}
+    //         style={styles.buttonRegister}
+    //       >
+    //         Register Now
+    //       </Button>
+    //     </SafeAreaView>
+    //   </View>
+    // </>
+
     <>
-      <Header />
-
       <View style={styles.container}>
-        <SafeAreaView>
-          <View style={styles.imageContainer}>
-            <Image
-              source={{
-                uri: "https://i.postimg.cc/brxvykCD/login.png",
-              }}
-              style={styles.image}
-            />
-          </View>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Loginn</Text>
+        </View>
+        <Animatable.View animation="fadeInUp" style={styles.formContainer}>
+          {/* <TextInput style={styles.input} placeholder="User ID" />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+        /> */}
 
           <TextInput
             style={styles.input}
@@ -113,30 +159,57 @@ const LoginPage = () => {
             value={userId}
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry={true}
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-          />
+          {/* <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+        /> */}
 
-          {error && <Text style={styles.warning}>{error}</Text>}
-
-          <TouchableOpacity
-          // style={styles.loginButton} onPress={handleLogin}
-          >
-            <Button
-              mode="contained"
-              buttonColor="#00a6fb"
-              style={styles.button}
-              onPress={handleLogin}
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Password"
+              secureTextEntry={!showPassword}
+              onChangeText={(text) => setPassword(text)}
+              value={password}
+            />
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => setShowPassword(!showPassword)}
             >
-              Login
-            </Button>
-            {/* {isLoading && <ActivityIndicator size="small" color="red" />} */}
-            {/* <Text style={styles.loginButtonTextX}>Loginn</Text> */}
-          </TouchableOpacity>
+              <Icon
+                name={showPassword ? "eye" : "eye-slash"}
+                size={20}
+                color="#495867"
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* <TouchableOpacity style={styles.registerButton} onPress={handleLogin}>
+          <Text style={styles.registerButtonText}>Loginn</Text>
+        </TouchableOpacity> */}
+
+          <Button
+            mode="contained"
+            buttonColor="#00a6fb"
+            style={styles.button}
+            onPress={handleLogin}
+          >
+            Login
+          </Button>
+
+          <Text
+            style={{
+              alignSelf: "center",
+              fontSize: 20,
+              color: "#495867",
+              fontWeight: "bold",
+            }}
+          >
+            orr
+          </Text>
 
           <Button
             icon="arrow-right"
@@ -146,99 +219,177 @@ const LoginPage = () => {
             contentStyle={{ flexDirection: "row-reverse" }}
             style={styles.buttonRegister}
           >
-            Register Now
+            Sign Up
           </Button>
-        </SafeAreaView>
+
+          {/* <TouchableOpacity
+          style={styles.registerButton}
+          onPress={() => navigation.navigate("Register")}
+        >
+          <Text style={styles.registerButtonText}>Registerr</Text>
+        </TouchableOpacity> */}
+        </Animatable.View>
       </View>
     </>
-
-
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: "#3498db",
     justifyContent: "center",
-    backgroundColor: "lightblue",
   },
   header: {
     alignItems: "center",
   },
   headerText: {
     fontSize: 24,
+    color: "#fff",
     fontWeight: "bold",
-  },
-  imageContainer: {
-    alignItems: "center",
     marginBottom: 20,
   },
-  image: {
-    width: 200,
-    height: 200,
-    resizeMode: "contain",
+  formContainer: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+    margin: 20,
   },
   input: {
-    // borderWidth: 1,
-    // borderColor: "#ccc",
-    // borderRadius: 5,
-    // padding: 10,
-    // marginBottom: 16,
-    // fontSize: 16,
-
-    backgroundColor: "white",
-    marginBottom: 10,
-    color: "black",
-    paddingHorizontal: 10,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
     borderRadius: 5,
-    width: 350,
-    alignSelf: "center",
+    marginVertical: 10,
+    padding: 10,
   },
-  loginButton: {
-    flexDirection: "row",
-    padding: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    width: "25%",
-    backgroundColor: "#00a6fb",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+  registerButton: {
+    backgroundColor: "#3498db",
     borderRadius: 5,
+    padding: 15,
     alignItems: "center",
-    alignSelf: "center",
-    marginBottom: 16,
+    marginTop: 10,
   },
-  loginButtonTextX: {
-    fontSize: 15,
-    //fontWeight: 'bold',
-    color: "white",
+  registerButtonText: {
+    color: "#fff",
     fontWeight: "bold",
-  },
-  registerNow: {
-    alignItems: "center",
-  },
-  registerNowText: {
     fontSize: 16,
-    color: "black",
-    //fontWeight: "bold",
-    textDecorationLine: "underline",
   },
-  warning: {
-    color: "red",
-  },
+
   button: {
-    width: "40%",
+    // width: "50%",
     marginTop: 20,
-    alignSelf: "center",
+    // alignSelf: "center",
   },
   buttonRegister: {
-    width: "40%",
-    marginTop: 20,
-    alignSelf: "center",
+    // width: "50%",
+    // marginTop: 10,
+    // alignSelf: "center",
+  },
+
+  passwordContainer: {
+    position: "relative",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  passwordInput: {
+    flex: 1,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginVertical: 10,
+    padding: 10,
+  },
+  iconContainer: {
+    position: "absolute",
+    top: 20,
+    right: 10,
   },
 });
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 16,
+//     justifyContent: "center",
+//     backgroundColor: "lightblue",
+//   },
+//   header: {
+//     alignItems: "center",
+//   },
+//   headerText: {
+//     fontSize: 24,
+//     fontWeight: "bold",
+//   },
+//   imageContainer: {
+//     alignItems: "center",
+//     marginBottom: 20,
+//   },
+//   image: {
+//     width: 200,
+//     height: 200,
+//     resizeMode: "contain",
+//   },
+//   input: {
+//     // borderWidth: 1,
+//     // borderColor: "#ccc",
+//     // borderRadius: 5,
+//     // padding: 10,
+//     // marginBottom: 16,
+//     // fontSize: 16,
+
+//     backgroundColor: "white",
+//     marginBottom: 10,
+//     color: "black",
+//     paddingHorizontal: 10,
+//     borderRadius: 5,
+//     width: 350,
+//     alignSelf: "center",
+//   },
+//   loginButton: {
+//     flexDirection: "row",
+//     padding: 12,
+//     alignItems: "center",
+//     justifyContent: "center",
+//     width: "25%",
+//     backgroundColor: "#00a6fb",
+//     paddingVertical: 12,
+//     paddingHorizontal: 24,
+//     borderRadius: 5,
+//     alignItems: "center",
+//     alignSelf: "center",
+//     marginBottom: 16,
+//   },
+//   loginButtonTextX: {
+//     fontSize: 15,
+//     //fontWeight: 'bold',
+//     color: "white",
+//     fontWeight: "bold",
+//   },
+//   registerNow: {
+//     alignItems: "center",
+//   },
+//   registerNowText: {
+//     fontSize: 16,
+//     color: "black",
+//     //fontWeight: "bold",
+//     textDecorationLine: "underline",
+//   },
+//   warning: {
+//     color: "red",
+//   },
+//   button: {
+//     width: "40%",
+//     marginTop: 20,
+//     alignSelf: "center",
+//   },
+//   buttonRegister: {
+//     width: "40%",
+//     marginTop: 20,
+//     alignSelf: "center",
+//   },
+// });
+
 export default LoginPage;
-
-
