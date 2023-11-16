@@ -14,10 +14,10 @@ export default function FlatCards() {
           onPress={() => navigation.navigate("Create Order")}
         >
           <Image
-            style={{ height: 25, width: 25, resizeMode: "contain" }}
+            style={{ height: 40, width: 40, resizeMode: "contain" }}
             source={require("../assets/delivery-service.png")}
           />
-          <Text>Create Order</Text>
+          <Text style={styles.card_text}>Create Order</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.card, styles.cardOne]}
@@ -26,20 +26,20 @@ export default function FlatCards() {
         >
           
           <Image
-            style={{ height: 25, width: 25, resizeMode: "contain" }}
+            style={{ height: 40, width: 40, resizeMode: "contain" }}
             source={require("../assets/customer.png")}
           />
-          <Text>Customer</Text>
+          <Text style={styles.card_text}>Customer</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.card, styles.cardOne]}
           onPress={() => navigation.navigate("Product List")}
         >
           <Image
-            style={{ height: 25, width: 25, resizeMode: "contain" }}
+            style={{ height: 40, width: 40, resizeMode: "contain" }}
             source={require("../assets/list.png")}
           />
-          <Text>Product</Text>
+          <Text style={styles.card_text}>Product</Text>
         </TouchableOpacity>
       </View>
       {/* ========================== */}
@@ -48,30 +48,30 @@ export default function FlatCards() {
           onPress={() => navigation.navigate("Order Status")}
         >
           <Image
-            style={{ height: 25, width: 25, resizeMode: "contain" }}
+            style={{ height: 40, width: 40, resizeMode: "contain" }}
             source={require("../assets/order-refund.png")}
           />
-          <Text>Order Status</Text>
+          <Text style={styles.card_text}>Order Status</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.card, styles.cardOne]}
           onPress={() => navigation.navigate("Change Password")}
         >
           <Image
-            style={{ height: 25, width: 25, resizeMode: "contain" }}
+            style={{ height: 40, width: 40, resizeMode: "contain" }}
             source={require("../assets/password.png")}
           />
-          <Text>Password</Text>
+          <Text style={styles.card_text}>Password</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.card, styles.cardOne]}
           onPress={() => navigation.navigate("Darft Screen")}
         >
           <Image
-            style={{ height: 25, width: 25, resizeMode: "contain" }}
+            style={{ height: 40, width: 40, resizeMode: "contain" }}
             source={require("../assets/draft.png")}
           />
-          <Text>Draft</Text>
+          <Text style={styles.card_text}>Draft</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -98,12 +98,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "30%",
     height: 100,
-    borderRadius: 15,
+    borderRadius: 5,
     margin: 8,
+    elevation:5
+
+    // padding:15,
+    // gap:5,
   },
 
   cardOne: {
     backgroundColor: "#a9def9",
   },
+
+  card_text:{
+    fontFamily: 'Roboto-bold',
+    fontWeight:"700",
+    marginTop:5
+  }
 
 });

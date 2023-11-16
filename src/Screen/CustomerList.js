@@ -27,6 +27,7 @@ export default function CustomerList() {
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
 
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
+  
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
 
@@ -48,7 +49,7 @@ export default function CustomerList() {
     setFilteredData(filtered);
   }, [searchTerm]);
 
-  //fetch api
+  //fetch customer api
   const fetchCustomerData = async () => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);

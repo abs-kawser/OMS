@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  Image,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -105,10 +106,15 @@ const Draft = ({ navigation }) => {
                     style={styles.iconCell}
                     onPress={() => handleItemPress(item)}
                   >
-                    <MaterialCommunityIcons
+                    {/* <MaterialCommunityIcons
                       name="file-find-outline"
                       size={30}
                       color="black"
+                    /> */}
+
+                    <Image
+                      style={{ height: 25, width: 25, resizeMode: "contain" }}
+                      source={require("../../assets/searchs.png")}
                     />
                   </TouchableOpacity>
                 </View>
@@ -118,7 +124,11 @@ const Draft = ({ navigation }) => {
                     style={styles.iconCell}
                     onPress={() => handleDeleteItem(item)}
                   >
-                    <FontAwesome name="trash" size={20} color="black" />
+                    {/* <FontAwesome name="trash" size={20} color="black" /> */}
+                    <Image
+                      style={{ height: 25, width: 25, resizeMode: "contain" }}
+                      source={require("../../assets/delete.png")}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -128,9 +138,6 @@ const Draft = ({ navigation }) => {
     </ScrollView>
   );
 };
-
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -144,13 +151,17 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   headerText: {
-    fontWeight: "bold",
+    fontWeight: "700",
+    fontFamily: 'Roboto-bold',
   },
   headerColumn60: {
     width: "60%",
   },
   headerColumn: {
     flex: 2,
+    // borderWidth:1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   row: {
     flexDirection: "row",
@@ -165,12 +176,12 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: "center",
     alignItems: "center",
+    // borderWidth:1,
+    
   },
   textColor: {
     color: "black",
   },
 });
-
-
 
 export default Draft;

@@ -9,6 +9,7 @@ import OrderInfo from "../../Screen/OrderInfo";
 import OrderStatusInfo from "../../Screen/OrderStatusInfo";
 import Darft from "../../Screen/Darft";
 import DraftRequest from "../../Screen/DraftRequest";
+import NoOrder from "../../Screen/NoOrder";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +79,9 @@ const StackNavigator = () => {
           headerTitleAlign: "center",
         }}
       />
+
+
+     
     </Stack.Navigator>
   );
 };

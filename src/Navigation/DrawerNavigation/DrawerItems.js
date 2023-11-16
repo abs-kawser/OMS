@@ -56,20 +56,24 @@ const DrawerItems = (props) => {
         {/* custom drawer header */}
         <View
           style={{
-            borderBottomWidth: 1,
+            borderBottomWidth: .5,
             backgroundColor: "#a9def9",
             marginTop: -4,
             padding: 10,
+            borderBottomColor:"gray"
+            
             // borderColor: "#e9ecef",
           }}
         >
           <Image
-            source={require("../../../assets/user.png")}
+            source={require("../../../assets/profile.png")}
             style={{
               width: 100,
               height: 80,
-              margin: 10,
+              // margin: 10,
               resizeMode: "contain",
+              alignSelf:"center",
+              marginVertical:10
               // alignSelf: "center",
             }}
           />
@@ -90,7 +94,11 @@ const DrawerItems = (props) => {
 
       <DrawerItem
         icon={({ color, size }) => (
-          <Icon name="logout" color={color} size={size} />
+          // <Icon name="logout" color={color} size={size} />
+          <Image
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
+              source={require("../../../assets/logouts.png")}
+            />
         )}
         label="Sign Out"
         onPress={handleLogout}
@@ -106,10 +114,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#323031",
     fontSize: 18,
-    marginLeft: 30,
+    textAlign:"center"
+    // marginLeft: 30,
   },
   grayText: {
     fontSize: 18,
-    marginLeft: 30,
+    textAlign:"center"
+    // marginLeft: 30,
   },
+  container:{
+    marginBottom:10,
+  }
 });

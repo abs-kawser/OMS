@@ -131,7 +131,7 @@ const RegistrationPage = ({ navigation }) => {
 
       <View style={styles.container}>
         <View style={styles.header}>
-      <Text style={styles.headerText}>Welcome to  OMS  </Text>
+          <Text style={styles.headerText}>Welcome to OMS </Text>
         </View>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
           <TextInput
@@ -187,8 +187,6 @@ const RegistrationPage = ({ navigation }) => {
             orr
           </Text>
 
-
-
           {/* <TouchableOpacity
             style={styles.registerButton}
             onPress={() => navigation.goBack()}
@@ -197,15 +195,13 @@ const RegistrationPage = ({ navigation }) => {
           </TouchableOpacity> */}
 
           <Button
-          mode="contained"
-          buttonColor="#00a6fb"
-          style={styles.button}
-          onPress={() => navigation.goBack()}
-        >
-          Login
-        </Button>
-
-
+            mode="contained"
+            buttonColor="#00a6fb"
+            style={styles.button}
+            onPress={() => navigation.goBack()}
+          >
+            Login
+          </Button>
 
           {isLoading && <Text>Loading...</Text>}
           {registrationResponse && (

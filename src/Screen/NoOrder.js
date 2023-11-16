@@ -24,9 +24,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import { Button } from "@rneui/themed";
 
-export default function CreateOrder() {
+const NoOrder = () => {
   const route = useRoute();
   const navigation = useNavigation();
+    //comeing from contex
+    const { isLoggedIn, setIsLoggedIn } = useLogin();
+    const { userDetails } = isLoggedIn;
+
   const customerInfoList = route.params?.customerInfoList;
 
   console.log("customer Info from Create Order page", customerInfoList);
@@ -34,25 +38,27 @@ export default function CreateOrder() {
 
   //check
 
-  const [client, setClient] = useState("");
-  const [isClientNameValid, setClientNameValid] = useState(false);
-  const [isClientNameTouched, setClientNameTouched] = useState(false);
-  const [customerSelected, setCustomerSelected] = useState(false);
+  //   const [client, setClient] = useState("");
+  //   const [isClientNameValid, setClientNameValid] = useState(false);
+  //   const [isClientNameTouched, setClientNameTouched] = useState(false);
+  //   const [customerSelected, setCustomerSelected] = useState(false);
+  //===//
+  const [data, setData] = useState([]);
 
+  const [value, setValue] = useState(customerInfoList?.CustomerId);
+  console.log("CustomerId value", value);
   const [orderDate, setOrderDate] = useState(new Date());
   const [deliveryDate, setDeliveryDate] = useState(new Date());
   const [note, setNote] = useState("");
+
+  console.log("orderDate",orderDate)
 
   //take sate for validtion
   const [error, setError] = useState("");
   const [customerError, setCustomerError] = useState("");
   const [noteError, setNoteError] = useState("");
 
-  //===//
-  const [data, setData] = useState([]);
-  const [value, setValue] = useState(customerInfoList?.CustomerId);
   const [isLoading, setIsLoading] = useState(false);
-
   const [outPut, setOutput] = useState([]);
   //const [dropDown, setDropDown] = useState(null);
   //checking on log
@@ -68,9 +74,7 @@ export default function CreateOrder() {
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
 
-  //comeing from contex
-  const { isLoggedIn, setIsLoggedIn } = useLogin();
-  const { userDetails } = isLoggedIn;
+
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
   console.log(
@@ -111,17 +115,6 @@ export default function CreateOrder() {
     }
   };
 
-  // ===============================
-  const onClientNameChange = (text) => {
-    const isValid = text.trim() !== "";
-    setClientNameValid(isValid);
-    setClient(text);
-  };
-
-  const onClientNameBlur = () => {
-    setClientNameTouched(true);
-  };
-
   // ===========================================
 
   //
@@ -133,7 +126,7 @@ export default function CreateOrder() {
     }
   };
 
-  //customert api call
+  //===================customert api call
 
   const fetchCustomerData = async () => {
     try {
@@ -190,39 +183,67 @@ export default function CreateOrder() {
     //fetchCustomerData();
   }, [userDetails]);
 
-  //Dynamicly set on dropDown
-  useEffect(() => {
-    setValue(customerInfoList?.CustomerId);
-  }, [customerInfoList]);
+  //=======================no order api calling ==========
 
-  // =====================
-  const requestData = {
-    CustomerId: value,
-    OrderDate: orderDate,
-    DeliveryDate: deliveryDate,
-    EntryBy: userDetails?.EmpId,
-    Note: note,
-    TerritoryId: userDetails?.TerritoryId,
-  };
+  const fetchNorderData = async () => {
+    const requestBody = {
+      CustomerId: value,
+      OrderDate: orderDate,
+      EntryDateTime: deliveryDate,
+      Note: note,
 
-  //Routing
+      Status: 1,
+      EntryBy: 1,
+      TerritoryId: userDetails?.TerritoryId,
+      SCId: userDetails?.ScId,
+    };
 
-  const nextPageComponent = () => {
-    if (!value || !note) {
-      if (!value) {
-        // Alert.alert("Customer field required", "Please select a customer.");
-        setCustomerError("Customer field is required");
+    try {
+
+      if (!value || !note || !deliveryDate || !orderDate) {
+        // setError('Please fill in both username and password fields');
+        ToastAndroid.show('Please fill in both input fields', ToastAndroid.SHORT);
+        return;
       }
-      if (!note) {
-        // Alert.alert("Note field required", "Please enter a note.");
-        setNoteError("Note field is required");
+
+
+
+
+
+
+
+      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+      const response = await fetch(`${BASE_URL}/api/NoOrderApi/CreateNoOrder`, {
+        method: "POST", // Specify the HTTP method
+        headers: {
+          Authorization: authHeader,
+          "Content-Type": "application/json", // Specify content type as JSON
+        },
+        body: JSON.stringify(requestBody), // Include the request body here
+      });
+
+      const jsonData = await response.json();
+
+
+      
+
+      if (jsonData.Success === true) {
+        ToastAndroid.show(
+          jsonData.Message,
+          ToastAndroid.SHORT
+        );
       }
-      return;
+
+      console.log(
+        "this from create order page ",
+        JSON.stringify(jsonData, null, 2)
+      );
+    } catch (error) {
+      console.error(error);
     }
-    setNoteError("");
-    setCustomerError("");
-    navigation.navigate("Order Details", { data: requestData });
   };
+
+  //==========================||==============================
 
   return (
     <View style={styles.container}>
@@ -250,29 +271,19 @@ export default function CreateOrder() {
                 setCustomerError("");
               }}
               renderItem={(item, index, isSelected) => (
-                // <View style={styles.dropdownItem}>
-                <>
-                  <View
-                    style={[
-                      styles.dropdownItem,
-                      isSelected && styles.selectedItem,
-                    ]}
-                  >
-                    <Text style={[styles.text, isSelected && styles.boldText]}>
-                      Name: <Text style={styles.nameText}>{item.Name}</Text>
-                    </Text>
-                    <Text style={[styles.text, isSelected && styles.boldText]}>
-                      CustomerId:
-                      <Text style={styles.customerIdText}>
-                        {item.CustomerId}
-                      </Text>
-                    </Text>
-                    <Text style={[styles.text, isSelected && styles.boldText]}>
-                      Address:
-                      <Text style={styles.addressText}>{item.Address}</Text>
-                    </Text>
-                  </View>
-                </>
+                <View style={styles.dropdownItem}>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    Name: <Text style={styles.nameText}>{item.Name}</Text>
+                  </Text>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    CustomerId:{" "}
+                    <Text style={styles.customerIdText}>{item.CustomerId}</Text>
+                  </Text>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    Address:{" "}
+                    <Text style={styles.addressText}>{item.Address}</Text>
+                  </Text>
+                </View>
               )}
             />
           </TouchableOpacity>
@@ -306,7 +317,7 @@ export default function CreateOrder() {
             )}
 
             {/* <Text>Order Date: {orderDate.toLocaleString()}</Text> */}
-            <Text style={{color:"black"}}>{moment(orderDate).format("DD-MM-YYYY")}</Text>
+            <Text>{moment(orderDate).format("DD-MM-YYYY")}</Text>
           </TouchableOpacity>
         </View>
 
@@ -330,7 +341,7 @@ export default function CreateOrder() {
               />
             )}
 
-            <Text style={{color:"black"}}>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
+            <Text>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
           </TouchableOpacity>
           {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
         </View>
@@ -338,12 +349,9 @@ export default function CreateOrder() {
         <View style={{ marginTop: 15 }}>
           <Text style={styles.label}>Note</Text>
           <TextInput
-            // style={[styles.input, { height: 50, backgroundColor: '' }]}
-
             style={[styles.input, { height: 50 }]}
             multiline
             placeholder="Enter notes"
-            placeholderTextColor="black"
             value={note}
             onChangeText={(text) => {
               setNote(text);
@@ -362,12 +370,14 @@ export default function CreateOrder() {
          <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity> */}
         <TouchableOpacity style={{ marginTop: 25 }}>
-          <Button onPress={nextPageComponent}>Next</Button>
+          <Button onPress={fetchNorderData}>Next</Button>
         </TouchableOpacity>
       </ScrollView>
     </View>
   );
-}
+};
+
+export default NoOrder;
 
 const styles = StyleSheet.create({
   container: {
@@ -432,183 +442,52 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#0096c7",
     borderRadius: 8,
-    height: 70,
-    // backgroundColor: "#fff", 
-    paddingHorizontal: 10, 
+    height: 70, // Reduced the height for a cleaner look
+    // backgroundColor: "#fff", // Changed the background color to white
+    paddingHorizontal: 10, // Added padding for text inside the dropdown
   },
   placeholderStyle: {
     fontSize: 16,
-    color: "black", // A slightly darker shade for better visibility
-    fontStyle: "italic", // Italics for a stylish touch
+    color: "#999", // Added a subtle color for the placeholder
   },
   selectedTextStyle: {
     fontSize: 16,
-    color: "#333",
+    color: "#333", // Changed the selected text color
   },
   iconStyle: {
-    // width: 20,
-    // height: 20,
-    // marginRight: 5,
-    width: 24,
-    height: 24,
-    marginRight: 8,
-    tintColor: "#3498DB", // A shade of blue for the icon color
+    width: 20,
+    height: 20, // Reduced the height of the arrow icon
+    marginRight: 5,
   },
-    
   inputSearchStyle: {
-    height: 60,
+    height: 40,
     fontSize: 16,
-    backgroundColor: "#9bf6ff", // Light gray background color
-    borderRadius: 8,
-    paddingLeft: 15,
-    // borderWidth: 1,
-    borderColor: "#9bf6ff", // A slightly darker shade for the border
+    backgroundColor: "#f1faee", // Added a background color for the search bar
+    borderRadius: 4, // Rounded corners for the search bar
+    paddingLeft: 10, // Added padding for the search input
   },
-  //it's  fine 
+
+  // =====
   dropdownItem: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    marginBottom: 10,
-    backgroundColor: "#9bf6ff",
-    borderRadius: 8, // Optional: Add border radius for a rounded appearance
-    shadowColor: "#000", // Optional: Add shadow for a lifted appearance
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    gap:5
+    marginLeft: 20,
+    paddingHorizontal: 5,
+    marginBottom: 30,
   },
-
-
-  
-  // ... other styles
   text: {
     fontSize: 16,
     fontWeight: "normal",
-    color: "#03071e",
-    // fontWeight: "700",
-    // fontFamily: "Roboto-bold",
   },
   boldText: {
     fontSize: 16,
     fontWeight: "bold",
   },
   nameText: {
-    // color: "#00b4d8",
-    // color:"white"
-    color: "#03071e",
-    // fontWeight: "700",
-    // fontFamily: "Roboto-bold",
+    color: "#00b4d8",
   },
   customerIdText: {
-    // color: "green",
-    // color:"white"
-    color: "#03071e",
-    // fontWeight: "700",
-    // fontFamily: "Roboto-bold",
+    color: "green",
   },
   addressText: {
-    // color: "#22223b",
-    color: "#03071e",
-    // fontWeight: "700",
-    // fontFamily: "Roboto-bold",
-  },
-  selectedItem: {
-    backgroundColor: "lightblue", 
+    color: "#22223b",
   },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ========= api calling =========
-// const fetchCreatenewOrderData = async () => {
-//   const requestData = {
-//     CustomerId: value,
-//     OrderDate: orderDate,
-//     DeliveryDate: deliveryDate,
-//     EntryBy: userDetails?.EmpId,
-//     Note: note,
-//     TerritoryId: userDetails?.TerritoryId,
-//   };
-//   console.log("Posting loan data:", JSON.stringify(requestData, null, 2));
-//   const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-//   const response = await fetch(`${BASE_URL}/api/NewOrderApi/CreateNewOrder`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: authHeader,
-//     },
-//     body: JSON.stringify(requestData),
-//   });
-//   // .then(response => response.json())
-//   const result = await response.json();
-//   setOutput(result);
-//   navigation.navigate("Order Details", { data: result });
-//   //navigation.navigate("Order Details", { data: result,dropDown:dropDown });
-
-//   console.log("this is result", JSON.stringify(result, null, 2));
-
-//   ToastAndroid.show(result.Status, ToastAndroid.SHORT);
-// };
-
-// const fetchCreatenewOrderData = async () => {
-//   const requestData = {
-//     CustomerId: value,
-//     OrderDate: orderDate,
-//     DeliveryDate: deliveryDate,
-//     EntryBy: userDetails?.EmpId,
-//     Note: note,
-//     TerritoryId: userDetails?.TerritoryId,
-//   };
-
-//   console.log("Posting loan data:", JSON.stringify(requestData, null, 2));
-//   const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-
-//   try {
-//     const response = await fetch(
-//       `${BASE_URL}/api/NewOrderApi/CreateNewOrder`,
-//       {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: authHeader,
-//         },
-//         body: JSON.stringify(requestData),
-//       }
-//     );
-//     console.log(response);
-//     if (response.status === 200) {
-//       const result = await response.json();
-//       setOutput(result);
-//       navigation.navigate("Order Details", { data: result });
-//       console.log("this is result", JSON.stringify(result, null, 2));
-
-//       Toast.show({
-//         text1: result.Status,
-//         type: "success",
-//       });
-//     } else {
-//       // Handle errors here if needed
-//       console.error("API request failed with status code:", response.status);
-//       ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
-//     }
-//   } catch (error) {
-//     // Handle network errors here if needed
-//     console.error("Network error:", error);
-//     ToastAndroid.show("Network error", ToastAndroid.LONG);
-//   }
-// };

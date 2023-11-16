@@ -6,9 +6,8 @@ import base64 from "base-64";
 import { useNavigation } from "@react-navigation/native";
 
 const ChangePassword = () => {
-
   const navigation = useNavigation();
-  
+
   const [networkId, setNetworkId] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -119,6 +118,7 @@ const styles = StyleSheet.create({
   input: {
     // width: '80%',
     marginBottom: 20,
+    backgroundColor: "#faf9f9",
   },
   button: {
     width: "25%",
@@ -128,7 +128,6 @@ const styles = StyleSheet.create({
 });
 
 export default ChangePassword;
-
 
 // import { StyleSheet, Text, View } from 'react-native'
 // import React from 'react'

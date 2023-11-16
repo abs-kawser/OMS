@@ -222,8 +222,8 @@ const CreateOrderDetails = ({ route }) => {
 
   const fetchCreatenewOrderData = async () => {
     const requestData = {
-      OrderDetails: transformedOrderDetails,
-      CustomerId: data?.CustomerId,
+      OrderDetails: transformedOrderDetails,     
+     CustomerId: data?.CustomerId,
       OrderDate: data?.OrderDate,
       DeliveryDate: data?.DeliveryDate,
       EntryBy: data?.EntryBy,
@@ -766,3 +766,4 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
+

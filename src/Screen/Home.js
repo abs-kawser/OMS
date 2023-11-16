@@ -15,20 +15,20 @@ export default function Home() {
   return (
     <ScrollView style={{ backgroundColor: "#fdfffc" }}>
       <View style={styles.centeredContainer}>
-        <Text style={styles.welcomeText}>Welcome to oms</Text>
+        <Text style={styles.welcomeText}>Welcome to OMS</Text>
         {/* <Text style={styles.detailsText}>This is your details</Text> */}
       </View>
 
       <View style={styles.container}>
-        <Text style={styles.Details}>User Information</Text>
-        <Text style={styles.text}>Name:{userDetails.FullName}</Text>
-        <Text style={styles.text}> EmpId:{userDetails.EmpId}</Text>
-        <Text style={styles.text}> Email:{userDetails.Email}</Text>
-        <Text style={styles.text}> Mobile:{userDetails.MobileNo}</Text>
+        {/* <Text style={styles.Details}>User Information</Text> */}
+        <Text style={styles.text}>Name: {userDetails.FullName}</Text>
+        <Text style={styles.text}>EmpId: {userDetails.EmpId}</Text>
+        <Text style={styles.text}>Email: {userDetails.Email}</Text>
+        <Text style={styles.text}>Mobile: {userDetails.MobileNo}</Text>
         <Text style={styles.text}>
           Designation:{userDetails.DesignationName}
         </Text>
-        <Text style={styles.text}>Full Region:{userDetails.RegionName}</Text>
+        <Text style={styles.text}>Full Region: {userDetails.RegionName}</Text>
       </View>
 
       <View>
@@ -47,12 +47,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 10,
     flex: 1,
-    backgroundColor: "#a8dadc",
-    elevation:5
+    backgroundColor: "#90e0ef",
+    elevation:5,
+  borderRadius:10,
   },
   text: {
     fontSize: 18,
-    color: "#333",
+    color: "#212529",
   },
   Details: {
     alignSelf: "center",
@@ -68,9 +69,12 @@ const styles = StyleSheet.create({
     marginTop: 20, // Add margin top for separation
   },
   welcomeText: {
-    fontSize: 24,
-    // fontWeight: "bold",
-    color: "#05668d",
+    fontSize: 30,
+
+    fontWeight: "700",
+    fontFamily: 'Roboto-bold', // font weight issue solve when using this property
+
+    color: "#57cc99",
     marginBottom: 10, // Add margin bottom for separation
   },
   detailsText: {

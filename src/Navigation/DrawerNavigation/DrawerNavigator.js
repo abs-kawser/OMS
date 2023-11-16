@@ -7,12 +7,12 @@ import CreateOrder from "../../Screen/CreateOrder";
 // import OrderCollection from "../../Screen/OrderCollection";
 import CustomerList from "../../Screen/CustomerList";
 import ProductList from "../../Screen/ProductList";
-import NoOrder from "../../Screen/ChangePassword";
 import OrderStatus from "../../Screen/OrderStatus";
 import DrawerItems from "./DrawerItems";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import Darft from "../../Screen/Darft";
 import ChangePassword from "../../Screen/ChangePassword";
+import NoOrder from "../../Screen/NoOrder";
 // import { Image } from "react-native-paper/lib/typescript/components/Avatar/Avatar";
 
 const Drawer = createDrawerNavigator();
@@ -45,8 +45,8 @@ const DrawerNavigator = () => {
             //   color={focused ? "black" : "gray"}
             // />
             <Image
-              style={{ height: 20, width: 20, resizeMode: "contain" }}
-              source={require("../../../assets/lodge.png")}
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
+              source={require("../../../assets/homes.png")}
             />
           ),
         }}
@@ -65,7 +65,7 @@ const DrawerNavigator = () => {
             // />
 
             <Image
-              style={{ height: 25, width: 25, resizeMode: "contain" }}
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
               source={require("../../../assets/delivery-service.png")}
             />
           ),
@@ -83,7 +83,7 @@ const DrawerNavigator = () => {
             //   color={focused ? "black" : "gray"}
             // />
             <Image
-              style={{ height: 25, width: 25, resizeMode: "contain" }}
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
               source={require("../../../assets/customer.png")}
             />
           ),
@@ -102,7 +102,7 @@ const DrawerNavigator = () => {
             // />
 
             <Image
-              style={{ height: 25, width: 25, resizeMode: "contain" }}
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
               source={require("../../../assets/list.png")}
             />
           ),
@@ -122,7 +122,7 @@ const DrawerNavigator = () => {
 
             <Image
               style={{ height: 30, width: 30, resizeMode: "contain" }}
-              source={require("../../../assets/order-refund.png")}
+              source={require("../../../assets/cargo.png")}
             />
           ),
         }}
@@ -141,8 +141,28 @@ const DrawerNavigator = () => {
             // />
 
             <Image
-              style={{ height: 25, width: 25, resizeMode: "contain" }}
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
               source={require("../../../assets/password.png")}
+            />
+          ),
+        }}
+      />
+
+<Drawer.Screen
+        name="No Order"
+        component={NoOrder}
+        options={{
+          headerShown: true,
+          headerBackVisible: true,
+          title: "No Order",
+          headerStyle: { backgroundColor: "#72ddf7" },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+
+          drawerIcon: ({ focused, size }) => (
+            <Image
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
+              source={require("../../../assets/no-order.png")}
             />
           ),
         }}
@@ -168,12 +188,15 @@ const DrawerNavigator = () => {
 
             <Image
               style={{ height: 30, width: 30, resizeMode: "contain" }}
-              source={require("../../../assets/drafts.png")}
+              source={require("../../../assets/notes.png")}
             />
           ),
         }}
       />
 
+
+
+      
       {/* <Drawer.Screen name="Order Collection" component={OrderCollection} /> */}
     </Drawer.Navigator>
   );
