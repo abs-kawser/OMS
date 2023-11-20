@@ -126,7 +126,7 @@ const NoOrder = () => {
     }
   };
 
-  //===================customert api call
+  //===================customert api call==============================================
 
   const fetchCustomerData = async () => {
     try {

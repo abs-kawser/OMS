@@ -83,4 +83,38 @@ http://184.168.127.174:6565/api/HomeApi/Login?networkId=U21080273 &password=1234
 
 onPress={() => navigation.goBack()}
 
+
+
+welcomeText: {
+    fontSize: 30,
+
+    fontWeight: "700",
+    fontFamily: 'Roboto-bold', // font weight issue solve when using this property
+
+    color: "#57cc99",
+    marginBottom: 10, // Add margin bottom for separation
+  },
+
+
+##apk build ##
+  There are a few step to build apk in react native  to share your app with other people 
+1. Open a terminal and navigate to your React Native project directory:
+ Like CD Your-app-name  
+
+2: Got to your  to the android directory:cd android
+
+3:Run the following command to build the release APK:./gradlew assembleRelease
+
+It take some time to complete the process 
+
+4:After the build process completes, you can find the generated APK in the following path:
+
+YourAppName\android\app\build\outputs\apk\release\app-release.apk
+
+
+20 nov -23 
+customer api Scid related problem not slove if give static 1 it work 
+
+
+
   

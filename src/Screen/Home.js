@@ -13,7 +13,7 @@ export default function Home() {
   const { userDetails } = isLoggedIn;
 
   return (
-    <ScrollView style={{ backgroundColor: "#fdfffc" }}>
+    <ScrollView style={{ backgroundColor: "#ecf8f8" }}>
       <View style={styles.centeredContainer}>
         <Text style={styles.welcomeText}>Welcome to OMS</Text>
         {/* <Text style={styles.detailsText}>This is your details</Text> */}
@@ -31,7 +31,7 @@ export default function Home() {
         <Text style={styles.text}>Full Region: {userDetails.RegionName}</Text>
       </View>
 
-      <View>
+      <View style={{backgroundColor:"#edf2fb",elevation:10,borderRadius:10}}>
             <FlatCards/>
         </View>    
     </ScrollView>

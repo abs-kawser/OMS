@@ -74,6 +74,8 @@ const LoginPage = () => {
     }
   };
 
+
+  
   const handleRegisterNow = () => {
     navigation.navigate("Register");
   };
@@ -141,7 +143,7 @@ const LoginPage = () => {
     <>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Loginn</Text>
+          <Text style={styles.headerText}>Login</Text>
         </View>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
           {/* <TextInput style={styles.input} placeholder="User ID" />
@@ -234,6 +236,8 @@ const LoginPage = () => {
   );
 };
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -246,8 +250,9 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     color: "#fff",
-    fontWeight: "bold",
     marginBottom: 20,
+    fontWeight: "700",
+    fontFamily: 'Roboto-bold',
   },
   formContainer: {
     backgroundColor: "#fff",

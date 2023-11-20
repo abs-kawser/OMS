@@ -73,7 +73,8 @@ export default function ProductList() {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Search..."
+          placeholder="Enter product name..."
+          placeholderTextColor="#001427"
           onChangeText={(text) => setSearchTerm(text)}
         />
         <Icon
@@ -141,8 +142,13 @@ export default function ProductList() {
         //   ))}
         // </ScrollView>
 
-        (<FlatList
-          style={{ flex: 1 }}
+
+
+        <View  style={{marginBottom:100 }}>
+
+    
+        <FlatList
+         
           data={filteredData}
           keyExtractor={(product, index) => index.toString()}
           ListHeaderComponent={<Text style={styles.header}>Product List</Text>}
@@ -156,6 +162,7 @@ export default function ProductList() {
               ]}
             >
               <View style={styles.textContainer}>
+                {/* <Text>{index+1}.</Text> */}
                 <Text style={styles.productName}>{item.Name}</Text>
                 <Text style={styles.productInfo}>({item.ProductCode})</Text>
               </View>
@@ -174,7 +181,9 @@ export default function ProductList() {
               </View>
             </View>
           )}
-        />)
+        />
+
+</View>
 
       )}
 
@@ -187,6 +196,7 @@ export default function ProductList() {
     </>
   );
 }
+
 const styles = StyleSheet.create({
   // mainContainer:{
   //   flex: 1,
@@ -196,6 +206,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     borderRadius: 1,
+    marginBottom:120,
   },
   header: {
     fontSize: 20,
@@ -259,15 +270,17 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderColor: "gray",
+    borderColor: "#242423",
     borderWidth: 1,
     margin: 10,
     padding: 5,
+    borderRadius:15,
   },
   input: {
     flex: 1,
     height: 40,
     padding: 10,
+    color:"black"
   },
   icon: {
     marginRight: 10,

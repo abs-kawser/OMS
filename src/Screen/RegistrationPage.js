@@ -131,7 +131,7 @@ const RegistrationPage = ({ navigation }) => {
 
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Welcome to OMS </Text>
+          <Text style={styles.headerText}>Welcome</Text>
         </View>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
           <TextInput
@@ -215,6 +215,8 @@ const RegistrationPage = ({ navigation }) => {
   );
 };
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -225,10 +227,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 30,
     color: "#fff",
-    fontWeight: "bold",
     marginBottom: 20,
+    fontWeight: "700",
+    fontFamily: 'Roboto-bold',
   },
   formContainer: {
     backgroundColor: "#fff",

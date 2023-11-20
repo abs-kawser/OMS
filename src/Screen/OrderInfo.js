@@ -32,6 +32,7 @@ const OrderInfo = ({ route, navigation }) => {
       // throw error;
     }
   };
+
   useEffect(() => {
     fetchOrderInfoData();
   }, []);
@@ -45,6 +46,7 @@ const OrderInfo = ({ route, navigation }) => {
   });
 
   return (
+
     <ScrollView>
       <View style={{ padding: 10, backgroundColor: "#e9ecef", elevation: 5 }}>
         <View style={styles.pageInfoOne}>
@@ -107,6 +109,7 @@ const OrderInfo = ({ route, navigation }) => {
 
       </View>
     </ScrollView>
+    
   );
 };
 

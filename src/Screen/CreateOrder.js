@@ -238,7 +238,7 @@ export default function CreateOrder() {
               iconStyle={styles.iconStyle}
               data={data}
               search
-              maxHeight={500}
+              maxHeight={800}
               labelField="Name"
               valueField="CustomerId"
               placeholder="Select Customer"
@@ -369,6 +369,8 @@ export default function CreateOrder() {
   );
 }
 
+
+
 const styles = StyleSheet.create({
   container: {
     padding: 16,
@@ -435,6 +437,7 @@ const styles = StyleSheet.create({
     height: 70,
     // backgroundColor: "#fff", 
     paddingHorizontal: 10, 
+
   },
   placeholderStyle: {
     fontSize: 16,
