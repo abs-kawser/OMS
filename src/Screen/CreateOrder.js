@@ -25,6 +25,8 @@ import { useCustomerInfo } from "../Context/CustomerProvider";
 import { Button } from "@rneui/themed";
 
 export default function CreateOrder() {
+  const rainbowColors = ["#9bf6ff", "#f3ffbd"];
+
   const route = useRoute();
   const navigation = useNavigation();
   const customerInfoList = route.params?.customerInfoList;
@@ -138,16 +140,23 @@ export default function CreateOrder() {
   const fetchCustomerData = async () => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-      const response = await fetch(
-        `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
-          userDetails?.TerritoryId
-        }&scId=${userDetails.ScId !== null ? userDetails.ScId : 1}`,
-        {
-          headers: {
-            Authorization: authHeader,
-          },
-        }
-      );
+      // const response = await fetch(
+      //   `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
+      //     userDetails?.TerritoryId
+      //   }&scId=${userDetails.ScId !== null ? userDetails.ScId : 1}`,
+      //   {
+      //     headers: {
+      //       Authorization: authHeader,
+      //     },
+      //   }
+      // );
+      const apiUrl = `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${userDetails?.TerritoryId}`;
+      console.log("API URL:", apiUrl);
+      const response = await fetch(apiUrl, {
+        headers: {
+          Authorization: authHeader,
+        },
+      });
       const jsonData = await response.json();
       // console.log(
       //   "this from create order page ",
@@ -252,9 +261,19 @@ export default function CreateOrder() {
               renderItem={(item, index, isSelected) => (
                 // <View style={styles.dropdownItem}>
                 <>
+                  {/* <View
+                    style={[
+                      styles.dropdownItem,
+                      isSelected && styles.selectedItem,                      
+                    ]}
+                  > */}
                   <View
                     style={[
                       styles.dropdownItem,
+                      {
+                        backgroundColor:
+                          rainbowColors[index % rainbowColors.length],
+                      },
                       isSelected && styles.selectedItem,
                     ]}
                   >
@@ -306,7 +325,9 @@ export default function CreateOrder() {
             )}
 
             {/* <Text>Order Date: {orderDate.toLocaleString()}</Text> */}
-            <Text style={{color:"black"}}>{moment(orderDate).format("DD-MM-YYYY")}</Text>
+            <Text style={{ color: "black" }}>
+              {moment(orderDate).format("DD-MM-YYYY")}
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -330,7 +351,9 @@ export default function CreateOrder() {
               />
             )}
 
-            <Text style={{color:"black"}}>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
+            <Text style={{ color: "black" }}>
+              {moment(deliveryDate).format("DD-MM-YYYY")}
+            </Text>
           </TouchableOpacity>
           {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
         </View>
@@ -368,8 +391,6 @@ export default function CreateOrder() {
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -435,9 +456,7 @@ const styles = StyleSheet.create({
     borderColor: "#0096c7",
     borderRadius: 8,
     height: 70,
-    // backgroundColor: "#fff", 
-    paddingHorizontal: 10, 
-
+    paddingHorizontal: 10,
   },
   placeholderStyle: {
     fontSize: 16,
@@ -457,7 +476,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     tintColor: "#3498DB", // A shade of blue for the icon color
   },
-    
+
   inputSearchStyle: {
     height: 60,
     fontSize: 16,
@@ -467,14 +486,14 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     borderColor: "#9bf6ff", // A slightly darker shade for the border
   },
-  //it's  fine 
+  //it's  fine
   dropdownItem: {
     paddingHorizontal: 15,
     paddingVertical: 15,
     marginBottom: 10,
-    backgroundColor: "#9bf6ff",
-    borderRadius: 8, // Optional: Add border radius for a rounded appearance
-    shadowColor: "#000", // Optional: Add shadow for a lifted appearance
+    // backgroundColor: "#9bf6ff",
+    borderRadius: 8,
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -482,11 +501,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    gap:5
+    gap: 5,
   },
 
-
-  
   // ... other styles
   text: {
     fontSize: 16,
@@ -520,22 +537,9 @@ const styles = StyleSheet.create({
     // fontFamily: "Roboto-bold",
   },
   selectedItem: {
-    backgroundColor: "lightblue", 
+    backgroundColor: "lightblue",
   },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // ========= api calling =========
 // const fetchCreatenewOrderData = async () => {

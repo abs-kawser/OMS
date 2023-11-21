@@ -18,6 +18,7 @@ import { Divider } from "react-native-paper";
 import { Button } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
 import { color } from "@rneui/base";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const RegistrationPage = ({ navigation }) => {
   const [userId, setUserId] = useState("");
@@ -30,6 +31,7 @@ const RegistrationPage = ({ navigation }) => {
   // Add more state variables as needed for handling API response and loading state
   const [isLoading, setIsLoading] = useState(false);
   const [registrationResponse, setRegistrationResponse] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegistration = async () => {
     // Validate user input here if needed
@@ -131,7 +133,7 @@ const RegistrationPage = ({ navigation }) => {
 
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Welcome</Text>
+          <Text style={styles.headerText}>Sign Up Here</Text>
         </View>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
           <TextInput
@@ -150,14 +152,35 @@ const RegistrationPage = ({ navigation }) => {
             onChangeText={(text) => setMobile(text)}
           />
 
-          <TextInput
+          {/* <TextInput
             style={styles.input}
             placeholder="Password"
             placeholderTextColor="black"
             secureTextEntry
             value={password}
             onChangeText={(text) => setPassword(text)}
-          />
+          /> */}
+
+           <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Password"
+              placeholderTextColor="black"
+              secureTextEntry={!showPassword}
+              onChangeText={(text) => setPassword(text)}
+              value={password}
+            />
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => setShowPassword(!showPassword)}
+            >
+              <Icon
+                name={showPassword ? "eye" : "eye-slash"}
+                size={20}
+                color="#495867"
+              />
+            </TouchableOpacity>
+          </View>
 
           {/* <TouchableOpacity
             style={styles.registerButton}
@@ -228,13 +251,13 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 30,
-    color: "#fff",
+    color: "#fcf6bd",
     marginBottom: 20,
     fontWeight: "700",
     fontFamily: 'Roboto-bold',
   },
   formContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: "#fcf6bd",
     padding: 20,
     borderRadius: 10,
     elevation: 5,
@@ -259,6 +282,28 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+
+
+  // 
+  passwordContainer: {
+    position: "relative",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  passwordInput: {
+    flex: 1,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginVertical: 10,
+    padding: 10,
+  },
+  iconContainer: {
+    position: "absolute",
+    top: 20,
+    right: 10,
   },
 });
 export default RegistrationPage;

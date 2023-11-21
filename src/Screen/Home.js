@@ -22,7 +22,7 @@ export default function Home() {
       <View style={styles.container}>
         {/* <Text style={styles.Details}>User Information</Text> */}
         <Text style={styles.text}>Name: {userDetails.FullName}</Text>
-        <Text style={styles.text}>EmpId: {userDetails.EmpId}</Text>
+        {/* <Text style={styles.text}>EmpId: {userDetails.EmpId}</Text> */}
         <Text style={styles.text}>Email: {userDetails.Email}</Text>
         <Text style={styles.text}>Mobile: {userDetails.MobileNo}</Text>
         <Text style={styles.text}>

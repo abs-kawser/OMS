@@ -157,6 +157,8 @@ const LoginPage = () => {
           <TextInput
             style={styles.input}
             placeholder="User Id"
+            placeholderTextColor="black"
+
             onChangeText={(text) => setUserId(text)}
             value={userId}
           />
@@ -173,6 +175,7 @@ const LoginPage = () => {
             <TextInput
               style={styles.passwordInput}
               placeholder="Password"
+              placeholderTextColor="black"
               secureTextEntry={!showPassword}
               onChangeText={(text) => setPassword(text)}
               value={password}
@@ -193,13 +196,28 @@ const LoginPage = () => {
           <Text style={styles.registerButtonText}>Loginn</Text>
         </TouchableOpacity> */}
 
-          <Button
+          {/* <Button
             mode="contained"
             buttonColor="#00a6fb"
             style={styles.button}
             onPress={handleLogin}
           >
             Login
+          </Button> */} 
+
+           <Button
+            mode="contained"
+            buttonColor="#00a6fb"
+            style={styles.button}
+            onPress={handleLogin}
+            loading={isLoading}
+            //disabled={isLoading} // Disable the button when loading
+          >
+            {isLoading ? (
+              <ActivityIndicator color="red" size="small" />
+            ) : (
+              "Login"
+            )}
           </Button>
 
           <Text
@@ -249,13 +267,13 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 24,
-    color: "#fff",
+    color: "#fcf6bd",
     marginBottom: 20,
     fontWeight: "700",
     fontFamily: 'Roboto-bold',
   },
   formContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: "#fcf6bd",
     padding: 20,
     borderRadius: 10,
     elevation: 5,

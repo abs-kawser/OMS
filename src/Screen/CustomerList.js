@@ -69,21 +69,16 @@ export default function CustomerList() {
       //   }
       // );     ${userDetails?.ScId !== null ? userDetails?.ScId : 1}
 
-      const apiUrl = `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
-        userDetails?.TerritoryId
-      }&scId=1`;
-  
+      const apiUrl = `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${userDetails?.TerritoryId}`;
+
       console.log("API URL:", apiUrl);
-  
+
       const response = await fetch(apiUrl, {
         headers: {
           Authorization: authHeader,
         },
       });
-  
 
-
-      
       const jsonData = await response.json();
       console.log(JSON.stringify("fetch json data  ", jsonData, null, 2));
       await AsyncStorage.setItem("customerData", JSON.stringify(jsonData));
@@ -91,7 +86,7 @@ export default function CustomerList() {
       setData(jsonData);
       setFilteredData(jsonData);
       setIsLoading(false);
-      return jsonData;      
+      return jsonData;
     } catch (error) {
       console.error("Error fetching data:", error);
       setIsLoading(false);

@@ -131,16 +131,23 @@ const NoOrder = () => {
   const fetchCustomerData = async () => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-      const response = await fetch(
-        `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
-          userDetails?.TerritoryId
-        }&scId=${userDetails.ScId !== null ? userDetails.ScId : 1}`,
-        {
-          headers: {
-            Authorization: authHeader,
-          },
-        }
-      );
+      // const response = await fetch(
+      //   `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
+      //     userDetails?.TerritoryId
+      //   }&scId=${userDetails.ScId !== null ? userDetails.ScId : 1}`,
+      //   {
+      //     headers: {
+      //       Authorization: authHeader,
+      //     },
+      //   }
+      // );
+      const apiUrl = `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${userDetails?.TerritoryId}`;
+      console.log("API URL:", apiUrl);
+      const response = await fetch(apiUrl, {
+        headers: {
+          Authorization: authHeader,
+        },
+      });
       const jsonData = await response.json();
       // console.log(
       //   "this from create order page ",
@@ -248,6 +255,7 @@ const NoOrder = () => {
   return (
     <View style={styles.container}>
       <ScrollView>
+        
         <View>
           <Text style={styles.label}>Customer</Text>
           <TouchableOpacity>
@@ -276,11 +284,11 @@ const NoOrder = () => {
                     Name: <Text style={styles.nameText}>{item.Name}</Text>
                   </Text>
                   <Text style={[styles.text, isSelected && styles.boldText]}>
-                    CustomerId:{" "}
+                    CustomerId:
                     <Text style={styles.customerIdText}>{item.CustomerId}</Text>
                   </Text>
                   <Text style={[styles.text, isSelected && styles.boldText]}>
-                    Address:{" "}
+                    Address:
                     <Text style={styles.addressText}>{item.Address}</Text>
                   </Text>
                 </View>
