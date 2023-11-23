@@ -21,6 +21,8 @@ import { Button } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as Animatable from "react-native-animatable";
 
+
+
 const LoginPage = () => {
   const navigation = useNavigation();
   const [userId, setUserId] = useState("");

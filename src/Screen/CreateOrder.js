@@ -233,12 +233,16 @@ export default function CreateOrder() {
     navigation.navigate("Order Details", { data: requestData });
   };
 
+
+
+  
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View>
           <Text style={styles.label}>Customer</Text>
-          <TouchableOpacity>
+          {/* <TouchableOpacity> */}
             <Dropdown
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
@@ -261,28 +265,20 @@ export default function CreateOrder() {
               renderItem={(item, index, isSelected) => (
                 // <View style={styles.dropdownItem}>
                 <>
-                  {/* <View
-                    style={[
-                      styles.dropdownItem,
-                      isSelected && styles.selectedItem,                      
-                    ]}
-                  > */}
                   <View
                     style={[
                       styles.dropdownItem,
-                      {
-                        backgroundColor:
-                          rainbowColors[index % rainbowColors.length],
-                      },
-                      isSelected && styles.selectedItem,
+                      isSelected && styles.selectedItem, 
+                                     
                     ]}
                   >
+                    
                     <Text style={[styles.text, isSelected && styles.boldText]}>
                       Name: <Text style={styles.nameText}>{item.Name}</Text>
                     </Text>
                     <Text style={[styles.text, isSelected && styles.boldText]}>
                       CustomerId:
-                      <Text style={styles.customerIdText}>
+                      <Text style={styles.customerIdText} >
                         {item.CustomerId}
                       </Text>
                     </Text>
@@ -293,8 +289,13 @@ export default function CreateOrder() {
                   </View>
                 </>
               )}
+
+
+             
+
+
             />
-          </TouchableOpacity>
+          {/* </TouchableOpacity> */}
 
           {/* {isClientNameTouched && !isClientNameValid && client === "" && (
             <Text style={styles.errorMessage}>Client name is required ***</Text>
@@ -491,7 +492,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 15,
     marginBottom: 10,
-    // backgroundColor: "#9bf6ff",
+    backgroundColor: "#f3ffbd",
     borderRadius: 8,
     shadowColor: "#000",
     shadowOffset: {
@@ -501,7 +502,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    gap: 5,
+    gap: 2,
+   
   },
 
   // ... other styles
@@ -540,6 +542,9 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
 });
+
+
+
 
 // ========= api calling =========
 // const fetchCreatenewOrderData = async () => {

@@ -515,11 +515,6 @@ const CreateOrderDetails = ({ route }) => {
                             <Text style={styles.cellText} numberOfLines={2}>
                               {specificProduct.Name}
                             </Text>
-
-                            {/* <View style={{  alignItems: 'center' }}>
-                  <Text style={styles.cellText}>{quantity}</Text>
-                  </View> */}
-
                             <Text style={[styles.cellText, styles.quantity]}>
                               {quantity}
                             </Text>

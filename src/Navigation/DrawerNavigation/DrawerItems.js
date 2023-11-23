@@ -51,13 +51,13 @@ const DrawerItems = (props) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1,}}>
       <DrawerContentScrollView {...props}>
         {/* custom drawer header */}
         <View
           style={{
             borderBottomWidth: .5,
-            backgroundColor: "#a9def9",
+            backgroundColor: "#f3ffbd",
             marginTop: -4,
             padding: 10,
             borderBottomColor:"gray"

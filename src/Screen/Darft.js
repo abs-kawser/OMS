@@ -61,8 +61,6 @@ const Draft = ({ navigation }) => {
     }
   };
 
-  // handle press
-
   const handleItemPress = (selectedItem) => {
     // Navigate to the target component with the selected item's data
     // console.log('leave request', selectedItem);
@@ -106,12 +104,6 @@ const Draft = ({ navigation }) => {
                     style={styles.iconCell}
                     onPress={() => handleItemPress(item)}
                   >
-                    {/* <MaterialCommunityIcons
-                      name="file-find-outline"
-                      size={30}
-                      color="black"
-                    /> */}
-
                     <Image
                       style={{ height: 25, width: 25, resizeMode: "contain" }}
                       source={require("../../assets/searchs.png")}
@@ -152,7 +144,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontWeight: "700",
-    fontFamily: 'Roboto-bold',
+    fontFamily: "Roboto-bold",
   },
   headerColumn60: {
     width: "60%",
@@ -177,7 +169,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // borderWidth:1,
-    
   },
   textColor: {
     color: "black",

@@ -68,11 +68,10 @@ export default function CustomerList() {
       //     },
       //   }
       // );     ${userDetails?.ScId !== null ? userDetails?.ScId : 1}
+      
 
       const apiUrl = `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${userDetails?.TerritoryId}`;
-
       console.log("API URL:", apiUrl);
-
       const response = await fetch(apiUrl, {
         headers: {
           Authorization: authHeader,
@@ -191,6 +190,7 @@ export default function CustomerList() {
   // }, []);
 
   return (
+    
     <>
       {/* implement search  part*/}
       <View style={styles.container}>

@@ -259,7 +259,7 @@ const NoOrder = () => {
         <View>
           <Text style={styles.label}>Customer</Text>
           <TouchableOpacity>
-            <Dropdown
+            {/* <Dropdown
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
@@ -292,6 +292,52 @@ const NoOrder = () => {
                     <Text style={styles.addressText}>{item.Address}</Text>
                   </Text>
                 </View>
+              )}
+            /> */}
+              <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={800}
+              labelField="Name"
+              valueField="CustomerId"
+              placeholder="Select Customer"
+              searchPlaceholder="Search..."
+              value={value}
+              onChange={(item) => {
+                setValue(item.CustomerId);
+                setCustomerInformation(item);
+                setCustomerError("");
+              }}
+              renderItem={(item, index, isSelected) => (
+                // <View style={styles.dropdownItem}>
+                <>
+                  <View
+                    style={[
+                      styles.dropdownItem,
+                      isSelected && styles.selectedItem,                      
+                    ]}
+                  >
+                    
+                    <Text style={[styles.text, isSelected && styles.boldText]}>
+                      Name: <Text style={styles.nameText}>{item.Name}</Text>
+                    </Text>
+                    <Text style={[styles.text, isSelected && styles.boldText]}>
+                      CustomerId:
+                      <Text style={styles.customerIdText} >
+                        {item.CustomerId}
+                      </Text>
+                    </Text>
+                    <Text style={[styles.text, isSelected && styles.boldText]}>
+                      Address:
+                      <Text style={styles.addressText}>{item.Address}</Text>
+                    </Text>
+                  </View>
+                </>
               )}
             />
           </TouchableOpacity>
@@ -450,52 +496,88 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#0096c7",
     borderRadius: 8,
-    height: 70, // Reduced the height for a cleaner look
-    // backgroundColor: "#fff", // Changed the background color to white
-    paddingHorizontal: 10, // Added padding for text inside the dropdown
+    height: 70,
+    paddingHorizontal: 10,
   },
   placeholderStyle: {
     fontSize: 16,
-    color: "#999", // Added a subtle color for the placeholder
+    color: "black", // A slightly darker shade for better visibility
+    fontStyle: "italic", // Italics for a stylish touch
   },
   selectedTextStyle: {
     fontSize: 16,
-    color: "#333", // Changed the selected text color
+    color: "#333",
   },
   iconStyle: {
-    width: 20,
-    height: 20, // Reduced the height of the arrow icon
-    marginRight: 5,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
-    backgroundColor: "#f1faee", // Added a background color for the search bar
-    borderRadius: 4, // Rounded corners for the search bar
-    paddingLeft: 10, // Added padding for the search input
+    // width: 20,
+    // height: 20,
+    // marginRight: 5,
+    width: 24,
+    height: 24,
+    marginRight: 8,
+    tintColor: "#3498DB", // A shade of blue for the icon color
   },
 
-  // =====
-  dropdownItem: {
-    marginLeft: 20,
-    paddingHorizontal: 5,
-    marginBottom: 30,
+  inputSearchStyle: {
+    height: 60,
+    fontSize: 16,
+    backgroundColor: "#9bf6ff", // Light gray background color
+    borderRadius: 8,
+    paddingLeft: 15,
+    // borderWidth: 1,
+    borderColor: "#9bf6ff", // A slightly darker shade for the border
   },
+  //it's  fine
+  dropdownItem: {
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    marginBottom: 10,
+    backgroundColor: "#f3ffbd",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    gap: 2,
+  },
+
+  // ... other styles
   text: {
     fontSize: 16,
     fontWeight: "normal",
+    color: "#03071e",
+    // fontWeight: "700",
+    // fontFamily: "Roboto-bold",
   },
   boldText: {
     fontSize: 16,
     fontWeight: "bold",
   },
   nameText: {
-    color: "#00b4d8",
+    // color: "#00b4d8",
+    // color:"white"
+    color: "#03071e",
+    // fontWeight: "700",
+    // fontFamily: "Roboto-bold",
   },
   customerIdText: {
-    color: "green",
+    // color: "green",
+    // color:"white"
+    color: "#03071e",
+    // fontWeight: "700",
+    // fontFamily: "Roboto-bold",
   },
   addressText: {
-    color: "#22223b",
+    // color: "#22223b",
+    color: "#03071e",
+    // fontWeight: "700",
+    // fontFamily: "Roboto-bold",
+  },
+  selectedItem: {
+    backgroundColor: "lightblue",
   },
 });
