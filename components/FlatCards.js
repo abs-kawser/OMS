@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "30%",
     height: 100,
-    borderRadius: 5,
+    borderRadius: 18,
     margin: 8,
-    elevation:10
+    elevation:15
 
     // padding:15,
     // gap:5,
@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
   card_text:{
     fontFamily: 'Roboto-bold',
     fontWeight:"700",
-    marginTop:5
+    marginTop:5,
+    color:"black"
   }
 
 });

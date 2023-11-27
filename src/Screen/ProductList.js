@@ -210,9 +210,14 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginBottom: 16,
     marginLeft: 25,
+    fontWeight: "700",
+    fontFamily: 'Roboto-bold',
+    color:"black"
+
+
   },
   productCard: {
     marginLeft: 22,

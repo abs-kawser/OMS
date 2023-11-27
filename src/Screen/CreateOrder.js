@@ -233,70 +233,57 @@ export default function CreateOrder() {
     navigation.navigate("Order Details", { data: requestData });
   };
 
-
-
-  
-
   return (
     <View style={styles.container}>
       <ScrollView>
         <View>
           <Text style={styles.label}>Customer</Text>
           {/* <TouchableOpacity> */}
-            <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={data}
-              search
-              maxHeight={800}
-              labelField="Name"
-              valueField="CustomerId"
-              placeholder="Select Customer"
-              searchPlaceholder="Search..."
-              value={value}
-              onChange={(item) => {
-                setValue(item.CustomerId);
-                setCustomerInformation(item);
-                setCustomerError("");
-              }}
-              renderItem={(item, index, isSelected) => (
-                // <View style={styles.dropdownItem}>
-                <>
-                  <View
-                    style={[
-                      styles.dropdownItem,
-                      isSelected && styles.selectedItem, 
-                                     
-                    ]}
-                  >
-                    
-                    <Text style={[styles.text, isSelected && styles.boldText]}>
-                      Name: <Text style={styles.nameText}>{item.Name}</Text>
-                    </Text>
-                    <Text style={[styles.text, isSelected && styles.boldText]}>
-                      CustomerId:
-                      <Text style={styles.customerIdText} >
-                        {item.CustomerId}
-                      </Text>
-                    </Text>
-                    <Text style={[styles.text, isSelected && styles.boldText]}>
-                      Address:
-                      <Text style={styles.addressText}>{item.Address}</Text>
-                    </Text>
-                  </View>
-                </>
-              )}
-
-
-             
-
-
-            />
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={800}
+            labelField="Name"
+            valueField="CustomerId"
+            placeholder="Select Customer"
+            searchPlaceholder="Search..."
+            value={value}
+            onChange={(item) => {
+              setValue(item.CustomerId);
+              setCustomerInformation(item);
+              setCustomerError("");
+            }}
+            renderItem={(item, index, isSelected) => (
+              // <View style={styles.dropdownItem}>
+              <>
+                <View
+                  style={[
+                    styles.dropdownItem,
+                    isSelected && styles.selectedItem,
+                  ]}
+                >
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    Name: <Text style={styles.nameText}>{item.Name}</Text>
+                  </Text>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    CustomerId:
+                    <Text style={styles.customerIdText}>{item.CustomerId}</Text>
+                  </Text>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    Address:
+                    <Text style={styles.addressText}>{item.Address}</Text>
+                  </Text>
+                </View>
+              </>
+            )}
+          />
+          
           {/* </TouchableOpacity> */}
-
           {/* {isClientNameTouched && !isClientNameValid && client === "" && (
             <Text style={styles.errorMessage}>Client name is required ***</Text>
           )} */}
@@ -385,9 +372,13 @@ export default function CreateOrder() {
         >
          <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity> */}
+
+
         <TouchableOpacity style={{ marginTop: 25 }}>
           <Button onPress={nextPageComponent}>Next</Button>
         </TouchableOpacity>
+
+        
       </ScrollView>
     </View>
   );
@@ -503,7 +494,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     gap: 2,
-   
   },
 
   // ... other styles
@@ -542,9 +532,6 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
 });
-
-
-
 
 // ========= api calling =========
 // const fetchCreatenewOrderData = async () => {

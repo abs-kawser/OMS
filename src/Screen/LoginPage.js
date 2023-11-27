@@ -24,9 +24,9 @@ import * as Animatable from "react-native-animatable";
 
 
 const LoginPage = () => {
+
   const navigation = useNavigation();
   const [userId, setUserId] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
 
@@ -145,7 +145,7 @@ const LoginPage = () => {
     <>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Login</Text>
+          <Text style={styles.headerText}>Welcome back! plz login</Text>
         </View>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
           {/* <TextInput style={styles.input} placeholder="User ID" />
@@ -275,7 +275,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-bold',
   },
   formContainer: {
-    backgroundColor: "#fcf6bd",
+    // backgroundColor: "#fcf6bd",
+    backgroundColor:"#F5F7F8",
     padding: 20,
     borderRadius: 10,
     elevation: 5,

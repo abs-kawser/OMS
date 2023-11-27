@@ -27,31 +27,20 @@ const DraftRequest = ({ route }) => {
   const { draftData, setDraftData } = useDraft();
   //const { selectedItem, onDeleteItem } = route.params;
   const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
-
   console.log("draft page data", JSON.stringify(selectedItem, null, 2));
-
   const data = route.params?.data;
-
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
-
   console.log(customerInformation, "customerInformation");
-
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
-
   const [showProductData, setShowProductData] = useState(true);
   const [showOrderData, setShowOrderData] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [products, setProducts] = useState([]);
-
   const [productQuantities, setProductQuantities] = useState([]);
   console.log("product quantities", productQuantities);
-
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   // console.log("selected  ProductIds:", selectedProductIds);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [orderQuantities, setOrderQuantities] = useState(null);
   console.log(`Quantities`, orderQuantities);
@@ -109,8 +98,6 @@ const DraftRequest = ({ route }) => {
   };
 
   const logQuantityValues = () => {
-
-
     const quantityValues = selectedProduct.map((product) => {
       const quantity = productQuantities[product.ProductId] || 0;
       return quantity;
@@ -396,17 +383,15 @@ const DraftRequest = ({ route }) => {
   // };
 
 
-
+  
   const handleDeleteOrderItem = async (productId) => {
     try {
       // Create a copy of the draftData array
       const updatedDraftData = [...draftData];
-
       // Find the specific item within the cloned array
       const itemIndex = updatedDraftData.findIndex(
         (item) => item.CustomerId === selectedItem.CustomerId
       );
-
       if (itemIndex !== -1) {
         // Clone the selected item within the array
         const updatedSelectedItem = { ...updatedDraftData[itemIndex] };
@@ -416,21 +401,16 @@ const DraftRequest = ({ route }) => {
           updatedSelectedItem.OrderDetails.filter(
             (orderItem) => orderItem.ProductId !== productId
           );
-
         // Update the selected item's OrderDetails with the filtered data
         updatedSelectedItem.OrderDetails = updatedOrderDetailsFiltered;
-
         setSelectedItem(updatedSelectedItem);
-
         // Update the draftData array with the modified item
         updatedDraftData[itemIndex] = updatedSelectedItem;
-
         // Update the AsyncStorage data with the modified draftData
         await AsyncStorage.setItem(
           "customerInformation",
           JSON.stringify(updatedDraftData)
         );
-
         // Update the state with the modified data
         setDraftData(updatedDraftData);
       }
@@ -439,12 +419,14 @@ const DraftRequest = ({ route }) => {
     }
   };
 
-  //css issue 
+  //css issue
   const isSelectedProduct = (productId) => {
     return selectedProductIds.includes(productId);
   };
 
   return (
+
+
     <View style={styles.container}>
       <View style={styles.userInformation}>
         <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
@@ -489,7 +471,7 @@ const DraftRequest = ({ route }) => {
           <View style={styles.loadingContainer}>
             {/* <ActivityIndicator size="large" color="#0077b6" /> */}
             <LottieView
-              source={require("../../Lottie/animation_ln8n5kbe.json")} // Replace with your animation file path
+              source={require("../../Lottie/animation_ln8n5kbe.json")} 
               autoPlay
               loop
               style={styles.lottiContainer}
@@ -593,18 +575,17 @@ const DraftRequest = ({ route }) => {
                             </Text>
 
                             <View style={{ flex: 1, alignSelf: "center" }}>
-                               <TouchableOpacity
-                              style={styles.actionButton}
-                              onPress={() =>
-                                handleDeleteProduct(specificProduct.ProductId)
-                              }
+                              <TouchableOpacity
+                                style={styles.actionButton}
+                                onPress={() =>
+                                  handleDeleteProduct(specificProduct.ProductId)
+                                }
 
-                              //onPress={() => console.log("Delete button pressed")}
-                            >
-                              <Icon name="trash" size={20} color="#212529" />
-                            </TouchableOpacity>
+                                //onPress={() => console.log("Delete button pressed")}
+                              >
+                                <Icon name="trash" size={20} color="#212529" />
+                              </TouchableOpacity>
                             </View>
-                           
                           </View>
                         );
                       }
@@ -656,11 +637,13 @@ const DraftRequest = ({ route }) => {
         Total Price: {calculateTotalPrice()}
       </Text> */}
     </View>
+
   );
+
+
 };
 
 export default DraftRequest;
-
 
 
 const styles = StyleSheet.create({
@@ -804,11 +787,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     padding: 10,
-   backgroundColor:"gray",
-   marginHorizontal:10
+    backgroundColor: "gray",
+    marginHorizontal: 10,
 
-
-     // backgroundColor: "#f2f2f2", // Header background color
+    // backgroundColor: "#f2f2f2", // Header background color
     //  paddingHorizontal:5
     // flex:1,
   },
@@ -821,7 +803,6 @@ const styles = StyleSheet.create({
 
     flex: 1,
     textAlign: "center",
-   
   },
   tableRow: {
     flexDirection: "row",
@@ -829,7 +810,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc", // Border color
-    marginHorizontal:10,
+    marginHorizontal: 10,
   },
   cellText: {
     fontSize: 13,
@@ -840,7 +821,6 @@ const styles = StyleSheet.create({
     // borderWidth:1,
     // color: "#1985a1",
     textAlign: "center",
-    
   },
 
   quantity: {

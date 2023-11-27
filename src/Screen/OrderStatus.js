@@ -181,7 +181,6 @@ const OrderStatus = () => {
 
   return (
     <View style={styles.container}>
-
       <View>
         <Text style={styles.label}>Order Date</Text>
         <TouchableOpacity
@@ -326,7 +325,16 @@ const OrderStatus = () => {
       </View>
 
       {error ? (
-        <Text style={{ color: "red", marginTop: 20, alignSelf: "center" }}>
+        <Text
+          style={{
+            color: "red",
+            marginTop: 30,
+            alignSelf: "center",
+            fontSize: 15,
+            fontWeight: "700",
+            fontFamily: "Roboto-bold",
+          }}
+        >
           {error}
         </Text>
       ) : null}
@@ -360,7 +368,6 @@ const styles = StyleSheet.create({
     borderColor: "#0096c7",
     borderRadius: 5,
     height: 40,
-    // backgroundColor: '#FFFFFF',
     justifyContent: "center",
     marginBottom: 16,
   },
@@ -377,11 +384,13 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: "red",
     fontSize: 18,
-    marginTop: 5, // Adjust the spacing from the input field
-    //fontStyle: 'italic', // You can use italic for error messages
+    marginTop: 5,
   },
 
   searchButton: {
-    marginTop: 20,
+    width: "50%",
+    marginTop: 30,
+    backgroundColor: "#2E97A7",
+    alignSelf: "flex-end",
   },
 });

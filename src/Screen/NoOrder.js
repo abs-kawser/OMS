@@ -198,7 +198,6 @@ const NoOrder = () => {
       OrderDate: orderDate,
       EntryDateTime: deliveryDate,
       Note: note,
-
       Status: 1,
       EntryBy: 1,
       TerritoryId: userDetails?.TerritoryId,
@@ -250,50 +249,14 @@ const NoOrder = () => {
     }
   };
 
-  //==========================||==============================
+  //==========================||==============================//
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        
+
+      <ScrollView style={styles.container}>     
         <View>
           <Text style={styles.label}>Customer</Text>
           <TouchableOpacity>
-            {/* <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={data}
-              search
-              maxHeight={500}
-              labelField="Name"
-              valueField="CustomerId"
-              placeholder="Select Customer"
-              searchPlaceholder="Search..."
-              value={value}
-              onChange={(item) => {
-                setValue(item.CustomerId);
-                setCustomerInformation(item);
-                setCustomerError("");
-              }}
-              renderItem={(item, index, isSelected) => (
-                <View style={styles.dropdownItem}>
-                  <Text style={[styles.text, isSelected && styles.boldText]}>
-                    Name: <Text style={styles.nameText}>{item.Name}</Text>
-                  </Text>
-                  <Text style={[styles.text, isSelected && styles.boldText]}>
-                    CustomerId:
-                    <Text style={styles.customerIdText}>{item.CustomerId}</Text>
-                  </Text>
-                  <Text style={[styles.text, isSelected && styles.boldText]}>
-                    Address:
-                    <Text style={styles.addressText}>{item.Address}</Text>
-                  </Text>
-                </View>
-              )}
-            /> */}
               <Dropdown
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
@@ -427,7 +390,7 @@ const NoOrder = () => {
           <Button onPress={fetchNorderData}>Next</Button>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    
   );
 };
 

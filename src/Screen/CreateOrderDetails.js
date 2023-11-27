@@ -67,7 +67,7 @@ const CreateOrderDetails = ({ route }) => {
   //   JSON.stringify(selectedProduct, null, 2)
   // );
 
-  // product api calling
+  // product api calling 
   useEffect(() => {
     const getProductList = async () => {
       try {
@@ -222,8 +222,8 @@ const CreateOrderDetails = ({ route }) => {
 
   const fetchCreatenewOrderData = async () => {
     const requestData = {
-      OrderDetails: transformedOrderDetails,     
-     CustomerId: data?.CustomerId,
+      OrderDetails: transformedOrderDetails,
+      CustomerId: data?.CustomerId,
       OrderDate: data?.OrderDate,
       DeliveryDate: data?.DeliveryDate,
       EntryBy: data?.EntryBy,
@@ -376,8 +376,8 @@ const CreateOrderDetails = ({ route }) => {
           </Button>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{ width: "50%" }}>
-          <Button color="#FF5733" onPress={handleOrderButtonPress}>
+        <TouchableOpacity style={{ width: "50%", }}>
+          <Button color="#2E97A7" onPress={handleOrderButtonPress}>
             Order Details
           </Button>
         </TouchableOpacity>
@@ -399,48 +399,6 @@ const CreateOrderDetails = ({ route }) => {
         ) : (
           //ScrollView
           <ScrollView>
-            {/* <>
-              {showProductData && (
-                <View style={styles.dataContainer}>
-                  {filteredProducts.map((product, index) => (
-                    <View style={styles.row} key={product.ProductId}>
-                      <View style={styles.infoContainer}>
-                        <Text style={styles.name}>{product.Name} </Text>
-
-                        <View style={{ flexDirection: "row", gap: 10 }}>
-                          <Text style={styles.price}>price :{product.MRP}</Text>
-                          <Text style={styles.price}>
-                            PackSize :{product.PackSize}
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View style={styles.quantityContainer}>
-                        <View style={styles.containerx}>
-                          <View style={styles.inputContainer}>
-                            <TextInput
-                              placeholder="QTY"
-                              style={styles.input}
-                              keyboardType="numeric"
-                              value={
-                                productQuantities[product.ProductId]
-                                  ? productQuantities[
-                                      product.ProductId
-                                    ].toString()
-                                  : ""
-                              }
-                              onChangeText={(text) =>
-                                handleQuantityChange(product.ProductId, text)
-                              }
-                            />
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  ))}
-                </View>
-              )}
-            </> */}
             <>
               {showProductData && (
                 <View style={styles.dataContainer}>
@@ -468,7 +426,7 @@ const CreateOrderDetails = ({ route }) => {
                               <TextInput
                                 placeholder="QTY"
                                 style={styles.input}
-                                keyboardType="numeric"
+                                // keyboardType="numeric"
                                 value={
                                   productQuantities[product.ProductId]
                                     ? productQuantities[
@@ -659,8 +617,9 @@ const styles = StyleSheet.create({
   //   paddingHorizontal: 10,
   // },
   input: {
-    fontSize: 13,
+    fontSize: 15,
     borderWidth: 1,
+    // borderBottomWidth:1,
     borderColor: "gray",
     padding: 5,
     minWidth: 40,
@@ -760,5 +719,9 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
   },
-});
+})
+
+
+
+
 

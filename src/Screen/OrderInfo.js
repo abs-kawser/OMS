@@ -11,7 +11,7 @@ const OrderInfo = ({ route, navigation }) => {
 
   const [data, setData] = useState(null);
 
-  //======================= Api Calling ==========================
+  //======================= Order info   Api Calling ==========================
   const fetchOrderInfoData = async () => {
     try {
       const url = `${BASE_URL}/api/NewOrderApi/GetPoInfo?orderNo=${orderNo}&verId=1`;

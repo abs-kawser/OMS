@@ -44,7 +44,7 @@ const AppNav = () => {
          
       )} */}
 
-      {isLoggedIn.login && isLoggedIn.userDetails ? <StackNavigator /> : <AuthNavigator />} 
+      {isLoggedIn.login && isLoggedIn.userDetails ? <StackNavigator/> : <AuthNavigator/>} 
          
       
     </NavigationContainer>

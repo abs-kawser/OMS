@@ -22,18 +22,20 @@ export default function Home() {
       <View style={styles.container}>
         {/* <Text style={styles.Details}>User Information</Text> */}
         <Text style={styles.text}>Name: {userDetails.FullName}</Text>
-        {/* <Text style={styles.text}>EmpId: {userDetails.EmpId}</Text> */}
         <Text style={styles.text}>Email: {userDetails.Email}</Text>
         <Text style={styles.text}>Mobile: {userDetails.MobileNo}</Text>
         <Text style={styles.text}>
           Designation:{userDetails.DesignationName}
         </Text>
         <Text style={styles.text}>Full Region: {userDetails.RegionName}</Text>
+        {/* <Text style={styles.text}>EmpId: {userDetails.EmpId}</Text> */}
       </View>
 
-      <View style={{backgroundColor:"#edf2fb",elevation:10,borderRadius:10}}>
-            <FlatCards/>
-        </View>    
+      <View
+        style={{ backgroundColor: "#edf2fb", elevation: 20, borderRadius: 10 }}
+      >
+        <FlatCards />
+      </View>
     </ScrollView>
   );
 }
@@ -48,18 +50,19 @@ const styles = StyleSheet.create({
     gap: 10,
     flex: 1,
     backgroundColor: "#90e0ef",
-    elevation:5,
-  borderRadius:10,
+    elevation: 5,
+    borderRadius: 10,
   },
   text: {
     fontSize: 18,
     color: "#212529",
+    
   },
   Details: {
     alignSelf: "center",
     color: "#000",
     fontSize: 28,
-    fontStyle:"italic"
+    fontStyle: "italic",
     // fontWeight: "bold",
   },
   centeredContainer: {
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
 
     fontWeight: "700",
-    fontFamily: 'Roboto-bold', // font weight issue solve when using this property
+    fontFamily: "Roboto-bold", // font weight issue solve when using this property
 
     color: "#57cc99",
     marginBottom: 10, // Add margin bottom for separation

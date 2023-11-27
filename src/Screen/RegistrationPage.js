@@ -204,10 +204,11 @@ const RegistrationPage = ({ navigation }) => {
               alignSelf: "center",
               fontSize: 18,
               color: "#495867",
-              fontWeight: "bold",
+              fontWeight: "700",
+              fontFamily: 'Roboto-bold',
             }}
           >
-            orr
+            or
           </Text>
 
           {/* <TouchableOpacity
@@ -257,7 +258,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-bold',
   },
   formContainer: {
-    backgroundColor: "#fcf6bd",
+    // backgroundColor: "#fcf6bd",
+    backgroundColor:"#F5F7F8",
     padding: 20,
     borderRadius: 10,
     elevation: 5,
@@ -399,3 +401,4 @@ export default RegistrationPage;
 //     color: "black",
 //   },
 // });
+
