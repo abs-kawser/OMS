@@ -16,6 +16,8 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 import { useDraft } from "../Context/DraftProvider";
 
+
+
 const Draft = ({ navigation }) => {
   const { draftData, setDraftData } = useDraft();
   // const [draftData, setDraftData] = useState([]);
@@ -62,9 +64,6 @@ const Draft = ({ navigation }) => {
   };
 
   const handleItemPress = (selectedItem) => {
-    // Navigate to the target component with the selected item's data
-    // console.log('leave request', selectedItem);
-
     navigation.navigate("Draft Request", {
       selectedItem,
       onDeleteItem: handleDeleteItem,

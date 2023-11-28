@@ -4,8 +4,13 @@ import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
-const OrderInfo = ({ route, navigation }) => {
+const OrderInfo = ({ route }) => {
+
+  const navigation = useNavigation();
+
+
   const orderNo = route.params?.orderNo;
   console.log("orderNo ", orderNo);
 
@@ -100,10 +105,10 @@ const OrderInfo = ({ route, navigation }) => {
           <Button
             icon="arrow-left"
             mode="contained"
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate("Home")}
             buttonColor="tomato"
           >
-            Back
+            Back 
           </Button>
         </View>
 

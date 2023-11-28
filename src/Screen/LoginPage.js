@@ -32,6 +32,9 @@ const LoginPage = () => {
 
   //error handleing
   const [error, setError] = useState("");
+
+
+  
   //useContext api
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   //loading
@@ -225,12 +228,13 @@ const LoginPage = () => {
           <Text
             style={{
               alignSelf: "center",
-              fontSize: 20,
+              fontSize: 18,
               color: "#495867",
-              fontWeight: "bold",
+              fontWeight: "700",
+              fontFamily: 'Roboto-bold',
             }}
           >
-            orr
+            or
           </Text>
 
           <Button

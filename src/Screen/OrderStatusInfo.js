@@ -46,7 +46,10 @@ const OrderStatusInfo = ({ route, navigation }) => {
             Total: {OrderStatus?.length} records
           </Text>
         </Button>
-        <Button color="#0091ad" onPress={() => navigation.goBack()}><Text style={{ color: "white" }}> Back </Text></Button>
+        <Button color="#0091ad" 
+        onPress={() => navigation.goBack()}>
+          
+          <Text style={{ color: "white" }}> Back </Text></Button>
       </View>
       
     </ScrollView>

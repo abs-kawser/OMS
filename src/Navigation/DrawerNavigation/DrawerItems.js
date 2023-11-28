@@ -23,6 +23,8 @@ const DrawerItems = (props) => {
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { login, userDetails } = isLoggedIn;
 
+
+  
   const handleLogout = async () => {
     Alert.alert(
       "Logout",
@@ -49,6 +51,8 @@ const DrawerItems = (props) => {
       { cancelable: false }
     );
   };
+
+
 
   return (
     <View style={{ flex: 1,}}>
@@ -86,6 +90,8 @@ const DrawerItems = (props) => {
               {userDetails.Email}
             </Text>
           </View>
+
+
         </View>
         <View>
           <DrawerItemList {...props} />
@@ -100,7 +106,7 @@ const DrawerItems = (props) => {
               source={require("../../../assets/logouts.png")}
             />
         )}
-        label="Sign Out"
+        label="Log Out"
         onPress={handleLogout}
       />
     </View>
@@ -109,8 +115,10 @@ const DrawerItems = (props) => {
 
 export default DrawerItems;
 
+
+
 const styles = StyleSheet.create({
-  boldWhiteText: {
+ boldWhiteText: {
     fontWeight: "bold",
     color: "#323031",
     fontSize: 18,

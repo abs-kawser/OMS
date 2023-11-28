@@ -311,7 +311,7 @@ const OrderStatus = () => {
           label="Customer ID"
           placeholder="Enter customer ID"
           onChangeText={(text) => setCustomerId(text)}
-          value={customerId}
+          // value={customerId}
           keyboardType="numeric"
         />
         {/* Search Button */}

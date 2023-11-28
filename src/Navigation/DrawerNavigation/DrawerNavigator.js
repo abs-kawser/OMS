@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import Home from "../../Screen/Home";
 // import OrderCollection from "../../Screen/OrderCollection";
 import CustomerList from "../../Screen/CustomerList";
 import ProductList from "../../Screen/ProductList";
@@ -13,6 +12,7 @@ import Darft from "../../Screen/Darft";
 import ChangePassword from "../../Screen/ChangePassword";
 import NoOrder from "../../Screen/NoOrder";
 import CreateOrder from "../../Screen/CreateOrder";
+import HomeScreen from "../../Screen/HomeScreen";
 // import { Image } from "react-native-paper/lib/typescript/components/Avatar/Avatar";
 
 const Drawer = createDrawerNavigator();
@@ -36,7 +36,7 @@ const DrawerNavigator = () => {
     >
       <Drawer.Screen
         name="Home"
-        component={Home}
+        component={HomeScreen}
         options={{
           drawerIcon: ({ focused, size }) => (
             // <FontAwesome

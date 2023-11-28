@@ -7,7 +7,7 @@ import ElevatedCards from "../../components/ElevatedCards";
 import { useLogin } from "../Context/LoginProvider";
 import FlatCards from "../../components/FlatCards";
 
-export default function Home() {
+export default function HomeScreen() {
   //it comes from contex
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
@@ -39,6 +39,8 @@ export default function Home() {
     </ScrollView>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {

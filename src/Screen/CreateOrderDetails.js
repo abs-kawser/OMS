@@ -220,6 +220,8 @@ const CreateOrderDetails = ({ route }) => {
     };
   });
 
+
+  
   const fetchCreatenewOrderData = async () => {
     const requestData = {
       OrderDetails: transformedOrderDetails,
@@ -287,46 +289,46 @@ const CreateOrderDetails = ({ route }) => {
     };
   });
 
-  const handleDraftSave = async () => {
-    const requestData = {
-      OrderDetails: draftTransformedOrderDetails,
-      CustomerId: data?.CustomerId,
-      OrderDate: data?.OrderDate,
-      DeliveryDate: data?.DeliveryDate,
-      EntryBy: data?.EntryBy,
-      Note: data?.Note,
-      TerritoryId: data?.TerritoryId,
-      CustomerName: customerInformation?.Name,
-      CustomerAddress: customerInformation?.Address,
-    };
-    try {
-      // Retrieve the existing data from AsyncStorage
-      const existingData = await AsyncStorage.getItem("customerInformation");
+const handleDraftSave = async () => {
+const requestData = {
+  OrderDetails: draftTransformedOrderDetails,
+  CustomerId: data?.CustomerId,
+  OrderDate: data?.OrderDate,
+  DeliveryDate: data?.DeliveryDate,
+  EntryBy: data?.EntryBy,
+  Note: data?.Note,
+  TerritoryId: data?.TerritoryId,
+  CustomerName: customerInformation?.Name,
+  CustomerAddress: customerInformation?.Address,
+};
+try {
+  // Retrieve the existing data from AsyncStorage
+  const existingData = await AsyncStorage.getItem("customerInformation");
+  
+  console.log(
+    "existing data in async storage",
+    JSON.stringify(existingData, null, 2)
+  );
 
-      console.log(
-        "existing data in async storage",
-        JSON.stringify(existingData, null, 2)
-      );
+  // Parse the existing data (or initialize an empty array)
+  const customerInfoArray = existingData ? JSON.parse(existingData) : [];
 
-      // Parse the existing data (or initialize an empty array)
-      const customerInfoArray = existingData ? JSON.parse(existingData) : [];
+  // Add the current customerInformation to the array
+  customerInfoArray.push(requestData);
 
-      // Add the current customerInformation to the array
-      customerInfoArray.push(requestData);
+  // Save the updated array to AsyncStorage
+  await AsyncStorage.setItem(
+    "customerInformation",
+    JSON.stringify(customerInfoArray)
+  );
 
-      // Save the updated array to AsyncStorage
-      await AsyncStorage.setItem(
-        "customerInformation",
-        JSON.stringify(customerInfoArray)
-      );
+  navigation.navigate("Darft Screen");
 
-      navigation.navigate("Darft Screen");
-
-      // Alert.alert('Data saved successfully.');
-    } catch (error) {
-      console.error("Error saving data:", error);
-    }
-  };
+  // Alert.alert('Data saved successfully.');
+} catch (error) {
+  console.error("Error saving data:", error);
+}
+};
 
   // ==================================
 
