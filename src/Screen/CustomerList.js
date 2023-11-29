@@ -313,7 +313,7 @@ export default function CustomerList() {
                   {Customer?.DepotName}
                 </Text>
 
-                <View style={{ alignSelf: "flex-start" }}>
+                <View style={{ alignSelf: "flex-start" ,}}>
                   <Button
                     title="Create Order"
                     // buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}

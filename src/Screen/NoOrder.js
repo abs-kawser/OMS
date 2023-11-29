@@ -387,7 +387,7 @@ const NoOrder = () => {
          <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity> */}
         <TouchableOpacity style={{ marginTop: 25 }}>
-          <Button onPress={fetchNorderData}>Next</Button>
+          <Button onPress={fetchNorderData}>Submit</Button>
         </TouchableOpacity>
       </ScrollView>
     

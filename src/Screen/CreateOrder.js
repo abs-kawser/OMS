@@ -375,7 +375,7 @@ export default function CreateOrder() {
 
 
         <TouchableOpacity style={{ marginTop: 25 }}>
-          <Button onPress={nextPageComponent}>Next</Button>
+          <Button color="#2E97A7" onPress={nextPageComponent}>Next</Button>
         </TouchableOpacity>
 
         

@@ -13,7 +13,7 @@ export default function HomeScreen() {
   const { userDetails } = isLoggedIn;
 
   return (
-    <ScrollView style={{ backgroundColor: "#ecf8f8" }}>
+    <ScrollView style={{ backgroundColor: "#36485f" }}>
       <View style={styles.centeredContainer}>
         <Text style={styles.welcomeText}>Welcome to OMS</Text>
         {/* <Text style={styles.detailsText}>This is your details</Text> */}
@@ -32,15 +32,14 @@ export default function HomeScreen() {
       </View>
 
       <View
-        style={{ backgroundColor: "#edf2fb", elevation: 20, borderRadius: 10 }}
+      // backgroundColor: "#90e0ef", elevation: 20,
+        style={{ borderRadius: 10 }}
       >
         <FlatCards />
       </View>
     </ScrollView>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -58,7 +57,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     color: "#212529",
-    
   },
   Details: {
     alignSelf: "center",

@@ -26,6 +26,8 @@ import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import TransitionLoader from "../../components/TransitionLoader";
 
+import AutoGrowingTextInput from "react-native-autogrow-textinput";
+
 const CreateOrderDetails = ({ route }) => {
   const data = route.params?.data;
 
@@ -67,7 +69,7 @@ const CreateOrderDetails = ({ route }) => {
   //   JSON.stringify(selectedProduct, null, 2)
   // );
 
-  // product api calling 
+  // product api calling
   useEffect(() => {
     const getProductList = async () => {
       try {
@@ -220,8 +222,6 @@ const CreateOrderDetails = ({ route }) => {
     };
   });
 
-
-  
   const fetchCreatenewOrderData = async () => {
     const requestData = {
       OrderDetails: transformedOrderDetails,
@@ -289,46 +289,46 @@ const CreateOrderDetails = ({ route }) => {
     };
   });
 
-const handleDraftSave = async () => {
-const requestData = {
-  OrderDetails: draftTransformedOrderDetails,
-  CustomerId: data?.CustomerId,
-  OrderDate: data?.OrderDate,
-  DeliveryDate: data?.DeliveryDate,
-  EntryBy: data?.EntryBy,
-  Note: data?.Note,
-  TerritoryId: data?.TerritoryId,
-  CustomerName: customerInformation?.Name,
-  CustomerAddress: customerInformation?.Address,
-};
-try {
-  // Retrieve the existing data from AsyncStorage
-  const existingData = await AsyncStorage.getItem("customerInformation");
-  
-  console.log(
-    "existing data in async storage",
-    JSON.stringify(existingData, null, 2)
-  );
+  const handleDraftSave = async () => {
+    const requestData = {
+      OrderDetails: draftTransformedOrderDetails,
+      CustomerId: data?.CustomerId,
+      OrderDate: data?.OrderDate,
+      DeliveryDate: data?.DeliveryDate,
+      EntryBy: data?.EntryBy,
+      Note: data?.Note,
+      TerritoryId: data?.TerritoryId,
+      CustomerName: customerInformation?.Name,
+      CustomerAddress: customerInformation?.Address,
+    };
+    try {
+      // Retrieve the existing data from AsyncStorage
+      const existingData = await AsyncStorage.getItem("customerInformation");
 
-  // Parse the existing data (or initialize an empty array)
-  const customerInfoArray = existingData ? JSON.parse(existingData) : [];
+      console.log(
+        "existing data in async storage",
+        JSON.stringify(existingData, null, 2)
+      );
 
-  // Add the current customerInformation to the array
-  customerInfoArray.push(requestData);
+      // Parse the existing data (or initialize an empty array)
+      const customerInfoArray = existingData ? JSON.parse(existingData) : [];
 
-  // Save the updated array to AsyncStorage
-  await AsyncStorage.setItem(
-    "customerInformation",
-    JSON.stringify(customerInfoArray)
-  );
+      // Add the current customerInformation to the array
+      customerInfoArray.push(requestData);
 
-  navigation.navigate("Darft Screen");
+      // Save the updated array to AsyncStorage
+      await AsyncStorage.setItem(
+        "customerInformation",
+        JSON.stringify(customerInfoArray)
+      );
 
-  // Alert.alert('Data saved successfully.');
-} catch (error) {
-  console.error("Error saving data:", error);
-}
-};
+      navigation.navigate("Darft Screen");
+
+      // Alert.alert('Data saved successfully.');
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
+  };
 
   // ==================================
 
@@ -378,7 +378,7 @@ try {
           </Button>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{ width: "50%", }}>
+        <TouchableOpacity style={{ width: "50%" }}>
           <Button color="#2E97A7" onPress={handleOrderButtonPress}>
             Order Details
           </Button>
@@ -428,7 +428,7 @@ try {
                               <TextInput
                                 placeholder="QTY"
                                 style={styles.input}
-                                // keyboardType="numeric"
+                                keyboardType="numeric"
                                 value={
                                   productQuantities[product.ProductId]
                                     ? productQuantities[
@@ -441,8 +441,9 @@ try {
                                 }
                               />
                             </View>
-                          </View>
-                        </View>
+                           </View> 
+                         </View> 
+
                       </View>
                     )}
                   />
@@ -503,8 +504,12 @@ try {
                   </>
 
                   <View style={styles.btngrp}>
-                    <Button onPress={handleDraftSave}>Save</Button>
-                    <Button onPress={fetchCreatenewOrderData}>Submit</Button>
+                    <Button color="#2E97A7" onPress={handleDraftSave}>
+                      Save
+                    </Button>
+                    <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
+                      Submit
+                    </Button>
                   </View>
                 </View>
               )}
@@ -514,7 +519,7 @@ try {
       </>
 
       <Text style={styles.totalPriceText}>
-        Total Price: {calculateTotalPrice()}
+        Total Price: {calculateTotalPrice()} Tk
       </Text>
     </View>
   );
@@ -549,7 +554,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   dataContainer: {
-    marginTop: 20,
+    // marginTop: 20,
   },
 
   button: {
@@ -721,9 +726,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
   },
-})
-
-
-
+});
 
 

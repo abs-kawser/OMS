@@ -265,7 +265,8 @@ const LoginPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#3498db",
+    // backgroundColor: "#3498db",
+    backgroundColor: "#36485f",
     justifyContent: "center",
   },
   header: {

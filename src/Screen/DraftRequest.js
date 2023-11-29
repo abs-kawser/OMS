@@ -267,8 +267,8 @@ const DraftRequest = ({ route }) => {
       }
     } catch (error) {
       // Handle network errors here if needed
-      console.error("Network error:", error);
-      ToastAndroid.show("Network error", ToastAndroid.LONG);
+      // console.error("Network error:", error);
+      // ToastAndroid.show("Network error", ToastAndroid.LONG);
     }
   };
 

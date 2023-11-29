@@ -156,7 +156,7 @@ const OrderStatus = () => {
       // setIsLoading(false);
       //return jsonData;
     } catch (error) {
-      setError("An error occurred while fetching data.");
+      setError("Please fill up those field.");
       console.error("Error fetching data:", error);
 
       throw error;
@@ -311,8 +311,8 @@ const OrderStatus = () => {
           label="Customer ID"
           placeholder="Enter customer ID"
           onChangeText={(text) => setCustomerId(text)}
-          // value={customerId}
           keyboardType="numeric"
+          // value={customerId}
         />
         {/* Search Button */}
         <Button

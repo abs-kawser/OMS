@@ -132,6 +132,7 @@ const RegistrationPage = ({ navigation }) => {
       </View> */}
 
       <View style={styles.container}>
+        {/* <Image source={require("../../assets/omsRound.png")} /> */}
         <View style={styles.header}>
           <Text style={styles.headerText}>Sign Up Here</Text>
         </View>
@@ -161,7 +162,7 @@ const RegistrationPage = ({ navigation }) => {
             onChangeText={(text) => setPassword(text)}
           /> */}
 
-           <View style={styles.passwordContainer}>
+          <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
               placeholder="Password"
@@ -205,7 +206,7 @@ const RegistrationPage = ({ navigation }) => {
               fontSize: 18,
               color: "#495867",
               fontWeight: "700",
-              fontFamily: 'Roboto-bold',
+              fontFamily: "Roboto-bold",
             }}
           >
             or
@@ -239,12 +240,11 @@ const RegistrationPage = ({ navigation }) => {
   );
 };
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#3498db",
+    // backgroundColor: "#3498db",
+    backgroundColor: "#36485f",
     justifyContent: "center",
   },
   header: {
@@ -255,11 +255,11 @@ const styles = StyleSheet.create({
     color: "#fcf6bd",
     marginBottom: 20,
     fontWeight: "700",
-    fontFamily: 'Roboto-bold',
+    fontFamily: "Roboto-bold",
   },
   formContainer: {
     // backgroundColor: "#fcf6bd",
-    backgroundColor:"#F5F7F8",
+    backgroundColor: "#F5F7F8",
     padding: 20,
     borderRadius: 10,
     elevation: 5,
@@ -286,8 +286,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-
-  // 
+  //
   passwordContainer: {
     position: "relative",
     flexDirection: "row",
@@ -401,4 +400,3 @@ export default RegistrationPage;
 //     color: "black",
 //   },
 // });
-

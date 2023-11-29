@@ -57,7 +57,7 @@ const ChangePassword = () => {
     <View style={styles.container}>
       <PaperTextInput
         mode="outlined"
-        label="User Name"
+        label="User Id"
         style={styles.input}
         value={networkId.toString()}
         onChangeText={(text) => setNetworkId(text)}
@@ -112,13 +112,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    // backgroundColor:"#36485f"
     // justifyContent: 'center',
     // alignItems: 'center',
   },
   input: {
     // width: '80%',
     marginBottom: 20,
-    backgroundColor: "#faf9f9",
+    backgroundColor: "#F1EFEF",
   },
   button: {
     width: "25%",
