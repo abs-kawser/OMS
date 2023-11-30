@@ -21,22 +21,22 @@ import { Button } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as Animatable from "react-native-animatable";
 
-
-
 const LoginPage = () => {
-
   const navigation = useNavigation();
   const [userId, setUserId] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
 
   //error handleing
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
+  const [loginResponse, setloginResponse] = useState(null);
 
 
-  
+
   //useContext api
   const { isLoggedIn, setIsLoggedIn } = useLogin();
+
+
   //loading
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,7 +55,11 @@ const LoginPage = () => {
         }
       );
       const result = await response.json();
-      setIsLoading(false); // Stop loading
+      // setloginResponse(result);
+      // console.log("API response:", result);
+
+      setIsLoading(false);
+      // Stop loading
       // console.log('this is login details', result.EmployeeId);
       if (result.EmpId) {
         // Save user authentication details in AsyncStorage
@@ -73,108 +77,31 @@ const LoginPage = () => {
       } else {
         const errorMessage = result;
         setError(errorMessage);
+        console.log("errorMessage",errorMessage);
       }
     } catch (error) {
       console.error("AsyncStorage Error:", error);
     }
   };
 
-
-  
   const handleRegisterNow = () => {
     navigation.navigate("Register");
   };
 
   return (
-    // <>
-    //   <Header />
-    //   <View style={styles.container}>
-    //     <SafeAreaView>
-    //       <View style={styles.imageContainer}>
-    //         <Image
-    //           source={{
-    //             uri: "https://i.postimg.cc/brxvykCD/login.png",
-    //           }}
-    //           style={styles.image}
-    //         />
-    //       </View>
-
-    //       <TextInput
-    //         style={styles.input}
-    //         placeholder="User Id"
-    //         onChangeText={(text) => setUserId(text)}
-    //         value={userId}
-    //       />
-
-    //       <TextInput
-    //         style={styles.input}
-    //         placeholder="Password"
-    //         secureTextEntry={true}
-    //         onChangeText={(text) => setPassword(text)}
-    //         value={password}
-    //       />
-
-    //       {error && <Text style={styles.warning}>{error}</Text>}
-
-    //       <TouchableOpacity
-    //       // style={styles.loginButton} onPress={handleLogin}
-    //       >
-    //         <Button
-    //           mode="contained"
-    //           buttonColor="#00a6fb"
-    //           style={styles.button}
-    //           onPress={handleLogin}
-    //         >
-    //           Login
-    //         </Button>
-    //         {/* {isLoading && <ActivityIndicator size="small" color="red" />} */}
-    //         {/* <Text style={styles.loginButtonTextX}>Loginn</Text> */}
-    //       </TouchableOpacity>
-
-    //       <Button
-    //         icon="arrow-right"
-    //         mode="contained"
-    //         onPress={handleRegisterNow}
-    //         buttonColor="#00b4d8"
-    //         contentStyle={{ flexDirection: "row-reverse" }}
-    //         style={styles.buttonRegister}
-    //       >
-    //         Register Now
-    //       </Button>
-    //     </SafeAreaView>
-    //   </View>
-    // </>
-
     <>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerText}>Welcome back! plz login</Text>
         </View>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
-          {/* <TextInput style={styles.input} placeholder="User ID" />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-        /> */}
-
           <TextInput
             style={styles.input}
             placeholder="User Id"
             placeholderTextColor="black"
-
             onChangeText={(text) => setUserId(text)}
             value={userId}
           />
-
-          {/* <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-        /> */}
 
           <View style={styles.passwordContainer}>
             <TextInput
@@ -196,21 +123,7 @@ const LoginPage = () => {
               />
             </TouchableOpacity>
           </View>
-
-          {/* <TouchableOpacity style={styles.registerButton} onPress={handleLogin}>
-          <Text style={styles.registerButtonText}>Loginn</Text>
-        </TouchableOpacity> */}
-
-          {/* <Button
-            mode="contained"
-            buttonColor="#00a6fb"
-            style={styles.button}
-            onPress={handleLogin}
-          >
-            Login
-          </Button> */} 
-
-           <Button
+          <Button
             mode="contained"
             buttonColor="#00a6fb"
             style={styles.button}
@@ -231,12 +144,11 @@ const LoginPage = () => {
               fontSize: 18,
               color: "#495867",
               fontWeight: "700",
-              fontFamily: 'Roboto-bold',
+              fontFamily: "Roboto-bold",
             }}
           >
             or
           </Text>
-
           <Button
             icon="arrow-right"
             mode="contained"
@@ -247,20 +159,14 @@ const LoginPage = () => {
           >
             Sign Up
           </Button>
-
-          {/* <TouchableOpacity
-          style={styles.registerButton}
-          onPress={() => navigation.navigate("Register")}
-        >
-          <Text style={styles.registerButtonText}>Registerr</Text>
-        </TouchableOpacity> */}
+          {error !== "" && (
+            <Text style={styles.errorMessage}>{error}</Text>
+          )}
         </Animatable.View>
       </View>
     </>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -277,11 +183,11 @@ const styles = StyleSheet.create({
     color: "#fcf6bd",
     marginBottom: 20,
     fontWeight: "700",
-    fontFamily: 'Roboto-bold',
+    fontFamily: "Roboto-bold",
   },
   formContainer: {
     // backgroundColor: "#fcf6bd",
-    backgroundColor:"#F5F7F8",
+    backgroundColor: "#F5F7F8",
     padding: 20,
     borderRadius: 10,
     elevation: 5,
@@ -317,6 +223,12 @@ const styles = StyleSheet.create({
     // width: "50%",
     // marginTop: 10,
     // alignSelf: "center",
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 14,
+    textAlign: "center",
+    marginVertical: 10,
   },
 
   passwordContainer: {

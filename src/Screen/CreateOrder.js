@@ -23,6 +23,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import { Button } from "@rneui/themed";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function CreateOrder() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
@@ -52,6 +53,7 @@ export default function CreateOrder() {
 
   //===//
   const [data, setData] = useState([]);
+  
   const [value, setValue] = useState(customerInfoList?.CustomerId);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -76,9 +78,61 @@ export default function CreateOrder() {
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
   console.log(
-    "customerIn formation",
+    "customerIn formation create order page",
     JSON.stringify(customerInformation, null, 2)
   );
+
+  //field clearing done
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     setValue("");
+  //     // setOrderDate("")
+  //     // setDeliveryDate("")
+  //     setNote("");
+
+  //     setCustomerInformation("");
+  //     setClient("");
+  //     setCustomerSelected(false);
+  //     setError("");
+  //     setCustomerError("");
+  //     setNoteError("");
+  //   }, [])
+  // );
+
+
+
+
+  // Inside your functional component
+  useFocusEffect(
+    React.useCallback(() => {
+      setValue("");
+      // setOrderDate("");
+      // setDeliveryDate("");
+      setNote("");
+  
+      // Check for navigation parameters and update state
+      const params = route.params?.customerInfoList;
+      console.log("params",params);
+      if (params) {
+        setCustomerInformation(params|| "");
+        setClient(params.client || "");
+        setCustomerSelected(params.customerSelected || false);
+        setError(params.error || "");
+        setCustomerError(params.customerError || "");
+        setNoteError(params.noteError || "");
+      } else {
+        // Set default state if no parameters
+        setCustomerInformation("");
+        setClient("");
+        setCustomerSelected(false);
+        setError("");
+        setCustomerError("");
+        setNoteError("");
+      }
+    }, [route.params?.customerInfoList]) 
+  );
+  
+  
 
   // ================================================
   const handleOrderDate = (event, selectedDate) => {
@@ -214,6 +268,8 @@ export default function CreateOrder() {
     TerritoryId: userDetails?.TerritoryId,
   };
 
+  console.log("reqdata",requestData);
+
   //Routing
 
   const nextPageComponent = () => {
@@ -254,6 +310,7 @@ export default function CreateOrder() {
             searchPlaceholder="Search..."
             value={value}
             onChange={(item) => {
+             // it comes from customer list 
               setValue(item.CustomerId);
               setCustomerInformation(item);
               setCustomerError("");
@@ -282,7 +339,7 @@ export default function CreateOrder() {
               </>
             )}
           />
-          
+
           {/* </TouchableOpacity> */}
           {/* {isClientNameTouched && !isClientNameValid && client === "" && (
             <Text style={styles.errorMessage}>Client name is required ***</Text>
@@ -373,12 +430,11 @@ export default function CreateOrder() {
          <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity> */}
 
-
         <TouchableOpacity style={{ marginTop: 25 }}>
-          <Button color="#2E97A7" onPress={nextPageComponent}>Next</Button>
+          <Button color="#2E97A7" onPress={nextPageComponent}>
+            Next
+          </Button>
         </TouchableOpacity>
-
-        
       </ScrollView>
     </View>
   );

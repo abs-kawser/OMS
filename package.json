@@ -28,7 +28,6 @@
     "react-hook-form": "^7.46.1",
     "react-native": "0.72.4",
     "react-native-animatable": "^1.4.0",
-    "react-native-autogrow-textinput": "^5.4.0",
     "react-native-element-dropdown": "^2.10.0",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "^2.12.1",

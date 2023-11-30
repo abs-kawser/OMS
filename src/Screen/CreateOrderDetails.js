@@ -26,12 +26,13 @@ import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import TransitionLoader from "../../components/TransitionLoader";
 
-import AutoGrowingTextInput from "react-native-autogrow-textinput";
 
 const CreateOrderDetails = ({ route }) => {
   const data = route.params?.data;
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
+
+
 
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
@@ -315,7 +316,6 @@ const CreateOrderDetails = ({ route }) => {
 
       // Add the current customerInformation to the array
       customerInfoArray.push(requestData);
-
       // Save the updated array to AsyncStorage
       await AsyncStorage.setItem(
         "customerInformation",
@@ -331,7 +331,6 @@ const CreateOrderDetails = ({ route }) => {
   };
 
   // ==================================
-
   useEffect(() => {
     // Inside this effect, filter and set the selected products based on product IDs
     const selectedProducts = selectedProductIds.map((productId) => {
@@ -343,8 +342,11 @@ const CreateOrderDetails = ({ route }) => {
     );
   }, [selectedProductIds, products]);
 
+
+
   return (
     <View style={styles.container}>
+      
       <View style={styles.userInformation}>
         <Text style={styles.userText1}>{customerInformation?.Name}</Text>
         <Text style={{ color: "black" }}>
@@ -441,9 +443,8 @@ const CreateOrderDetails = ({ route }) => {
                                 }
                               />
                             </View>
-                           </View> 
-                         </View> 
-
+                          </View>
+                        </View>
                       </View>
                     )}
                   />
@@ -524,7 +525,6 @@ const CreateOrderDetails = ({ route }) => {
     </View>
   );
 };
-
 export default CreateOrderDetails;
 
 const styles = StyleSheet.create({
@@ -727,5 +727,3 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
-
-

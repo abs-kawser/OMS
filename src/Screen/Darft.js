@@ -19,6 +19,8 @@ import { useDraft } from "../Context/DraftProvider";
 
 
 const Draft = ({ navigation }) => {
+
+  
   const { draftData, setDraftData } = useDraft();
   // const [draftData, setDraftData] = useState([]);
 
@@ -49,14 +51,12 @@ const Draft = ({ navigation }) => {
       const updatedDraftData = draftData.filter(
         (item) => item !== selectedItem
       );
-
       // Update the AsyncStorage with the updated data
       await AsyncStorage.setItem(
         "customerInformation",
         JSON.stringify(updatedDraftData)
       );
-
-      // Update the state to reflect the changes
+     // Update the state to reflect the changes
       setDraftData(updatedDraftData);
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -68,8 +68,7 @@ const Draft = ({ navigation }) => {
       selectedItem,
       onDeleteItem: handleDeleteItem,
     });
-
-    // Alert.alert(selectedItem.Note);
+   // Alert.alert(selectedItem.Note);
   };
 
   return (
