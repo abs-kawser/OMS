@@ -24,8 +24,6 @@ const RegistrationPage = ({ navigation }) => {
   const [userId, setUserId] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
   console.log("USer id", userId);
 
   // Add more state variables as needed for handling API response and loading state
@@ -51,86 +49,10 @@ const RegistrationPage = ({ navigation }) => {
     }
   };
 
+  const isRegisterDisabled = !userId || !password || !mobile;
+
   return (
     <>
-      {/* <Header /> */}
-      {/* <View style={styles.container}>
-        <ScrollView>
-          <View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={styles.commontextContainer}>
-                <Text style={styles.commonText}>Here's</Text>
-                <Text style={styles.commonText}>your first</Text>
-                <Text style={styles.commonText}>step with</Text>
-                <Text style={styles.commonText}>us</Text>
-              </View>
-
-              <View style={styles.imageContainer}>
-                <Image
-                  source={{
-                    uri: "https://i.postimg.cc/76T31pPv/register.png",
-                  }}
-                  style={styles.image}
-                />
-              </View>
-            </View>
-
-            <View style={styles.content}>
-              <View style={styles.form}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="User ID"
-                  placeholderTextColor="black"
-                  value={userId}
-                  onChangeText={(text) => setUserId(text)
-                  
-                  }
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Mobile"
-                  placeholderTextColor="gray"
-                  value={mobile}
-                  onChangeText={(text) => setMobile(text)}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Password"
-                  placeholderTextColor="gray"
-                  secureTextEntry
-                  value={password}
-                  onChangeText={(text) => setPassword(text)}
-                />
-
-                <TouchableOpacity
-                  style={styles.registerButton}
-                  onPress={handleRegistration}
-                >
-                  {isLoading && <ActivityIndicator size="small" color="red" />}
-                  <Text style={styles.registerButtonText}>Registerr</Text>
-                </TouchableOpacity>
-
-                {isLoading && <Text>Loading...</Text>}
-                {registrationResponse && (
-                  <Text style={{ color: "red", emity: "" }}>
-                    {JSON.stringify(registrationResponse.Message)}
-                  </Text>
-                )}
-
-                <Button
-                  icon="arrow-left"
-                  mode="contained"
-                  onPress={() => navigation.goBack()}
-                  buttonColor="tomato"
-                >
-                  Back
-                </Button>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
-      </View> */}
-
       <View style={styles.container}>
         {/* <Image source={require("../../assets/omsRound.png")} /> */}
         <View style={styles.header}>
@@ -153,15 +75,6 @@ const RegistrationPage = ({ navigation }) => {
             onChangeText={(text) => setMobile(text)}
           />
 
-          {/* <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="black"
-            secureTextEntry
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          /> */}
-
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
@@ -183,22 +96,29 @@ const RegistrationPage = ({ navigation }) => {
             </TouchableOpacity>
           </View>
 
-          {/* <TouchableOpacity
-            style={styles.registerButton}
-            onPress={handleRegistration}
-          >
-            <Text style={styles.registerButtonText}>Sign Up</Text>
-          </TouchableOpacity> */}
-          <Button
-            icon="arrow-right"
+          {/* <Button
+            // icon="arrow-right"
             mode="contained"
             onPress={handleRegistration}
             buttonColor="#00b4d8"
             contentStyle={{ flexDirection: "row-reverse" }}
             style={styles.buttonRegister}
           >
-            Sign Up
-          </Button>
+            Register
+          </Button> */}
+
+        <TouchableOpacity
+      style={[
+        styles.loginButton,
+        {
+          backgroundColor: isRegisterDisabled ? "#B3B3B3" : "#00b4d8",
+        },
+      ]}
+      onPress={handleRegistration}
+      disabled={isRegisterDisabled}
+    >
+      <Text style={styles.loginButtonText}>Register</Text>
+    </TouchableOpacity>
 
           <Text
             style={{
@@ -212,21 +132,26 @@ const RegistrationPage = ({ navigation }) => {
             or
           </Text>
 
-          {/* <TouchableOpacity
-            style={styles.registerButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.registerButtonText}>Loginn</Text>
-          </TouchableOpacity> */}
-
-          <Button
+          {/* <Button
             mode="contained"
             buttonColor="#00a6fb"
             style={styles.button}
             onPress={() => navigation.goBack()}
           >
             Login
-          </Button>
+          </Button> */}
+
+        <TouchableOpacity
+            style={[
+              styles.loginButton,
+              // {
+              //   backgroundColor: isRegisterDisabled ? "#B3B3B3" : "#3498db",
+              // },
+            ]}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.loginButtonText}>Login</Text>
+          </TouchableOpacity>
 
           {isLoading && <Text>Loading...</Text>}
           {registrationResponse && (
@@ -305,6 +230,20 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 20,
     right: 10,
+  },
+  // 
+  loginButton: {
+    backgroundColor: "#3498db",
+    borderRadius: 10,
+    padding: 15,
+    alignItems: "center",
+    marginTop: 15,
+  },
+  loginButtonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "700",
+    fontFamily: "Roboto-bold",
   },
 });
 export default RegistrationPage;

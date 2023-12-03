@@ -23,35 +23,26 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import { Button } from "@rneui/themed";
+import { useFocusEffect } from "@react-navigation/native";
 
 const NoOrder = () => {
   const route = useRoute();
   const navigation = useNavigation();
-    //comeing from contex
-    const { isLoggedIn, setIsLoggedIn } = useLogin();
-    const { userDetails } = isLoggedIn;
+  //comeing from contex
+  const { isLoggedIn, setIsLoggedIn } = useLogin();
+  const { userDetails } = isLoggedIn;
 
   const customerInfoList = route.params?.customerInfoList;
 
   console.log("customer Info from Create Order page", customerInfoList);
-  //const customerId = route.params?.customerId;
-
-  //check
-
-  //   const [client, setClient] = useState("");
-  //   const [isClientNameValid, setClientNameValid] = useState(false);
-  //   const [isClientNameTouched, setClientNameTouched] = useState(false);
-  //   const [customerSelected, setCustomerSelected] = useState(false);
-  //===//
   const [data, setData] = useState([]);
-
   const [value, setValue] = useState(customerInfoList?.CustomerId);
   console.log("CustomerId value", value);
   const [orderDate, setOrderDate] = useState(new Date());
   const [deliveryDate, setDeliveryDate] = useState(new Date());
   const [note, setNote] = useState("");
 
-  console.log("orderDate",orderDate)
+  console.log("orderDate", orderDate);
 
   //take sate for validtion
   const [error, setError] = useState("");
@@ -73,8 +64,6 @@ const NoOrder = () => {
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
-
-
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
   console.log(
@@ -205,192 +194,179 @@ const NoOrder = () => {
     };
 
     try {
-
       if (!value || !note || !deliveryDate || !orderDate) {
         // setError('Please fill in both username and password fields');
-        ToastAndroid.show('Please fill in both input fields', ToastAndroid.SHORT);
+        ToastAndroid.show(
+          "Please fill up all input fields",
+          ToastAndroid.SHORT
+        );
         return;
       }
-
-
-
-
-
-
-
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
       const response = await fetch(`${BASE_URL}/api/NoOrderApi/CreateNoOrder`, {
         method: "POST", // Specify the HTTP method
         headers: {
           Authorization: authHeader,
-          "Content-Type": "application/json", // Specify content type as JSON
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody), // Include the request body here
+        body: JSON.stringify(requestBody),
       });
 
       const jsonData = await response.json();
 
-
-      
-
       if (jsonData.Success === true) {
-        ToastAndroid.show(
-          jsonData.Message,
-          ToastAndroid.SHORT
-        );
+        ToastAndroid.show(jsonData.Message, ToastAndroid.SHORT);
       }
 
       console.log(
         "this from create order page ",
         JSON.stringify(jsonData, null, 2)
       );
+
+      navigation.navigate("Home");
     } catch (error) {
       console.error(error);
     }
   };
 
+  //field clearing
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setValue("");
+      setOrderDate(new Date());
+      setDeliveryDate(new Date());
+      setNote("");
+    }, [])
+  );
+
   //==========================||==============================//
 
   return (
+    <ScrollView style={styles.container}>
+      <View>
+        <Text style={styles.label}>Customer</Text>
+        <TouchableOpacity>
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={800}
+            labelField="Name"
+            valueField="CustomerId"
+            placeholder="Select Customer"
+            searchPlaceholder="Search..."
+            value={value}
+            onChange={(item) => {
+              setValue(item.CustomerId);
+              setCustomerInformation(item);
+              setCustomerError("");
+            }}
+            renderItem={(item, index, isSelected) => (
+              // <View style={styles.dropdownItem}>
+              <>
+                <View
+                  style={[
+                    styles.dropdownItem,
+                    isSelected && styles.selectedItem,
+                  ]}
+                >
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    Name: <Text style={styles.nameText}>{item.Name}</Text>
+                  </Text>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    CustomerId:
+                    <Text style={styles.customerIdText}>{item.CustomerId}</Text>
+                  </Text>
+                  <Text style={[styles.text, isSelected && styles.boldText]}>
+                    Address:
+                    <Text style={styles.addressText}>{item.Address}</Text>
+                  </Text>
+                </View>
+              </>
+            )}
+          />
+        </TouchableOpacity>
 
-      <ScrollView style={styles.container}>     
-        <View>
-          <Text style={styles.label}>Customer</Text>
-          <TouchableOpacity>
-              <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={data}
-              search
-              maxHeight={800}
-              labelField="Name"
-              valueField="CustomerId"
-              placeholder="Select Customer"
-              searchPlaceholder="Search..."
-              value={value}
-              onChange={(item) => {
-                setValue(item.CustomerId);
-                setCustomerInformation(item);
-                setCustomerError("");
-              }}
-              renderItem={(item, index, isSelected) => (
-                // <View style={styles.dropdownItem}>
-                <>
-                  <View
-                    style={[
-                      styles.dropdownItem,
-                      isSelected && styles.selectedItem,                      
-                    ]}
-                  >
-                    
-                    <Text style={[styles.text, isSelected && styles.boldText]}>
-                      Name: <Text style={styles.nameText}>{item.Name}</Text>
-                    </Text>
-                    <Text style={[styles.text, isSelected && styles.boldText]}>
-                      CustomerId:
-                      <Text style={styles.customerIdText} >
-                        {item.CustomerId}
-                      </Text>
-                    </Text>
-                    <Text style={[styles.text, isSelected && styles.boldText]}>
-                      Address:
-                      <Text style={styles.addressText}>{item.Address}</Text>
-                    </Text>
-                  </View>
-                </>
-              )}
-            />
-          </TouchableOpacity>
-
-          {/* {isClientNameTouched && !isClientNameValid && client === "" && (
+        {/* {isClientNameTouched && !isClientNameValid && client === "" && (
             <Text style={styles.errorMessage}>Client name is required ***</Text>
           )} */}
-        </View>
+      </View>
 
-        {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
+      {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
 
-        {/* ================================================================= */}
-        <View style={{ marginTop: 20 }}>
-          <Text style={styles.label}>Order Date</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => showDatepicker("order")}
+      {/* ================================================================= */}
+      <View style={{ marginTop: 20 }}>
+        <Text style={styles.label}>Order Date</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => showDatepicker("order")}
+        >
+          {showOrderDatePicker && (
+            <DateTimePicker
+              value={orderDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) =>
+                handleOrderDate(event, selectedDate)
+              }
+            />
+          )}
+          <Text>{moment(orderDate).format("DD-MM-YYYY")}</Text>
+        </TouchableOpacity>
+      </View>
 
-            // Disable if client name is not valid
-            // disabled={!isClientNameValid}
-          >
-            {showOrderDatePicker && (
-              <DateTimePicker
-                value={orderDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) =>
-                  handleOrderDate(event, selectedDate)
-                }
-              />
-            )}
+      <View style={{ marginTop: 15 }}>
+        <Text style={styles.label}> Delivery Date</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => showDatepicker("delivery")}
+        >
+          {showDeliveryDatePicker && (
+            <DateTimePicker
+              value={deliveryDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) =>
+                handleDateDelivery(event, selectedDate)
+              }
+            />
+          )}
 
-            {/* <Text>Order Date: {orderDate.toLocaleString()}</Text> */}
-            <Text>{moment(orderDate).format("DD-MM-YYYY")}</Text>
-          </TouchableOpacity>
-        </View>
+          <Text>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
+        </TouchableOpacity>
+        {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+      </View>
+      {/* ===================================================================================================== */}
+      <View style={{ marginTop: 15 }}>
+        <Text style={styles.label}>Note</Text>
+        <TextInput
+          style={[styles.input, { height: 50 }]}
+          multiline
+          placeholder="Enter notes"
+          value={note}
+          onChangeText={(text) => {
+            setNote(text);
+            setNoteError("");
+          }}
+        />
+        {noteError ? <Text style={{ color: "red" }}>{noteError}</Text> : null}
+      </View>
 
-        <View style={{ marginTop: 15 }}>
-          <Text style={styles.label}> Delivery Date</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => showDatepicker("delivery")}
-
-            // Disable if client name is not valid
-            // disabled={!isClientNameValid}
-          >
-            {showDeliveryDatePicker && (
-              <DateTimePicker
-                value={deliveryDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) =>
-                  handleDateDelivery(event, selectedDate)
-                }
-              />
-            )}
-
-            <Text>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
-          </TouchableOpacity>
-          {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
-        </View>
-        {/* ===================================================================================================== */}
-        <View style={{ marginTop: 15 }}>
-          <Text style={styles.label}>Note</Text>
-          <TextInput
-            style={[styles.input, { height: 50 }]}
-            multiline
-            placeholder="Enter notes"
-            value={note}
-            onChangeText={(text) => {
-              setNote(text);
-              setNoteError("");
-            }}
-            // editable={isClientNameValid} // Only editable if client name is valid
-          />
-
-          {noteError ? <Text style={{ color: "red" }}>{noteError}</Text> : null}
-        </View>
-
-        {/* <TouchableOpacity
+      {/* <TouchableOpacity
           style={styles.nextButton}
           onPress={fetchCreatenewOrderData} 
         >
          <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity style={{ marginTop: 25 }}>
-          <Button onPress={fetchNorderData}>Submit</Button>
-        </TouchableOpacity>
-      </ScrollView>
-    
+      <TouchableOpacity style={{ marginTop: 25 }}>
+        <Button onPress={fetchNorderData}>Submit</Button>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
@@ -407,21 +383,13 @@ const styles = StyleSheet.create({
     color: "black",
   },
   input: {
-    // borderWidth: 1,
-    // borderColor: "#0096c7",
-    // borderRadius: 5,
-    // padding: 10,
-    // marginBottom: 16,
-    // fontSize: 16,
-    // width:"33%",
-    // height:40
-
     borderWidth: 1,
     borderColor: "#0096c7",
     borderRadius: 5,
     height: 40,
     // backgroundColor: '#FFFFFF',
     justifyContent: "center",
+
     // marginBottom: 16,
   },
 
@@ -451,7 +419,8 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: "red",
     fontSize: 18,
-    marginTop: 5, // Adjust the spacing from the input field
+    marginTop: 5,
+    // Adjust the spacing from the input field
     //fontStyle: 'italic', // You can use italic for error messages
   },
 
@@ -464,8 +433,10 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
-    color: "black", // A slightly darker shade for better visibility
-    fontStyle: "italic", // Italics for a stylish touch
+    color: "black",
+    fontStyle: "italic",
+    // A slightly darker shade for better visibility
+    // Italics for a stylish touch
   },
   selectedTextStyle: {
     fontSize: 16,
@@ -544,3 +515,13 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
 });
+
+//const customerId = route.params?.customerId;
+
+//check
+
+//   const [client, setClient] = useState("");
+//   const [isClientNameValid, setClientNameValid] = useState(false);
+//   const [isClientNameTouched, setClientNameTouched] = useState(false);
+//   const [customerSelected, setCustomerSelected] = useState(false);
+//===//

@@ -31,11 +31,8 @@ const LoginPage = () => {
   const [error, setError] = useState(null);
   const [loginResponse, setloginResponse] = useState(null);
 
-
-
   //useContext api
   const { isLoggedIn, setIsLoggedIn } = useLogin();
-
 
   //loading
   const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +74,7 @@ const LoginPage = () => {
       } else {
         const errorMessage = result;
         setError(errorMessage);
-        console.log("errorMessage",errorMessage);
+        console.log("errorMessage", errorMessage);
       }
     } catch (error) {
       console.error("AsyncStorage Error:", error);
@@ -88,13 +85,19 @@ const LoginPage = () => {
     navigation.navigate("Register");
   };
 
+  const isLoginButtonDisabled = !userId || !password;
+
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <Text style={styles.headerText}>Welcome back! plz login</Text>
-        </View>
+        </View> */}
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Welcome Back!</Text>
+          </View>
+
           <TextInput
             style={styles.input}
             placeholder="User Id"
@@ -123,7 +126,8 @@ const LoginPage = () => {
               />
             </TouchableOpacity>
           </View>
-          <Button
+
+          {/* <Button
             mode="contained"
             buttonColor="#00a6fb"
             style={styles.button}
@@ -136,9 +140,31 @@ const LoginPage = () => {
             ) : (
               "Login"
             )}
-          </Button>
+          </Button> */}
 
-          <Text
+          <TouchableOpacity
+            style={[
+              styles.loginButton,
+              {
+                backgroundColor: isLoginButtonDisabled ? "#B3B3B3" : "#3498db",
+              },
+            ]}
+            onPress={handleLogin}
+            disabled={isLoginButtonDisabled}
+          >
+            <Text style={styles.loginButtonText}>Login</Text>
+          </TouchableOpacity>
+
+          <View style={styles.signupContainer}>
+            <Text style={styles.signupText}>Don't have an account?</Text>
+            <TouchableOpacity style={styles.signupButton}>
+              <Text style={styles.signupButtonText} onPress={handleRegisterNow}>
+                Register
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* <Text
             style={{
               alignSelf: "center",
               fontSize: 18,
@@ -150,18 +176,17 @@ const LoginPage = () => {
             or
           </Text>
           <Button
-            icon="arrow-right"
+            // icon="arrow-right"
             mode="contained"
             onPress={handleRegisterNow}
             buttonColor="#00b4d8"
             contentStyle={{ flexDirection: "row-reverse" }}
             style={styles.buttonRegister}
           >
-            Sign Up
-          </Button>
-          {error !== "" && (
-            <Text style={styles.errorMessage}>{error}</Text>
-          )}
+            Register
+          </Button> */}
+
+          {error !== "" && <Text style={styles.errorMessage}>{error}</Text>}
         </Animatable.View>
       </View>
     </>
@@ -194,7 +219,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 5,
@@ -238,7 +263,7 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     flex: 1,
-    height: 40,
+    height: 50,
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 5,
@@ -249,6 +274,48 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 20,
     right: 10,
+  },
+  //
+
+  header: {
+    marginBottom: 20,
+  },
+  headerText: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#333333",
+  },
+  signupContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 15,
+  },
+  signupText: {
+    color: "#333333",
+    marginRight: 5,
+  },
+  signupButton: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#3498db",
+  },
+  signupButtonText: {
+    color: "#3498db",
+    fontSize: 16,
+  },
+
+  loginButton: {
+    backgroundColor: "blue",
+    borderRadius: 10,
+    padding: 15,
+    alignItems: "center",
+    marginTop: 15,
+  },
+  loginButtonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "700",
+    fontFamily: "Roboto-bold",
   },
 });
 

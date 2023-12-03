@@ -5,11 +5,10 @@ import base64 from "base-64";
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 
 const OrderInfo = ({ route }) => {
-
   const navigation = useNavigation();
-
 
   const orderNo = route.params?.orderNo;
   console.log("orderNo ", orderNo);
@@ -51,13 +50,22 @@ const OrderInfo = ({ route }) => {
   });
 
   return (
-
     <ScrollView>
       <View style={{ padding: 10, backgroundColor: "#e9ecef", elevation: 5 }}>
         <View style={styles.pageInfoOne}>
-          <Text style={styles.text}>{data?.OrderBaicInfo?.OrderNo}</Text>
-          <Text style={styles.text}>{data?.OrderBaicInfo?.OrderDate} </Text>
-          <Text style={styles.text}>{data?.OrderBaicInfo?.DeliveryDate} </Text>
+          <Text style={styles.text}>Order No: {data?.OrderBaicInfo?.OrderNo}</Text>
+          {/* <Text style={styles.text}>{data?.OrderBaicInfo?.OrderDate} </Text>
+    <Text style={styles.text}>{data?.OrderBaicInfo?.DeliveryDate} </Text> */}
+          <Text style={styles.text}>
+          Order Date: {data?.OrderBaicInfo?.OrderDate &&
+              moment(data.OrderBaicInfo.OrderDate).format("DD-MM-YYYY")}  
+           
+          </Text>
+          <Text style={styles.text}>
+          Delivery Date: {data?.OrderBaicInfo?.DeliveryDate &&
+              moment(data.OrderBaicInfo.DeliveryDate).format("DD-MM-YYYY")}
+            
+          </Text>
           <View style={styles.divider}></View>
 
           <Text style={styles.text}>{data?.OrderBaicInfo?.CustomerName}</Text>
@@ -108,20 +116,17 @@ const OrderInfo = ({ route }) => {
             onPress={() => navigation.navigate("Home")}
             buttonColor="tomato"
           >
-            Back 
+            Back
           </Button>
         </View>
-
       </View>
     </ScrollView>
-    
   );
 };
 
 export default OrderInfo;
 
 const styles = StyleSheet.create({
-
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -146,13 +151,13 @@ const styles = StyleSheet.create({
     lineHeight: 50,
   },
   divider: {
-    borderBottomColor: "gray", 
-    marginVertical: 8, 
+    borderBottomColor: "gray",
+    marginVertical: 8,
 
-    flex: 1, 
-    height: 1, 
+    flex: 1,
+    height: 1,
     width: "60%",
-    backgroundColor: "gray", 
+    backgroundColor: "gray",
     alignSelf: "center",
   },
   column: {

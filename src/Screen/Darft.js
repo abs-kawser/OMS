@@ -10,21 +10,12 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
 import { useDraft } from "../Context/DraftProvider";
 
-
-
 const Draft = ({ navigation }) => {
-
-  
   const { draftData, setDraftData } = useDraft();
-  // const [draftData, setDraftData] = useState([]);
-
   console.log("this is draft data", JSON.stringify(draftData, null, 2));
+
   // retrive data from asyncstorage
   useFocusEffect(
     React.useCallback(() => {
@@ -44,7 +35,6 @@ const Draft = ({ navigation }) => {
   );
 
   // handle delete data
-
   const handleDeleteItem = async (selectedItem) => {
     try {
       // Filter out the selected item from draftData
@@ -56,7 +46,7 @@ const Draft = ({ navigation }) => {
         "customerInformation",
         JSON.stringify(updatedDraftData)
       );
-     // Update the state to reflect the changes
+      // Update the state to reflect the changes
       setDraftData(updatedDraftData);
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -68,12 +58,12 @@ const Draft = ({ navigation }) => {
       selectedItem,
       onDeleteItem: handleDeleteItem,
     });
-   // Alert.alert(selectedItem.Note);
+    // Alert.alert(selectedItem.Note);
   };
 
   return (
-    <ScrollView>
-      <SafeAreaView>
+    <SafeAreaView>
+      <ScrollView>
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerColumn60}>
@@ -87,7 +77,6 @@ const Draft = ({ navigation }) => {
             </View>
           </View>
           {/* {draftData && Array.isArray(draftData) && draftData.map((item, index)  => ( */}
-
           {draftData &&
             draftData?.map((item, index) => (
               <View style={styles.row} key={index}>
@@ -96,7 +85,6 @@ const Draft = ({ navigation }) => {
                   <Text style={styles.textColor}>({item.CustomerId})</Text>
                   <Text style={styles.textColor}>{item.CustomerAddress}</Text>
                 </View>
-
                 <View style={styles.iconColumn}>
                   <TouchableOpacity
                     style={styles.iconCell}
@@ -124,8 +112,8 @@ const Draft = ({ navigation }) => {
               </View>
             ))}
         </View>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

@@ -71,6 +71,53 @@ const DrawerNavigator = () => {
           ),
         }}
       />
+
+      <Drawer.Screen
+        name="Darft Screen"
+        component={Darft}
+        options={{
+          headerShown: true,
+          headerBackVisible: true,
+          title: "Darft",
+          headerStyle: { backgroundColor: "#72ddf7" },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+
+          drawerIcon: ({ focused, size }) => (
+            // <FontAwesome
+            //   name="file-export" // Change this to the actual icon name
+            //   size={size}
+            //   color={focused ? "black" : "gray"}
+            // />
+
+            <Image
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
+              source={require("../../../assets/notes.png")}
+            />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="Order Status"
+        component={OrderStatus}
+        options={{
+          // drawerLabel: "Customer List",
+          drawerIcon: ({ focused, size }) => (
+            // <FontAwesome
+            //   name="user-clock" // Change this to the actual icon name
+            //   size={size}
+            //   color={focused ? "black" : "gray"}
+            // />
+
+            <Image
+              style={{ height: 30, width: 30, resizeMode: "contain" }}
+              source={require("../../../assets/cargo.png")}
+            />
+          ),
+        }}
+      />
+
       <Drawer.Screen
         name="Customer List"
         component={CustomerList}
@@ -108,21 +155,22 @@ const DrawerNavigator = () => {
           ),
         }}
       />
-      <Drawer.Screen
-        name="Order Status"
-        component={OrderStatus}
-        options={{
-          // drawerLabel: "Customer List",
-          drawerIcon: ({ focused, size }) => (
-            // <FontAwesome
-            //   name="user-clock" // Change this to the actual icon name
-            //   size={size}
-            //   color={focused ? "black" : "gray"}
-            // />
 
+      <Drawer.Screen
+        name="No Order"
+        component={NoOrder}
+        options={{
+          headerShown: true,
+          headerBackVisible: true,
+          title: "No Order",
+          headerStyle: { backgroundColor: "#72ddf7" },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+
+          drawerIcon: ({ focused, size }) => (
             <Image
               style={{ height: 30, width: 30, resizeMode: "contain" }}
-              source={require("../../../assets/cargo.png")}
+              source={require("../../../assets/no-order.png")}
             />
           ),
         }}
@@ -148,55 +196,6 @@ const DrawerNavigator = () => {
         }}
       />
 
-<Drawer.Screen
-        name="No Order"
-        component={NoOrder}
-        options={{
-          headerShown: true,
-          headerBackVisible: true,
-          title: "No Order",
-          headerStyle: { backgroundColor: "#72ddf7" },
-          headerTintColor: "white",
-          headerTitleAlign: "center",
-
-          drawerIcon: ({ focused, size }) => (
-            <Image
-              style={{ height: 30, width: 30, resizeMode: "contain" }}
-              source={require("../../../assets/no-order.png")}
-            />
-          ),
-        }}
-      />
-
-      <Drawer.Screen
-        name="Darft Screen"
-        component={Darft}
-        options={{
-          headerShown: true,
-          headerBackVisible: true,
-          title: "Darft",
-          headerStyle: { backgroundColor: "#72ddf7" },
-          headerTintColor: "white",
-          headerTitleAlign: "center",
-
-          drawerIcon: ({ focused, size }) => (
-            // <FontAwesome
-            //   name="file-export" // Change this to the actual icon name
-            //   size={size}
-            //   color={focused ? "black" : "gray"}
-            // />
-
-            <Image
-              style={{ height: 30, width: 30, resizeMode: "contain" }}
-              source={require("../../../assets/notes.png")}
-            />
-          ),
-        }}
-      />
-
-
-
-      
       {/* <Drawer.Screen name="Order Collection" component={OrderCollection} /> */}
     </Drawer.Navigator>
   );

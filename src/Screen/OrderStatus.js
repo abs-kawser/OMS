@@ -21,6 +21,8 @@ import { useLogin } from "../Context/LoginProvider";
 import { useNavigation } from "@react-navigation/native";
 import { useCustomerInfo } from "../Context/CustomerProvider";
 
+
+
 const OrderStatus = () => {
   const navigation = useNavigation();
 
@@ -116,7 +118,6 @@ const OrderStatus = () => {
 
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
       const response = await fetch(
-        // `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${emp}&OrderDate=${orderDate.toISOString().substring(0, 10)}&DeliveryDate=${deliveryDate.toISOString().substring(0, 10)}&CustomerId=${customer}`,
         `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${
           userDetails.EmpCode
         }&OrderDate=${orderDate
@@ -162,25 +163,18 @@ const OrderStatus = () => {
       throw error;
     }
   };
+
+
+
   useEffect(() => {
     if (customerInformation?.CustomerId) {
       setCustomerId(customerInformation.CustomerId);
     }
   }, [customerInformation]);
-  // useEffect(() => {
-  //   // declare the data fetching function
-  //   const fetchData = async () => {
-  //     const data = await fetchOrderStatus();
-  //   }
-
-  //   // call the function
-  //   fetchData()
-  //     // make sure to catch any error
-  //     // .catch(console.error);
-  // }, [])
 
   return (
     <View style={styles.container}>
+      
       <View>
         <Text style={styles.label}>Order Date</Text>
         <TouchableOpacity
@@ -211,47 +205,6 @@ const OrderStatus = () => {
         </Modal>
       </View>
 
-      {/* <Text style={styles.label}>Order Date</Text>
-      <TouchableOpacity
-      style={styles.button}
-      onPress={() => showOrderDatepicker()}
-    >
-      {showOrderDatePicker ? (
-        <DateTimePicker
-          value={orderDate || new Date()} // Use a default date if orderDate is null
-          mode="date"
-          display="default"
-          onChange={(event, selectedDate) =>
-            handleOrderDate(event, selectedDate)
-          }
-        />
-      ) : (
-        <Text>
-          {orderDate
-            ? moment(orderDate).format("DD-MM-YYYY")
-            : 'DD-MM-YYYY'} 
-        </Text>
-      )}
-    </TouchableOpacity> */}
-
-      {/* <TouchableOpacity
-        style={styles.button}
-        onPress={() => showDatepicker("order")}
-      >
-        {showOrderDatePicker && (
-          <DateTimePicker
-            value={orderDate}
-            mode="date"
-            display="default"
-            onChange={(event, selectedDate) =>
-              handleOrderDate(event, selectedDate)
-            }
-          />
-        )}
-
-        <Text>{moment(orderDate).format("DD-MM-YYYY")}</Text>
-      </TouchableOpacity> */}
-
       {/* delivery date */}
       <View style={{ marginTop: 20 }}>
         <Text style={styles.label}> Delivery Date</Text>
@@ -273,29 +226,11 @@ const OrderStatus = () => {
             <Text>
               {deliveryDate
                 ? moment(deliveryDate).format("DD-MM-YYYY")
-                : "DD-MM-YYYY"}{" "}
+                : "DD-MM-YYYY"}
               {/* Show placeholder if deliveryDate is null */}
             </Text>
           )}
         </TouchableOpacity>
-
-        {/* <TouchableOpacity
-          style={styles.button}
-          onPress={() => showDatepicker("delivery")}
-        >
-          {showDeliveryDatePicker && (
-            <DateTimePicker
-              value={deliveryDate}
-              mode="date"
-              display="default"
-              onChange={(event, selectedDate) =>
-                handleDateDelivery(event, selectedDate)
-              }
-            />
-          )}
-          <Text>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
-
-        </TouchableOpacity> */}
       </View>
 
       {/* ===================================================================================================== */}
@@ -394,3 +329,80 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
 });
+
+// useEffect(() => {
+//   // declare the data fetching function
+//   const fetchData = async () => {
+//     const data = await fetchOrderStatus();
+//   }
+
+//   // call the function
+//   fetchData()
+//     // make sure to catch any error
+//     // .catch(console.error);
+// }, [])
+
+{
+  /* <Text style={styles.label}>Order Date</Text>
+      <TouchableOpacity
+      style={styles.button}
+      onPress={() => showOrderDatepicker()}
+    >
+      {showOrderDatePicker ? (
+        <DateTimePicker
+          value={orderDate || new Date()} // Use a default date if orderDate is null
+          mode="date"
+          display="default"
+          onChange={(event, selectedDate) =>
+            handleOrderDate(event, selectedDate)
+          }
+        />
+      ) : (
+        <Text>
+          {orderDate
+            ? moment(orderDate).format("DD-MM-YYYY")
+            : 'DD-MM-YYYY'} 
+        </Text>
+      )}
+    </TouchableOpacity> */
+}
+
+{
+  /* <TouchableOpacity
+        style={styles.button}
+        onPress={() => showDatepicker("order")}
+      >
+        {showOrderDatePicker && (
+          <DateTimePicker
+            value={orderDate}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) =>
+              handleOrderDate(event, selectedDate)
+            }
+          />
+        )}
+
+        <Text>{moment(orderDate).format("DD-MM-YYYY")}</Text>
+      </TouchableOpacity> */
+}
+
+{
+  /* <TouchableOpacity
+          style={styles.button}
+          onPress={() => showDatepicker("delivery")}
+        >
+          {showDeliveryDatePicker && (
+            <DateTimePicker
+              value={deliveryDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) =>
+                handleDateDelivery(event, selectedDate)
+              }
+            />
+          )}
+          <Text>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
+
+        </TouchableOpacity> */
+}

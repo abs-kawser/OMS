@@ -83,38 +83,19 @@ export default function CreateOrder() {
   );
 
   //field clearing done
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     setValue("");
-  //     // setOrderDate("")
-  //     // setDeliveryDate("")
-  //     setNote("");
+  
 
-  //     setCustomerInformation("");
-  //     setClient("");
-  //     setCustomerSelected(false);
-  //     setError("");
-  //     setCustomerError("");
-  //     setNoteError("");
-  //   }, [])
-  // );
-
-
-
-
-  // Inside your functional component
   useFocusEffect(
     React.useCallback(() => {
       setValue("");
-      // setOrderDate("");
-      // setDeliveryDate("");
+      setOrderDate(new Date());
+      setDeliveryDate(new Date());
       setNote("");
-  
-      // Check for navigation parameters and update state
+     // Check for navigation parameters and update state
       const params = route.params?.customerInfoList;
-      console.log("params",params);
+      console.log("params", params);
       if (params) {
-        setCustomerInformation(params|| "");
+        setCustomerInformation(params || "");
         setClient(params.client || "");
         setCustomerSelected(params.customerSelected || false);
         setError(params.error || "");
@@ -129,18 +110,18 @@ export default function CreateOrder() {
         setCustomerError("");
         setNoteError("");
       }
-    }, [route.params?.customerInfoList]) 
+    }, [route.params?.customerInfoList])
   );
-  
   
 
   // ================================================
-  const handleOrderDate = (event, selectedDate) => {
-    // if (selectedDate) {
+   // if (selectedDate) {
     //   setShowOrderDatePicker(false);
     //   const newDate = new Date(selectedDate);
     //   setOrderDate(newDate);
     // }
+
+  const handleOrderDate = (event, selectedDate) => {
     setShowOrderDatePicker(false);
     if (selectedDate) {
       setOrderDate(selectedDate);
@@ -346,7 +327,7 @@ export default function CreateOrder() {
           )} */}
         </View>
 
-        {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
+    {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
 
         {/* ================================================================= */}
         <View style={{ marginTop: 20 }}>
@@ -402,6 +383,7 @@ export default function CreateOrder() {
           </TouchableOpacity>
           {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
         </View>
+        
         {/* ===================================================================================================== */}
         <View style={{ marginTop: 15 }}>
           <Text style={styles.label}>Note</Text>
