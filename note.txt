@@ -102,13 +102,49 @@ welcomeText: {
 
 2: Got to your  to the android directory:cd android
 
-3:Run the following command to build the release APK:./gradlew assembleRelease
+3:Run the following command to build the release APK: ./gradlew assembleRelease
 
 It take some time to complete the process 
 
 4:After the build process completes, you can find the generated APK in the following path:
 
 YourAppName\android\app\build\outputs\apk\release\app-release.apk
+
+
+
+
+
+
+   <View style={styles.signupContainer}>
+            <Text style={styles.signupText}>Allredy have an account?</Text>
+            <TouchableOpacity style={styles.signupButton}>
+              <Text style={styles.signupButtonText} onPress={handleRegisterNow}>
+                Login
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+
+
+            signupContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 15,
+  },
+  signupText: {
+    color: "#333333",
+    marginRight: 5,
+  },
+  signupButton: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#3498db",
+  },
+  signupButtonText: {
+    color: "#3498db",
+    fontSize: 16,
+  },
+
 
 
 

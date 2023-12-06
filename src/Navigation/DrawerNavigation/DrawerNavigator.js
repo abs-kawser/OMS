@@ -78,7 +78,7 @@ const DrawerNavigator = () => {
         options={{
           headerShown: true,
           headerBackVisible: true,
-          title: "Darft",
+          title: "Draft",
           headerStyle: { backgroundColor: "#72ddf7" },
           headerTintColor: "white",
           headerTitleAlign: "center",

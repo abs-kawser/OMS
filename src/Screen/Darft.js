@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
+  ToastAndroid,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -48,6 +49,9 @@ const Draft = ({ navigation }) => {
       );
       // Update the state to reflect the changes
       setDraftData(updatedDraftData);
+
+      // Show a success message
+      ToastAndroid.show("Delete Successful", ToastAndroid.SHORT);
     } catch (error) {
       console.error("Error deleting item:", error);
     }

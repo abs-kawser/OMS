@@ -151,7 +151,9 @@ export default function ProductList() {
          
           data={filteredData}
           keyExtractor={(product, index) => index.toString()}
-          ListHeaderComponent={<Text style={styles.header}>Product List</Text>}
+        //   ListHeaderComponent={
+        //   <Text style={styles.header}>Product List</Text> 
+        // }
           renderItem={({ item, index }) => (
             <View
               style={[
@@ -171,7 +173,7 @@ export default function ProductList() {
                 Category: {item.ProductCategory}
               </Text>
 
-              <View style={styles.textContainer}>
+              <View style={styles.textContainerx}>
                 <Text style={styles.productInfo}>
                   Trade Price : Tk {item.MRP}
                 </Text>
@@ -289,8 +291,13 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+    opacity: 0.5,
   },
   textContainer: {
+    flexDirection: "row",
+    gap: 5,
+  },
+  textContainerx: {
     flexDirection: "row",
     gap: 10,
   },

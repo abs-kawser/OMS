@@ -95,7 +95,7 @@ const LoginPage = () => {
         </View> */}
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
           <View style={styles.header}>
-            <Text style={styles.headerText}>Welcome Back!</Text>
+            <Text style={styles.headerText}>Welcome Back</Text>
           </View>
 
           <TextInput
@@ -126,6 +126,8 @@ const LoginPage = () => {
               />
             </TouchableOpacity>
           </View>
+
+          {error !== "" && <Text style={styles.errorMessage}>{error}</Text>}
 
           {/* <Button
             mode="contained"
@@ -186,12 +188,14 @@ const LoginPage = () => {
             Register
           </Button> */}
 
-          {error !== "" && <Text style={styles.errorMessage}>{error}</Text>}
+          
         </Animatable.View>
       </View>
     </>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -200,16 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#36485f",
     justifyContent: "center",
   },
-  header: {
-    alignItems: "center",
-  },
-  headerText: {
-    fontSize: 24,
-    color: "#fcf6bd",
-    marginBottom: 20,
-    fontWeight: "700",
-    fontFamily: "Roboto-bold",
-  },
+
   formContainer: {
     // backgroundColor: "#fcf6bd",
     backgroundColor: "#F5F7F8",
@@ -253,7 +248,7 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 14,
     textAlign: "center",
-    marginVertical: 10,
+    // marginVertical: 10,
   },
 
   passwordContainer: {
@@ -279,11 +274,14 @@ const styles = StyleSheet.create({
 
   header: {
     marginBottom: 20,
+    alignItems: "center",
+
   },
   headerText: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#333333",
+    fontSize: 24,
+    color: "black",
+    fontWeight: "700",
+    fontFamily: "Roboto-bold",
   },
   signupContainer: {
     flexDirection: "row",
@@ -318,6 +316,8 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-bold",
   },
 });
+
+
 
 // const styles = StyleSheet.create({
 //   container: {

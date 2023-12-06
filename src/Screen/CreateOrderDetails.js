@@ -26,13 +26,10 @@ import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import TransitionLoader from "../../components/TransitionLoader";
 
-
 const CreateOrderDetails = ({ route }) => {
   const data = route.params?.data;
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
-
-
 
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
@@ -56,6 +53,8 @@ const CreateOrderDetails = ({ route }) => {
   const [quantity, setQuantity] = useState([]);
 
   const [showLoader, setShowLoader] = useState(false);
+
+  const [hasSelectedProducts, setHasSelectedProducts] = useState(false);
 
   // console.log("create order page data", data?.DeliveryDate);
   // console.log("customerInformation from contex api ", customerInformation);
@@ -209,8 +208,12 @@ const CreateOrderDetails = ({ route }) => {
     // Remove the product quantity from productQuantities
     setProductQuantities((prevQuantities) => {
       const updatedQuantities = { ...prevQuantities };
+      // delete updatedQuantities[productId];
       return updatedQuantities;
     });
+
+    // Check if there are any selected products left
+    setHasSelectedProducts(selectedProductIds.length > 0);
   };
 
   // ================================== main api calling ========================================================
@@ -224,6 +227,12 @@ const CreateOrderDetails = ({ route }) => {
   });
 
   const fetchCreatenewOrderData = async () => {
+    if (!orderQuantities || Object.keys(orderQuantities).length === 0) {
+      console.log("No data in orderQuantities. Cannot submit.");
+      ToastAndroid.show("No data in order list", ToastAndroid.LONG);
+      return;
+    }
+
     const requestData = {
       OrderDetails: transformedOrderDetails,
       CustomerId: data?.CustomerId,
@@ -269,11 +278,7 @@ const CreateOrderDetails = ({ route }) => {
         console.error("API request failed with status code:", response.status);
         ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
       }
-    } catch (error) {
-      // Handle network errors here if needed
-      // console.error("Network error:", error);
-      // ToastAndroid.show("Network error", ToastAndroid.LONG);
-    }
+    } catch (error) {}
   };
 
   // ================================== main api calling end ==================================================
@@ -342,11 +347,8 @@ const CreateOrderDetails = ({ route }) => {
     );
   }, [selectedProductIds, products]);
 
-
-
   return (
     <View style={styles.container}>
-      
       <View style={styles.userInformation}>
         <Text style={styles.userText1}>{customerInformation?.Name}</Text>
         <Text style={{ color: "black" }}>
@@ -361,11 +363,7 @@ const CreateOrderDetails = ({ route }) => {
             placeholder="Search..."
             onChangeText={(text) => setSearchTerm(text)}
           />
-          <Icon
-            name="search" // Font Awesome icon name
-            size={24}
-            style={styles.iconx}
-          />
+          <Icon name="search" size={24} style={styles.iconx} />
         </View>
       </View>
 
@@ -508,7 +506,15 @@ const CreateOrderDetails = ({ route }) => {
                     <Button color="#2E97A7" onPress={handleDraftSave}>
                       Save
                     </Button>
-                    <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
+                    <Button
+                      color="#2E97A7"
+                      onPress={fetchCreatenewOrderData}
+                      // disabled={
+                      //   !orderQuantities ||
+                      //   Object.keys(orderQuantities).length === 0
+                      // }
+                      // disabled={!hasSelectedProducts}
+                    >
                       Submit
                     </Button>
                   </View>
@@ -593,7 +599,6 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-
     color: "#403d39",
   },
   quantityContainer: {
@@ -619,17 +624,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  // button: {
-  //   fontSize: 24,
-  //   paddingHorizontal: 10,
-  // },
+
   input: {
     fontSize: 15,
     borderWidth: 1,
-    // borderBottomWidth:1,
     borderColor: "gray",
     padding: 5,
     minWidth: 40,
+    // borderBottomWidth:1,
   },
   totalPriceText: {
     color: "black",
@@ -669,10 +671,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
-    backgroundColor: "#f2f2f2", // Header background color
+    backgroundColor: "#f2f2f2", 
   },
   headerText: {
-    // fontWeight: "bold",
     fontSize: 17,
     color: "black",
   },
@@ -681,7 +682,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc", // Border color
+    borderBottomColor: "#ccc", 
   },
   cellText: {
     fontSize: 13,

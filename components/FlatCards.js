@@ -55,13 +55,13 @@ export default function FlatCards() {
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.card, styles.cardOne]}
-          onPress={() => navigation.navigate("Change Password")}
+          onPress={() => navigation.navigate("No Order")}
         >
           <Image
             style={{ height: 40, width: 40, resizeMode: "contain" }}
-            source={require("../assets/password.png")}
+            source={require("../assets/no-order.png")}
           />
-          <Text style={styles.card_text}>Password</Text>
+          <Text style={styles.card_text}>No Order</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.card, styles.cardOne]}

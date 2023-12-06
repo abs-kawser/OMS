@@ -13,7 +13,7 @@ export default function HomeScreen() {
   const { userDetails } = isLoggedIn;
 
   return (
-    <ScrollView style={{ backgroundColor: "#36485f" }}>
+    <ScrollView style={{ backgroundColor: "#f4f3ee" }}>
       <View style={styles.centeredContainer}>
         <Text style={styles.welcomeText}>Welcome to OMS</Text>
         {/* <Text style={styles.detailsText}>This is your details</Text> */}
@@ -25,14 +25,14 @@ export default function HomeScreen() {
         <Text style={styles.text}>Email: {userDetails.Email}</Text>
         <Text style={styles.text}>Mobile: {userDetails.MobileNo}</Text>
         <Text style={styles.text}>
-          Designation:{userDetails.DesignationName}
+          Designation: {userDetails.DesignationName}
         </Text>
         <Text style={styles.text}>Full Region: {userDetails.RegionName}</Text>
         {/* <Text style={styles.text}>EmpId: {userDetails.EmpId}</Text> */}
       </View>
 
       <View
-      // backgroundColor: "#90e0ef", elevation: 20,
+        // backgroundColor: "#90e0ef", elevation: 20,
         style={{ borderRadius: 10 }}
       >
         <FlatCards />

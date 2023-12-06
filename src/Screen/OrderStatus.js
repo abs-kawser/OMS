@@ -18,10 +18,8 @@ import { TextInput as PaperTextInput, Button } from "react-native-paper";
 import { Text } from "react-native-paper";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import { useLogin } from "../Context/LoginProvider";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCustomerInfo } from "../Context/CustomerProvider";
-
-
 
 const OrderStatus = () => {
   const navigation = useNavigation();
@@ -37,7 +35,7 @@ const OrderStatus = () => {
   const [data, setData] = useState([]);
 
   const [customerId, setCustomerId] = useState();
-
+  console.log("customerID", customerId);
   // context
 
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -70,7 +68,7 @@ const OrderStatus = () => {
       setOrderDate(selectedDate);
       // Attempt to set the delivery date
       if (selectedDate > deliveryDate) {
-        setError("Delivery date cannot be earlier than order date");
+        // setError("Delivery date cannot be earlier than order date");
       } else {
         setError("");
       }
@@ -157,24 +155,30 @@ const OrderStatus = () => {
       // setIsLoading(false);
       //return jsonData;
     } catch (error) {
-      setError("Please fill up those field.");
+      setError("Please fill up all fields");
       console.error("Error fetching data:", error);
 
       throw error;
     }
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      setOrderDate(null);
+      setDeliveryDate(null);
+      setCustomerId("");
+      setError("");
+    }, [])
+  );
 
-
-  useEffect(() => {
-    if (customerInformation?.CustomerId) {
-      setCustomerId(customerInformation.CustomerId);
-    }
-  }, [customerInformation]);
+  // useEffect(() => {
+  //   if (customerInformation?.CustomerId) {
+  //     setCustomerId(customerInformation.CustomerId);
+  //   }
+  // }, [customerInformation]);
 
   return (
     <View style={styles.container}>
-      
       <View>
         <Text style={styles.label}>Order Date</Text>
         <TouchableOpacity
@@ -241,14 +245,33 @@ const OrderStatus = () => {
           Customer ID
           {/* ({customerInformation?.CustomerId}) */}
         </Text>
-        <PaperTextInput
+        <TextInput
+          style={[styles.input, { height: 50 }]}
           mode="outlined"
           label="Customer ID"
           placeholder="Enter customer ID"
+          placeholderTextColor="black"
           onChangeText={(text) => setCustomerId(text)}
           keyboardType="numeric"
+          value={customerId}
           // value={customerId}
         />
+        
+      {error ? (
+        <Text
+          style={{
+            color: "red",
+            marginLeft:10,
+            fontSize: 15,
+             // marginTop: 20,
+             // alignSelf: "center",
+            // fontWeight: "700",
+            // fontFamily: "Roboto-bold",
+          }}
+        >
+          {error}
+        </Text>
+      ) : null}
         {/* Search Button */}
         <Button
           mode="contained"
@@ -258,21 +281,6 @@ const OrderStatus = () => {
           Search
         </Button>
       </View>
-
-      {error ? (
-        <Text
-          style={{
-            color: "red",
-            marginTop: 30,
-            alignSelf: "center",
-            fontSize: 15,
-            fontWeight: "700",
-            fontFamily: "Roboto-bold",
-          }}
-        >
-          {error}
-        </Text>
-      ) : null}
     </View>
   );
 };
@@ -280,6 +288,25 @@ const OrderStatus = () => {
 export default OrderStatus;
 
 const styles = StyleSheet.create({
+  input: {
+    // borderWidth: 1,
+    // borderColor: "#0096c7",
+    // borderRadius: 5,
+    // padding: 10,
+    // marginBottom: 16,
+    // fontSize: 16,
+    // width:"33%",
+    // height:40
+
+    borderWidth: 1,
+    borderColor: "#0096c7",
+    borderRadius: 5,
+    height: 40,
+    // backgroundColor: '#FFFFFF',
+    justifyContent: "center",
+    // marginBottom: 16,
+  },
+
   container: {
     flex: 1,
     padding: 16,
@@ -287,6 +314,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     fontWeight: "bold",
+    
     //alignSelf: "center",
   },
   input: {

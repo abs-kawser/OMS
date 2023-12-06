@@ -53,7 +53,7 @@ export default function CreateOrder() {
 
   //===//
   const [data, setData] = useState([]);
-  
+
   const [value, setValue] = useState(customerInfoList?.CustomerId);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -83,7 +83,6 @@ export default function CreateOrder() {
   );
 
   //field clearing done
-  
 
   useFocusEffect(
     React.useCallback(() => {
@@ -91,7 +90,7 @@ export default function CreateOrder() {
       setOrderDate(new Date());
       setDeliveryDate(new Date());
       setNote("");
-     // Check for navigation parameters and update state
+      // Check for navigation parameters and update state
       const params = route.params?.customerInfoList;
       console.log("params", params);
       if (params) {
@@ -112,14 +111,13 @@ export default function CreateOrder() {
       }
     }, [route.params?.customerInfoList])
   );
-  
 
   // ================================================
-   // if (selectedDate) {
-    //   setShowOrderDatePicker(false);
-    //   const newDate = new Date(selectedDate);
-    //   setOrderDate(newDate);
-    // }
+  // if (selectedDate) {
+  //   setShowOrderDatePicker(false);
+  //   const newDate = new Date(selectedDate);
+  //   setOrderDate(newDate);
+  // }
 
   const handleOrderDate = (event, selectedDate) => {
     setShowOrderDatePicker(false);
@@ -249,7 +247,7 @@ export default function CreateOrder() {
     TerritoryId: userDetails?.TerritoryId,
   };
 
-  console.log("reqdata",requestData);
+  console.log("reqdata", requestData);
 
   //Routing
 
@@ -291,7 +289,7 @@ export default function CreateOrder() {
             searchPlaceholder="Search..."
             value={value}
             onChange={(item) => {
-             // it comes from customer list 
+              // it comes from customer list
               setValue(item.CustomerId);
               setCustomerInformation(item);
               setCustomerError("");
@@ -309,11 +307,11 @@ export default function CreateOrder() {
                     Name: <Text style={styles.nameText}>{item.Name}</Text>
                   </Text>
                   <Text style={[styles.text, isSelected && styles.boldText]}>
-                    CustomerId:
+                    Customer Id:
                     <Text style={styles.customerIdText}>{item.CustomerId}</Text>
                   </Text>
                   <Text style={[styles.text, isSelected && styles.boldText]}>
-                    Address:
+                    Address:{" "}
                     <Text style={styles.addressText}>{item.Address}</Text>
                   </Text>
                 </View>
@@ -327,7 +325,7 @@ export default function CreateOrder() {
           )} */}
         </View>
 
-    {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
+        {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
 
         {/* ================================================================= */}
         <View style={{ marginTop: 20 }}>
@@ -383,13 +381,12 @@ export default function CreateOrder() {
           </TouchableOpacity>
           {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
         </View>
-        
+
         {/* ===================================================================================================== */}
         <View style={{ marginTop: 15 }}>
           <Text style={styles.label}>Note</Text>
           <TextInput
             // style={[styles.input, { height: 50, backgroundColor: '' }]}
-
             style={[styles.input, { height: 50 }]}
             multiline
             placeholder="Enter notes"
@@ -570,6 +567,8 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
 });
+
+
 
 // ========= api calling =========
 // const fetchCreatenewOrderData = async () => {

@@ -71,6 +71,11 @@ const NoOrder = () => {
     JSON.stringify(customerInformation, null, 2)
   );
 
+
+ 
+
+
+
   // ================================================
   const handleOrderDate = (event, selectedDate) => {
     // if (selectedDate) {
@@ -213,7 +218,6 @@ const NoOrder = () => {
       });
 
       const jsonData = await response.json();
-
       if (jsonData.Success === true) {
         ToastAndroid.show(jsonData.Message, ToastAndroid.SHORT);
       }
@@ -279,12 +283,11 @@ const NoOrder = () => {
                     Name: <Text style={styles.nameText}>{item.Name}</Text>
                   </Text>
                   <Text style={[styles.text, isSelected && styles.boldText]}>
-                    CustomerId:
+                    Customer Id:
                     <Text style={styles.customerIdText}>{item.CustomerId}</Text>
                   </Text>
                   <Text style={[styles.text, isSelected && styles.boldText]}>
-                    Address:
-                    <Text style={styles.addressText}>{item.Address}</Text>
+                    Address: <Text style={styles.addressText}>{item.Address}</Text>     
                   </Text>
                 </View>
               </>
@@ -316,7 +319,7 @@ const NoOrder = () => {
               }
             />
           )}
-          <Text>{moment(orderDate).format("DD-MM-YYYY")}</Text>
+          <Text style={{ color: "black" }}>{moment(orderDate).format("DD-MM-YYYY")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -337,7 +340,7 @@ const NoOrder = () => {
             />
           )}
 
-          <Text>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
+          <Text style={{ color: "black" }}>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
         </TouchableOpacity>
         {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
       </View>
@@ -348,6 +351,7 @@ const NoOrder = () => {
           style={[styles.input, { height: 50 }]}
           multiline
           placeholder="Enter notes"
+          placeholderTextColor="black"
           value={note}
           onChangeText={(text) => {
             setNote(text);

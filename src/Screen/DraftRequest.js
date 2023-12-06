@@ -460,7 +460,7 @@ const DraftRequest = ({ route }) => {
         </TouchableOpacity>
 
         <TouchableOpacity style={{ width: "50%" }}>
-          <Button color="#FF5733" onPress={handleOrderButtonPress}>
+          <Button color="#2E97A7" onPress={handleOrderButtonPress}>
             Order Details
           </Button>
         </TouchableOpacity>

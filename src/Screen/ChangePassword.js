@@ -4,16 +4,27 @@ import { TextInput as PaperTextInput, Button } from "react-native-paper";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 import base64 from "base-64";
 import { useNavigation } from "@react-navigation/native";
+import { useLogin } from "../Context/LoginProvider";
 
 const ChangePassword = () => {
   const navigation = useNavigation();
 
-  const [networkId, setNetworkId] = useState("");
+  const { isLoggedIn, setIsLoggedIn } = useLogin();
+
+  const { userDetails } = isLoggedIn;
+  console.log("userDetails", JSON.stringify(userDetails, null, 2));
+
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
 
   const SavePassword = async () => {
+    // Check if any field is empty
+    if (!oldPassword || !newPassword || !ConfirmPassword) {
+      ToastAndroid.show("Please fill in all fields.", ToastAndroid.SHORT);
+      return;
+    }
+
     if (newPassword !== ConfirmPassword) {
       // Passwords do not match, show a toast message
       ToastAndroid.show(
@@ -26,7 +37,7 @@ const ChangePassword = () => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
       const response = await fetch(
-        `${BASE_URL}/api/HomeApi/ChangePassword?networkId=${networkId}&OldPassword=${oldPassword}&NewPassword=${newPassword}`,
+        `${BASE_URL}/api/HomeApi/ChangePassword?networkId=${userDetails?.EmpNetworkId}&OldPassword=${oldPassword}&NewPassword=${newPassword}`,
         {
           method: "POST",
           headers: {
@@ -55,7 +66,7 @@ const ChangePassword = () => {
 
   return (
     <View style={styles.container}>
-      <PaperTextInput
+      {/* <PaperTextInput
         mode="outlined"
         label="User Id"
         style={styles.input}
@@ -64,7 +75,9 @@ const ChangePassword = () => {
         keyboardType="phone-pad"
         outlineColor="#00a6fb"
         activeOutlineColor="#60d394"
-      />
+      /> */}
+         
+
       <PaperTextInput
         mode="outlined"
         label="Old Password"
@@ -92,7 +105,7 @@ const ChangePassword = () => {
         value={ConfirmPassword.toString()}
         onChangeText={(text) => setConfirmPassword(text)}
         keyboardType="phone-pad"
-        textColor="gray"
+        // textColor="gray"
         outlineColor="#00a6fb"
         activeOutlineColor="#60d394"
       />
@@ -102,7 +115,7 @@ const ChangePassword = () => {
         style={styles.button}
         onPress={SavePassword}
       >
-        SAVE
+        UPDATE 
       </Button>
     </View>
   );
@@ -122,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F1EFEF",
   },
   button: {
-    width: "25%",
+    width: "40%",
     marginTop: 20,
     alignSelf: "center",
   },

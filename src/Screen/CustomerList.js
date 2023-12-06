@@ -194,7 +194,8 @@ export default function CustomerList() {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Search..."
+            placeholder="Enter customer name..."
+            placeholderTextColor="#001427"
             onChangeText={(text) => setSearchTerm(text)}
           />
           <Icon
@@ -205,7 +206,7 @@ export default function CustomerList() {
         </View>
 
         <View style={styles.headerAndButton}>
-          <Text style={styles.header}>Customer List </Text>
+          {/* <Text style={styles.header}>Customer List </Text> */}
           <TouchableOpacity>
             {/* <Button onPress={CreateOrder}>Create  Order</Button> */}
           </TouchableOpacity>
@@ -229,58 +230,6 @@ export default function CustomerList() {
             />
           </View>
         ) : (
-          // <ScrollView keyboardShouldPersistTaps={"handled"}>
-          //   {filteredData.map((Customer, index) => (
-          //     // <TouchableOpacity key={index}>
-          //     <View
-          //       key={index} // Set the key here
-          //       style={[
-          //         styles.productCard,
-          //         {
-          //           backgroundColor:
-          //             rainbowColors[index % rainbowColors.length],
-          //         },
-          //       ]}
-          //     >
-          //       <View style={styles.textContainer}>
-          //         <Text style={styles.productName}> {Customer.Name}</Text>
-          //         <Text style={styles.productInfo}>
-          //           ({Customer.CustomerId})
-          //         </Text>
-          //       </View>
-
-          //       <Text style={styles.Address}>
-          //         <Text>Address: </Text>
-          //         {Customer.Address}
-          //       </Text>
-
-          //       <Text style={styles.DepotName}>
-          //         <Text>Depot Name: </Text>
-          //         {Customer.DepotName}
-          //       </Text>
-
-          //       <View style={{ alignSelf: "center" }}>
-          //         <Button
-          //           title="Create Order"
-          //           buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
-          //           containerStyle={{
-          //             height: 40,
-          //             // width: 180,
-          //             marginTop: 20,
-          //             borderRadius: 10,
-          //             // marginLeft:170
-          //           }}
-          //           titleStyle={{
-          //             color: "white",
-          //             // marginHorizontal: 20,
-          //           }}
-          //           onPress={() => CreateOrder(Customer)}
-          //         />
-          //       </View>
-          //     </View>
-          //     // </TouchableOpacity>
-          //   ))}
-          // </ScrollView>
 
           <FlatList
             data={filteredData}
@@ -304,13 +253,11 @@ export default function CustomerList() {
                 </View>
 
                 <Text style={styles.Address}>
-                  <Text>Address:</Text>
-                  {Customer?.Address}
+                <Text>Address:</Text> {Customer?.Address}                 
                 </Text>
 
                 <Text style={styles.DepotName}>
-                  <Text>Depot Name:</Text>
-                  {Customer?.DepotName}
+                <Text>Depot Name:</Text> {Customer?.DepotName}                
                 </Text>
 
                 <View style={{ alignSelf: "flex-start" ,}}>
@@ -410,25 +357,35 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
+    // flexDirection: "row",
+    // alignItems: "center",
+    // borderColor: "gray",
+    // borderWidth: 1,
+    // margin: 10,
+    // padding: 5,
+
     flexDirection: "row",
     alignItems: "center",
-    borderColor: "gray",
+    borderColor: "#242423",
     borderWidth: 1,
     margin: 10,
     padding: 5,
+    borderRadius:15,
   },
   input: {
     flex: 1,
     height: 40,
     padding: 10,
+    color:"black"
   },
   icon: {
     marginRight: 10,
+    opacity: 0.5,
   },
 
   textContainer: {
     flexDirection: "row",
-    gap: 10,
+    gap: 5,
   },
   DepotName: {
     marginTop: 10,

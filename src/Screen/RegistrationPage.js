@@ -20,45 +20,80 @@ import * as Animatable from "react-native-animatable";
 import { color } from "@rneui/base";
 import Icon from "react-native-vector-icons/FontAwesome";
 
+import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
+
 const RegistrationPage = ({ navigation }) => {
   const [userId, setUserId] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
-  console.log("USer id", userId);
 
   // Add more state variables as needed for handling API response and loading state
   const [isLoading, setIsLoading] = useState(false);
-  const [registrationResponse, setRegistrationResponse] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleRegistration = async () => {
-    // Validate user input here if needed
-    //setIsLoading(true);
+  // const handleRegistration = async () => {
+  //   try {
+  //     const response = await fetchRegistrationData(
+  //       setIsLoading,
+  //       networkId,
+  //       mobile,
+  //       password
+  //     );
+  //     console.log("API response This", response);
+
+  //     // if (response.Success === false) {
+  //     //   setError(response.Message);
+  //     // }
+  //   } catch (error) {
+  //     console.error("Error handling registration:", error);
+  //   }
+  // };
+
+  const fetchRegistrationData = async () => {
     try {
-      const response = await fetchRegistrationData(
-        setIsLoading,
-        userId,
-        mobile,
-        password
-      );
-      setRegistrationResponse(response);
-      console.log("API response:", response);
+      const requestData = {
+        // CustomerId: 318233,
+        NetworkId: userId,
+        MobileNo: mobile,
+        Password: password,
+      };
+
+      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+
+      const response = await fetch(`${BASE_URL}/api/HomeApi/Registration`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader,
+        },
+        body: JSON.stringify(requestData),
+      });
+      const jsonData = await response.json();
+      console.log("this is api response", JSON.stringify(jsonData, null, 2));
+
+      if (jsonData.Success === false) {
+        setError(jsonData.Message);
+      }
     } catch (error) {
-      //Alert.alert('Error', 'Failed to register. Please try again later.');
-      console.error(error);
+      console.error("Error fetching data:", error);
+
+      // setIsLoading(false);
+      // setIsLoading(false);
+      throw error;
     }
   };
 
-  const isRegisterDisabled = !userId || !password || !mobile;
+  const isRegisterDisabled = !setUserId || !password || !mobile;
 
   return (
     <>
       <View style={styles.container}>
-        {/* <Image source={require("../../assets/omsRound.png")} /> */}
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Sign Up Here</Text>
-        </View>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Sign Up Here</Text>
+          </View>
+
           <TextInput
             style={styles.input}
             placeholder="User ID"
@@ -96,52 +131,37 @@ const RegistrationPage = ({ navigation }) => {
             </TouchableOpacity>
           </View>
 
-          {/* <Button
-            // icon="arrow-right"
-            mode="contained"
-            onPress={handleRegistration}
-            buttonColor="#00b4d8"
-            contentStyle={{ flexDirection: "row-reverse" }}
-            style={styles.buttonRegister}
+          {error !== "" && <Text style={styles.errorMessage}>{error}</Text>}
+
+          <TouchableOpacity
+            style={[
+              styles.loginButton,
+              {
+                backgroundColor: isRegisterDisabled ? "#B3B3B3" : "#00b4d8",
+              },
+            ]}
+            onPress={fetchRegistrationData}
+            disabled={isRegisterDisabled}
           >
-            Register
-          </Button> */}
+            <Text style={styles.loginButtonText}>Register</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-      style={[
-        styles.loginButton,
-        {
-          backgroundColor: isRegisterDisabled ? "#B3B3B3" : "#00b4d8",
-        },
-      ]}
-      onPress={handleRegistration}
-      disabled={isRegisterDisabled}
-    >
-      <Text style={styles.loginButtonText}>Register</Text>
-    </TouchableOpacity>
-
-          <Text
+          {/* <Text
             style={{
               alignSelf: "center",
               fontSize: 18,
-              color: "#495867",
+              color: "black",
               fontWeight: "700",
               fontFamily: "Roboto-bold",
+              // marginTop:10
             }}
           >
             or
           </Text>
 
-          {/* <Button
-            mode="contained"
-            buttonColor="#00a6fb"
-            style={styles.button}
-            onPress={() => navigation.goBack()}
-          >
-            Login
-          </Button> */}
 
-        <TouchableOpacity
+
+          <TouchableOpacity
             style={[
               styles.loginButton,
               // {
@@ -151,14 +171,19 @@ const RegistrationPage = ({ navigation }) => {
             onPress={() => navigation.goBack()}
           >
             <Text style={styles.loginButtonText}>Login</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
-          {isLoading && <Text>Loading...</Text>}
-          {registrationResponse && (
-            <Text style={{ color: "red", emity: "" }}>
-              {JSON.stringify(registrationResponse.Message)}
-            </Text>
-          )}
+          <View style={styles.signupContainer}>
+            <Text style={styles.signupText}>Already have an account?</Text>
+            <TouchableOpacity style={styles.signupButton}>
+              <Text
+                style={styles.signupButtonText}
+                onPress={() => navigation.goBack()}
+              >
+                Login
+              </Text>
+            </TouchableOpacity>
+          </View>
         </Animatable.View>
       </View>
     </>
@@ -176,9 +201,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
-    fontSize: 30,
-    color: "#fcf6bd",
-    marginBottom: 20,
+    fontSize: 24,
+    color: "black",
+    marginBottom: 10,
     fontWeight: "700",
     fontFamily: "Roboto-bold",
   },
@@ -191,7 +216,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 5,
@@ -219,7 +244,7 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     flex: 1,
-    height: 40,
+    height: 50,
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 5,
@@ -231,13 +256,13 @@ const styles = StyleSheet.create({
     top: 20,
     right: 10,
   },
-  // 
+  //
   loginButton: {
     backgroundColor: "#3498db",
     borderRadius: 10,
     padding: 15,
     alignItems: "center",
-    marginTop: 15,
+    // marginTop: 15,
   },
   loginButtonText: {
     color: "#FFFFFF",
@@ -245,97 +270,31 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontFamily: "Roboto-bold",
   },
+  errorMessage: {
+    // padding:10,
+    color: "red",
+    fontSize: 15,
+    textAlign: "center",
+    padding: 5,
+  },
+
+  signupContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 15,
+  },
+  signupText: {
+    color: "#333333",
+    marginRight: 5,
+  },
+  signupButton: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#3498db",
+  },
+  signupButtonText: {
+    color: "#3498db",
+    fontSize: 16,
+  },
 });
 export default RegistrationPage;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "lightblue",
-//     justifyContent: "center",
-//     // alignItems: "center",
-//   },
-//   header: {
-//     //marginBottom: 20,
-//   },
-//   headerText: {
-//     fontSize: 24,
-//     fontWeight: "bold",
-//     color: "white",
-//   },
-//   commontextContainer: {
-//     marginTop: "20%",
-//     //transform: [{ rotate: '-15deg' }]
-//   },
-
-//   commonText: {
-//     fontSize: 35,
-//     // fontWeight: "bold",
-//     color: "white",
-//     marginLeft: 30,
-//     //marginRight: "50%",
-//   },
-
-//   content: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//   },
-//   imageContainer: {
-//     flex: 1,
-//     alignItems: "center",
-//   },
-//   image: {
-//     width: 120,
-//     height: 120,
-//     resizeMode: "cover",
-//   },
-//   form: {
-//     flex: 1,
-//     padding: 10,
-//     backgroundColor: "#cae9ff",
-//     padding: 50,
-//     margin: 10,
-//     borderRadius: 20,
-//     // paddingHorizontal: 20,
-//   },
-//   input: {
-//     height: 40,
-//     // backgroundColor: 'rgba(255, 255, 255, 0.2)',
-//     backgroundColor: "white",
-//     marginBottom: 10,
-//     color: "black",
-//     paddingHorizontal: 10,
-//     borderRadius: 5,
-//     width: 350,
-//     alignSelf: "center",
-//   },
-//   registerButton: {
-//     flexDirection: "row",
-//     padding: 12,
-//     alignItems: "center",
-//     justifyContent: "center",
-//     width: "60%",
-//     backgroundColor: "#ffe66d",
-//     paddingVertical: 12,
-//     paddingHorizontal: 24,
-//     borderRadius: 15,
-//     alignItems: "center",
-//     alignSelf: "center",
-//     marginBottom: 16,
-//   },
-//   registerButtonText: {
-//     fontSize: 15,
-//     //fontWeight: 'bold',
-//     color: "#5c677d",
-//     fontWeight: "bold",
-//   },
-
-//   alredy: {
-//     marginTop: 20, // Adjust the margin as needed
-//     fontSize: 16,
-//     fontWeight: "bold",
-//     color: "white",
-//     textAlign: "center",
-//     color: "black",
-//   },
-// });
