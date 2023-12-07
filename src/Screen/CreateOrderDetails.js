@@ -335,19 +335,20 @@ const CreateOrderDetails = ({ route }) => {
     }
   };
 
+
   // ==================================
   useEffect(() => {
     // Inside this effect, filter and set the selected products based on product IDs
     const selectedProducts = selectedProductIds.map((productId) => {
       return products.find((product) => product.ProductId === productId);
     });
-
     setSelectedProduct(
       selectedProducts.filter((product) => product !== undefined)
     );
   }, [selectedProductIds, products]);
 
   return (
+    
     <View style={styles.container}>
       <View style={styles.userInformation}>
         <Text style={styles.userText1}>{customerInformation?.Name}</Text>
@@ -525,10 +526,13 @@ const CreateOrderDetails = ({ route }) => {
         )}
       </>
 
+
+
       <Text style={styles.totalPriceText}>
         Total Price: {calculateTotalPrice()} Tk
       </Text>
     </View>
+
   );
 };
 export default CreateOrderDetails;
@@ -671,7 +675,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
-    backgroundColor: "#f2f2f2", 
+    backgroundColor: "#f2f2f2",
   },
   headerText: {
     fontSize: 17,
@@ -682,16 +686,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc", 
+    borderBottomColor: "#ccc",
   },
   cellText: {
     fontSize: 13,
     flex: 1,
     fontWeight: "bold",
     color: "#00050e",
-
-    // color: "#1985a1",
-    // textAlign: 'center',
   },
 
   quantity: {

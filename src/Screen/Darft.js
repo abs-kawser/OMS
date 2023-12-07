@@ -66,6 +66,7 @@ const Draft = ({ navigation }) => {
   };
 
   return (
+    
     <SafeAreaView>
       <ScrollView>
         <View style={styles.container}>
@@ -118,6 +119,7 @@ const Draft = ({ navigation }) => {
         </View>
       </ScrollView>
     </SafeAreaView>
+
   );
 };
 

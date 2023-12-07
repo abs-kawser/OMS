@@ -25,6 +25,9 @@ import { useCustomerInfo } from "../Context/CustomerProvider";
 import { Button } from "@rneui/themed";
 import { useFocusEffect } from "@react-navigation/native";
 
+
+
+
 export default function CreateOrder() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
 
@@ -268,6 +271,8 @@ export default function CreateOrder() {
     navigation.navigate("Order Details", { data: requestData });
   };
 
+
+  
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -324,9 +329,7 @@ export default function CreateOrder() {
             <Text style={styles.errorMessage}>Client name is required ***</Text>
           )} */}
         </View>
-
         {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
-
         {/* ================================================================= */}
         <View style={{ marginTop: 20 }}>
           <Text style={styles.label}>Order Date</Text>
@@ -417,7 +420,9 @@ export default function CreateOrder() {
       </ScrollView>
     </View>
   );
-}
+};
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -474,7 +479,8 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: "red",
     fontSize: 18,
-    marginTop: 5, // Adjust the spacing from the input field
+    marginTop: 5, 
+    // Adjust the spacing from the input field
     //fontStyle: 'italic', // You can use italic for error messages
   },
 

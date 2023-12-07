@@ -22,7 +22,6 @@ import LottieView from "lottie-react-native";
 import axios from "axios";
 
 export default function CustomerList() {
-
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
 
   const navigation = useNavigation();
@@ -191,6 +190,8 @@ export default function CustomerList() {
     <>
       {/* implement search  part*/}
       <View style={styles.container}>
+
+        
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -230,7 +231,6 @@ export default function CustomerList() {
             />
           </View>
         ) : (
-
           <FlatList
             data={filteredData}
             keyExtractor={(Customer, index) => index.toString()} // You can use a more unique key if available
@@ -253,14 +253,14 @@ export default function CustomerList() {
                 </View>
 
                 <Text style={styles.Address}>
-                <Text>Address:</Text> {Customer?.Address}                 
+                  <Text>Address:</Text> {Customer?.Address}
                 </Text>
 
                 <Text style={styles.DepotName}>
-                <Text>Depot Name:</Text> {Customer?.DepotName}                
+                  <Text>Depot Name:</Text> {Customer?.DepotName}
                 </Text>
 
-                <View style={{ alignSelf: "flex-start" ,}}>
+                <View style={{ alignSelf: "flex-start" }}>
                   <Button
                     title="Create Order"
                     // buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
@@ -312,8 +312,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginLeft: 15,
     fontWeight: "700",
-    fontFamily: 'Roboto-bold',
-    color:"black"
+    fontFamily: "Roboto-bold",
+    color: "black",
   },
   productCard: {
     backgroundColor: "#fff",
@@ -370,13 +370,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 10,
     padding: 5,
-    borderRadius:15,
+    borderRadius: 15,
   },
   input: {
     flex: 1,
     height: 40,
     padding: 10,
-    color:"black"
+    color: "black",
   },
   icon: {
     marginRight: 10,

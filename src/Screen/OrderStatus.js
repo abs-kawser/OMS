@@ -313,8 +313,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 18,
-    fontWeight: "bold",
-    
+    fontWeight: "bold",   
     //alignSelf: "center",
   },
   input: {
@@ -357,6 +356,8 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
 });
+
+
 
 // useEffect(() => {
 //   // declare the data fetching function

@@ -26,6 +26,7 @@ import { Button } from "@rneui/themed";
 import { useFocusEffect } from "@react-navigation/native";
 
 const NoOrder = () => {
+
   const route = useRoute();
   const navigation = useNavigation();
   //comeing from contex
@@ -35,14 +36,15 @@ const NoOrder = () => {
   const customerInfoList = route.params?.customerInfoList;
 
   console.log("customer Info from Create Order page", customerInfoList);
+  console.log("CustomerId value", value);
+  console.log("orderDate", orderDate);
+
   const [data, setData] = useState([]);
   const [value, setValue] = useState(customerInfoList?.CustomerId);
-  console.log("CustomerId value", value);
   const [orderDate, setOrderDate] = useState(new Date());
   const [deliveryDate, setDeliveryDate] = useState(new Date());
   const [note, setNote] = useState("");
 
-  console.log("orderDate", orderDate);
 
   //take sate for validtion
   const [error, setError] = useState("");
@@ -376,6 +378,8 @@ const NoOrder = () => {
 
 export default NoOrder;
 
+
+
 const styles = StyleSheet.create({
   container: {
     padding: 16,
@@ -519,6 +523,10 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
 });
+
+
+
+
 
 //const customerId = route.params?.customerId;
 

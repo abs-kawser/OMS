@@ -382,8 +382,6 @@ const DraftRequest = ({ route }) => {
   //   }
   // };
 
-
-  
   const handleDeleteOrderItem = async (productId) => {
     try {
       // Create a copy of the draftData array
@@ -425,8 +423,6 @@ const DraftRequest = ({ route }) => {
   };
 
   return (
-
-
     <View style={styles.container}>
       <View style={styles.userInformation}>
         <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
@@ -471,7 +467,7 @@ const DraftRequest = ({ route }) => {
           <View style={styles.loadingContainer}>
             {/* <ActivityIndicator size="large" color="#0077b6" /> */}
             <LottieView
-              source={require("../../Lottie/animation_ln8n5kbe.json")} 
+              source={require("../../Lottie/animation_ln8n5kbe.json")}
               autoPlay
               loop
               style={styles.lottiContainer}
@@ -637,14 +633,10 @@ const DraftRequest = ({ route }) => {
         Total Price: {calculateTotalPrice()}
       </Text> */}
     </View>
-
   );
-
-
 };
 
 export default DraftRequest;
-
 
 const styles = StyleSheet.create({
   container: {
@@ -795,12 +787,8 @@ const styles = StyleSheet.create({
     // flex:1,
   },
   headerText: {
-    // fontWeight: "bold",
     fontSize: 17,
     color: "white",
-
-    // borderWidth:1,
-
     flex: 1,
     textAlign: "center",
   },
