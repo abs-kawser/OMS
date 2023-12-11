@@ -8,10 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ToastAndroid,
-  ActivityIndicator,
-  Alert,
 } from "react-native";
-import Toast from "react-native-toast-message";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLogin } from "../Context/LoginProvider";
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
@@ -24,10 +21,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import { Button } from "@rneui/themed";
 import { useFocusEffect } from "@react-navigation/native";
+// import Toast from "react-native-toast-notifications";
+import {useToast} from 'react-native-toast-notifications';
 
 const NoOrder = () => {
-
+   // toast message
+   const toast = useToast();
   const route = useRoute();
+
   const navigation = useNavigation();
   //comeing from contex
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -186,6 +187,8 @@ const NoOrder = () => {
     //fetchCustomerData();
   }, [userDetails]);
 
+
+
   //=======================no order api calling ==========
 
   const fetchNorderData = async () => {
@@ -201,14 +204,29 @@ const NoOrder = () => {
     };
 
     try {
+
+      // if (!value || !note || !deliveryDate || !orderDate) {
+      //   // setError('Please fill in both username and password fields');
+      //   ToastAndroid.show(
+      //     "Please fill up all input fields",
+      //     ToastAndroid.SHORT
+      //   );
+      //   return;
+      // }
+
       if (!value || !note || !deliveryDate || !orderDate) {
-        // setError('Please fill in both username and password fields');
-        ToastAndroid.show(
-          "Please fill up all input fields",
-          ToastAndroid.SHORT
-        );
+        // toast.show({
+        //   text: 'Please fill up all input fields',
+        //   position: 'bottom',
+        //   duration: 3000,
+        //   textStyle: { fontSize: 15 },
+        // });
+        toast.show('Please fill up all fields❌',{type: 'normal', duration: 2000});
+        //toast.show('successfully submited',{type: 'normal', duration: 2000});
+
         return;
       }
+
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
       const response = await fetch(`${BASE_URL}/api/NoOrderApi/CreateNoOrder`, {
         method: "POST", // Specify the HTTP method
@@ -221,8 +239,15 @@ const NoOrder = () => {
 
       const jsonData = await response.json();
       if (jsonData.Success === true) {
-        ToastAndroid.show(jsonData.Message, ToastAndroid.SHORT);
+        // ToastAndroid.show(jsonData.Message, ToastAndroid.SHORT);
+        toast.show('successfully submited',{type: 'success', duration: 2000});
+
       }
+
+      // if (jsonData.Success === true) {
+      //  toast.show(jsonData.Message , {type: 'normal', duration: 1000});
+
+      // }
 
       console.log(
         "this from create order page ",
@@ -370,7 +395,7 @@ const NoOrder = () => {
          <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity> */}
       <TouchableOpacity style={{ marginTop: 25 }}>
-        <Button onPress={fetchNorderData}>Submit</Button>
+        <Button color="#2E97A7" onPress={fetchNorderData}>Submit</Button>
       </TouchableOpacity>
     </ScrollView>
   );

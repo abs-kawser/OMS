@@ -6,6 +6,7 @@ import LoginProvider from "./src/Context/LoginProvider";
 import AppNav from "./src/Navigation/Auth/AppNav";
 import CustomerProvider from "./src/Context/CustomerProvider";
 import DraftProvider from "./src/Context/DraftProvider";
+import { ToastProvider } from "react-native-toast-notifications";
 
 const App = () => {
   return (
@@ -13,7 +14,9 @@ const App = () => {
       <CustomerProvider>
         <DraftProvider>
           <PaperProvider>
-            <AppNav />
+            <ToastProvider>
+              <AppNav />
+            </ToastProvider>
           </PaperProvider>
         </DraftProvider>
       </CustomerProvider>

@@ -65,7 +65,7 @@ const Draft = ({ navigation }) => {
     // Alert.alert(selectedItem.Note);
   };
 
-  return (
+  return (  
     
     <SafeAreaView>
       <ScrollView>

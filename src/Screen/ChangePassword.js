@@ -66,16 +66,9 @@ const ChangePassword = () => {
 
   return (
     <View style={styles.container}>
-      {/* <PaperTextInput
-        mode="outlined"
-        label="User Id"
-        style={styles.input}
-        value={networkId.toString()}
-        onChangeText={(text) => setNetworkId(text)}
-        keyboardType="phone-pad"
-        outlineColor="#00a6fb"
-        activeOutlineColor="#60d394"
-      /> */}
+   
+      
+        {/* change password icon  */}
          
 
       <PaperTextInput

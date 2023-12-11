@@ -5,7 +5,7 @@ import {
   ScrollView,
   TextInput,
   ActivityIndicator,
-  FlatList
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -15,13 +15,11 @@ import { fetchProductData } from "../Api/ProductListApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LottieView from "lottie-react-native";
 
-
-
 export default function ProductList() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
-  
+
   //filter part
   const [filteredData, setFilteredData] = useState([products]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,9 +48,7 @@ export default function ProductList() {
         console.error("Error retrieving data from AsyncStorage:", error);
       }
     };
-
     fetchDataFromStorage();
-
     const getProductList = async () => {
       try {
         const productList = await fetchProductData(setIsLoading);
@@ -70,7 +66,7 @@ export default function ProductList() {
   return (
     <>
       {/* implement search  part*/}
-      <View style={styles.inputContainer}>
+      {/* <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           placeholder="Enter product name..."
@@ -82,112 +78,79 @@ export default function ProductList() {
           size={24}
           style={styles.icon}
         />
-      </View>
+      </View> */}
 
-      {isLoading ? (
-        
-        // <ActivityIndicator
-        //   size="large"
-        //   color="#0000ff"
-        //   // colors={COLORS.primary}
-        //   style={styles.activityIndicator}
-        // />
+<View style={styles.container}>
 
+
+
+    <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter product name..."
+            placeholderTextColor="#001427"
+            onChangeText={(text) => setSearchTerm(text)}
+          />
+          <Icon
+            name="search" // Font Awesome icon name
+            size={24}
+            style={styles.icon}
+          />
+        </View>
+
+      {isLoading ? (  
         <View style={styles.loadingContainer}>
           {/* <ActivityIndicator size="large" color="#0077b6" /> */}
           <LottieView
-            source={require("../../Lottie/Animation8.json")} // Replace with your animation file path
+            source={require("../../Lottie/Animation8.json")} 
             autoPlay
             loop
             style={styles.lottiContainer}
           />
         </View>
       ) : (
-        // <ScrollView style={{flex:1}}>
-        //   <Text style={styles.header}>Product List</Text>
+        <View style={{ marginBottom: 100 }}>
+          <FlatList
+            data={filteredData}
+            keyExtractor={(product, index) => index.toString()}
+            //   ListHeaderComponent={
+            //   <Text style={styles.header}>Product List</Text>
+            // }
+            renderItem={({ item, index }) => (
+              <View
+                style={[
+                  styles.productCard,
+                  {
+                    backgroundColor:
+                      rainbowColors[index % rainbowColors.length],
+                  },
+                ]}
+              >
+                <View style={styles.textContainer}>
+                  {/* <Text>{index+1}.</Text> */}
+                  <Text style={styles.productName}>{item.Name}</Text>
+                  <Text style={styles.productInfo}>({item.ProductCode})</Text>
+                </View>
 
-        //   {filteredData.map((product, index) => (
-        //     <View
-        //       key={index}
-        //       style={[
-        //         styles.productCard,
-        //         {
-        //           backgroundColor: rainbowColors[index % rainbowColors.length],
-        //         },
-        //       ]}
-        //     >
-        //       <View style={styles.textContainer}>
-        //         <Text style={styles.productName}>{product.Name}</Text>
-        //         <Text style={styles.productInfo}>({product.ProductCode})</Text>
-        //       </View>
-
-        //       {/* <Text style={styles.productName}>Name:{product.Name}</Text>
-        //     <Text style={styles.productInfo}>
-        //       ProductCode:{product.ProductCode}
-        //     </Text> */}
-
-        //       <Text style={styles.Category}>
-        //         Category: {product.ProductCategory}
-        //       </Text>
-
-        //       <View style={styles.textContainer}>
-        //         <Text style={styles.productInfo}>
-        //           Trade Price : Tk {product.MRP}
-        //         </Text>
-        //         <Text style={styles.tradeLicense}>
-        //           Pack Size: {product.PackSize}
-        //         </Text>
-        //       </View>
-        //     </View>
-        //   ))}
-        // </ScrollView>
-
-
-
-        <View  style={{marginBottom:100 }}>
-
-    
-        <FlatList
-         
-          data={filteredData}
-          keyExtractor={(product, index) => index.toString()}
-        //   ListHeaderComponent={
-        //   <Text style={styles.header}>Product List</Text> 
-        // }
-          renderItem={({ item, index }) => (
-            <View
-              style={[
-                styles.productCard,
-                {
-                  backgroundColor: rainbowColors[index % rainbowColors.length],
-                },
-              ]}
-            >
-              <View style={styles.textContainer}>
-                {/* <Text>{index+1}.</Text> */}
-                <Text style={styles.productName}>{item.Name}</Text>
-                <Text style={styles.productInfo}>({item.ProductCode})</Text>
-              </View>
-
-              <Text style={styles.Category}>
-                Category: {item.ProductCategory}
-              </Text>
-
-              <View style={styles.textContainerx}>
-                <Text style={styles.productInfo}>
-                  Trade Price : Tk {item.MRP}
+                <Text style={styles.Category}>
+                  Category: {item.ProductCategory}
                 </Text>
-                <Text style={styles.tradeLicense}>
-                  Pack Size: {item.PackSize}
-                </Text>
+
+                <View style={styles.textContainerx}>
+                  <Text style={styles.productInfo}>
+                    Trade Price : Tk {item.MRP}
+                  </Text>
+                  <Text style={styles.tradeLicense}>
+                    Pack Size: {item.PackSize}
+                  </Text>
+                </View>
               </View>
-            </View>
-          )}
-        />
+            )}
+          />
+        </View>
+      )}
 
 </View>
-
-      )}
 
       {/* total */}
       <View style={styles.bottomTextContainer}>
@@ -206,9 +169,11 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    padding: 16,
-    borderRadius: 1,
-    marginBottom:120,
+    // padding: 16,
+
+
+    // borderRadius: 1,
+    // marginBottom: 120,
   },
   header: {
     fontSize: 20,
@@ -216,10 +181,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginLeft: 25,
     fontWeight: "700",
-    fontFamily: 'Roboto-bold',
-    color:"black"
-
-
+    fontFamily: "Roboto-bold",
+    color: "black",
   },
   productCard: {
     marginLeft: 22,
@@ -274,25 +237,31 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
+ 
+
+
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     borderColor: "#242423",
     borderWidth: 1,
-    margin: 10,
+    marginHorizontal: 20,
+    marginVertical: 15,
     padding: 5,
-    borderRadius:15,
+    borderRadius: 15,
   },
   input: {
     flex: 1,
     height: 40,
     padding: 10,
-    color:"black"
+    color: "black",
   },
   icon: {
     marginRight: 10,
     opacity: 0.5,
   },
+
+
   textContainer: {
     flexDirection: "row",
     gap: 5,
@@ -327,7 +296,6 @@ const styles = StyleSheet.create({
 
 
 
-
 // ============Fetch Api manualy ==================\\
 // //fetch api
 // const fetchProductData = async () => {
@@ -352,3 +320,12 @@ const styles = StyleSheet.create({
 //     throw error;
 //   }
 // };
+
+
+     // <ActivityIndicator
+        //   size="large"
+        //   color="#0000ff"
+        //   // colors={COLORS.primary}
+        //   style={styles.activityIndicator}
+        // />
+

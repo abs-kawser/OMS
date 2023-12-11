@@ -6,6 +6,7 @@ import FanseCards from "../../components/FanseCards";
 import ElevatedCards from "../../components/ElevatedCards";
 import { useLogin } from "../Context/LoginProvider";
 import FlatCards from "../../components/FlatCards";
+import LinearGradient from "react-native-linear-gradient";
 
 export default function HomeScreen() {
   //it comes from contex
@@ -13,6 +14,7 @@ export default function HomeScreen() {
   const { userDetails } = isLoggedIn;
 
   return (
+    //
     <ScrollView style={{ backgroundColor: "#f4f3ee" }}>
       <View style={styles.centeredContainer}>
         <Text style={styles.welcomeText}>Welcome to OMS</Text>

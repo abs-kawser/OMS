@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: "#caf0f8",
-    padding: 16,
+    // padding: 16,
   },
   headerAndButton: {
     flexDirection: "row",
@@ -316,14 +316,27 @@ const styles = StyleSheet.create({
     color: "black",
   },
   productCard: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    // backgroundColor: "#fff",
+    // borderRadius: 10,
+    // padding: 16,
+    // marginBottom: 15,
+    // shadowColor: "#000",
+    // shadowOpacity: 0.2,
+    // shadowRadius: 4,
+    // elevation: 3,
+
+    marginLeft: 22,
+    width: "90%",
+    backgroundColor: "white",
+    borderRadius: 5,
     padding: 16,
-    marginBottom: 15,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    marginBottom: 16,
+    elevation: 5,
+    shadowColor: "rgba(0, 0, 0, 0.2)",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    borderRadius: 8,
   },
   productName: {
     fontSize: 16,
@@ -359,16 +372,18 @@ const styles = StyleSheet.create({
   inputContainer: {
     // flexDirection: "row",
     // alignItems: "center",
-    // borderColor: "gray",
+    // borderColor: "#242423",
     // borderWidth: 1,
     // margin: 10,
     // padding: 5,
+    // borderRadius: 15,
 
     flexDirection: "row",
     alignItems: "center",
     borderColor: "#242423",
     borderWidth: 1,
-    margin: 10,
+    marginHorizontal: 20,
+    marginVertical: 15,
     padding: 5,
     borderRadius: 15,
   },
@@ -382,6 +397,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
     opacity: 0.5,
   },
+
+
 
   textContainer: {
     flexDirection: "row",

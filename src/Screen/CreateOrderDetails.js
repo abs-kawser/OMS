@@ -52,8 +52,6 @@ const CreateOrderDetails = ({ route }) => {
   const [totalAmount, setTotalAmount] = useState([]);
   const [quantity, setQuantity] = useState([]);
 
-  const [showLoader, setShowLoader] = useState(false);
-
   const [hasSelectedProducts, setHasSelectedProducts] = useState(false);
 
   // console.log("create order page data", data?.DeliveryDate);
@@ -229,7 +227,7 @@ const CreateOrderDetails = ({ route }) => {
   const fetchCreatenewOrderData = async () => {
     if (!orderQuantities || Object.keys(orderQuantities).length === 0) {
       console.log("No data in orderQuantities. Cannot submit.");
-      ToastAndroid.show("No data in order list", ToastAndroid.LONG);
+      ToastAndroid.show("No data in order details", ToastAndroid.LONG);
       return;
     }
 
@@ -296,6 +294,12 @@ const CreateOrderDetails = ({ route }) => {
   });
 
   const handleDraftSave = async () => {
+    if (!orderQuantities || Object.keys(orderQuantities).length === 0) {
+      console.log("No data in orderQuantities. Cannot submit.");
+      ToastAndroid.show("No data in order details", ToastAndroid.LONG);
+      return;
+    }
+
     const requestData = {
       OrderDetails: draftTransformedOrderDetails,
       CustomerId: data?.CustomerId,
@@ -335,7 +339,6 @@ const CreateOrderDetails = ({ route }) => {
     }
   };
 
-
   // ==================================
   useEffect(() => {
     // Inside this effect, filter and set the selected products based on product IDs
@@ -348,7 +351,6 @@ const CreateOrderDetails = ({ route }) => {
   }, [selectedProductIds, products]);
 
   return (
-    
     <View style={styles.container}>
       <View style={styles.userInformation}>
         <Text style={styles.userText1}>{customerInformation?.Name}</Text>
@@ -415,10 +417,10 @@ const CreateOrderDetails = ({ route }) => {
 
                           <View style={{ flexDirection: "row", gap: 10 }}>
                             <Text style={styles.price}>
-                              price: {product.MRP}
+                              Price: {product.MRP}
                             </Text>
                             <Text style={styles.price}>
-                              PackSize: {product.PackSize}
+                              Pack Size: {product.PackSize}
                             </Text>
                           </View>
                         </View>
@@ -492,7 +494,6 @@ const CreateOrderDetails = ({ route }) => {
                                 // console.log("Delete button pressed")
                               }
                             >
-                              {/* <Icon name="trash" size={25} color="tomato" /> */}
                               <Icon name="trash" size={20} color="#212529" />
                             </TouchableOpacity>
                           </View>
@@ -510,11 +511,6 @@ const CreateOrderDetails = ({ route }) => {
                     <Button
                       color="#2E97A7"
                       onPress={fetchCreatenewOrderData}
-                      // disabled={
-                      //   !orderQuantities ||
-                      //   Object.keys(orderQuantities).length === 0
-                      // }
-                      // disabled={!hasSelectedProducts}
                     >
                       Submit
                     </Button>
@@ -526,13 +522,10 @@ const CreateOrderDetails = ({ route }) => {
         )}
       </>
 
-
-
       <Text style={styles.totalPriceText}>
         Total Price: {calculateTotalPrice()} Tk
       </Text>
     </View>
-
   );
 };
 export default CreateOrderDetails;
@@ -604,6 +597,8 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     color: "#403d39",
+    fontWeight: "600",
+    fontFamily: "Roboto-bold",
   },
   quantityContainer: {
     flex: 1,
@@ -632,8 +627,8 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 15,
     borderWidth: 1,
-    borderColor: "gray",
-    padding: 5,
+    borderColor: "#0b090a",
+    padding: 7,
     minWidth: 40,
     // borderBottomWidth:1,
   },
@@ -665,7 +660,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     padding: 10,
-    color: "#80A896",
+    color: "#0b090a",
   },
   iconx: {
     marginRight: 10,
@@ -693,6 +688,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: "bold",
     color: "#00050e",
+    //for responsive
+    flexWrap: "wrap",
   },
 
   quantity: {

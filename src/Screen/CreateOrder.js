@@ -115,6 +115,7 @@ export default function CreateOrder() {
     }, [route.params?.customerInfoList])
   );
 
+  
   // ================================================
   // if (selectedDate) {
   //   setShowOrderDatePicker(false);
@@ -272,153 +273,150 @@ export default function CreateOrder() {
   };
 
 
-  
+
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View>
-          <Text style={styles.label}>Customer</Text>
-          {/* <TouchableOpacity> */}
-          <Dropdown
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            search
-            maxHeight={800}
-            labelField="Name"
-            valueField="CustomerId"
-            placeholder="Select Customer"
-            searchPlaceholder="Search..."
-            value={value}
-            onChange={(item) => {
-              // it comes from customer list
-              setValue(item.CustomerId);
-              setCustomerInformation(item);
-              setCustomerError("");
-            }}
-            renderItem={(item, index, isSelected) => (
-              // <View style={styles.dropdownItem}>
-              <>
-                <View
-                  style={[
-                    styles.dropdownItem,
-                    isSelected && styles.selectedItem,
-                  ]}
-                >
-                  <Text style={[styles.text, isSelected && styles.boldText]}>
-                    Name: <Text style={styles.nameText}>{item.Name}</Text>
-                  </Text>
-                  <Text style={[styles.text, isSelected && styles.boldText]}>
-                    Customer Id:
-                    <Text style={styles.customerIdText}>{item.CustomerId}</Text>
-                  </Text>
-                  <Text style={[styles.text, isSelected && styles.boldText]}>
-                    Address:{" "}
-                    <Text style={styles.addressText}>{item.Address}</Text>
-                  </Text>
-                </View>
-              </>
-            )}
-          />
-
-          {/* </TouchableOpacity> */}
-          {/* {isClientNameTouched && !isClientNameValid && client === "" && (
-            <Text style={styles.errorMessage}>Client name is required ***</Text>
-          )} */}
-        </View>
-        {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
-        {/* ================================================================= */}
-        <View style={{ marginTop: 20 }}>
-          <Text style={styles.label}>Order Date</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => showDatepicker("order")}
-
-            // Disable if client name is not valid
-            // disabled={!isClientNameValid}
+<View style={styles.container}>
+  <View>
+    <Text style={styles.label}>Customer</Text>
+    {/* <TouchableOpacity> */}
+    <Dropdown
+      style={styles.dropdown}
+      placeholderStyle={styles.placeholderStyle}
+      selectedTextStyle={styles.selectedTextStyle}
+      inputSearchStyle={styles.inputSearchStyle}
+      iconStyle={styles.iconStyle}
+      data={data}
+      search
+      maxHeight={800}
+      labelField="Name"
+      valueField="CustomerId"
+      placeholder="Select Customer"
+      searchPlaceholder="Search..."
+      value={value}
+      onChange={(item) => {
+        // it comes from customer list
+        setValue(item.CustomerId);
+        setCustomerInformation(item);
+        setCustomerError("");
+      }}
+      renderItem={(item, index, isSelected) => (
+        // <View style={styles.dropdownItem}>
+        <>
+          <View
+            style={[
+              styles.dropdownItem,
+              isSelected && styles.selectedItem,
+            ]}
           >
-            {showOrderDatePicker && (
-              <DateTimePicker
-                value={orderDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) =>
-                  handleOrderDate(event, selectedDate)
-                }
-              />
-            )}
-
-            {/* <Text>Order Date: {orderDate.toLocaleString()}</Text> */}
-            <Text style={{ color: "black" }}>
-              {moment(orderDate).format("DD-MM-YYYY")}
+            <Text style={[styles.text, isSelected && styles.boldText]}>
+              Name: <Text style={styles.nameText}>{item.Name}</Text>
             </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ marginTop: 15 }}>
-          <Text style={styles.label}> Delivery Date</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => showDatepicker("delivery")}
-
-            // Disable if client name is not valid
-            // disabled={!isClientNameValid}
-          >
-            {showDeliveryDatePicker && (
-              <DateTimePicker
-                value={deliveryDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) =>
-                  handleDateDelivery(event, selectedDate)
-                }
-              />
-            )}
-
-            <Text style={{ color: "black" }}>
-              {moment(deliveryDate).format("DD-MM-YYYY")}
+            <Text style={[styles.text, isSelected && styles.boldText]}>
+              Customer Id:
+              <Text style={styles.customerIdText}>{item.CustomerId}</Text>
             </Text>
-          </TouchableOpacity>
-          {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
-        </View>
+            <Text style={[styles.text, isSelected && styles.boldText]}>
+              Address:{" "}
+              <Text style={styles.addressText}>{item.Address}</Text>
+            </Text>
+          </View>
+        </>
+      )}
+    />
 
-        {/* ===================================================================================================== */}
-        <View style={{ marginTop: 15 }}>
-          <Text style={styles.label}>Note</Text>
-          <TextInput
-            // style={[styles.input, { height: 50, backgroundColor: '' }]}
-            style={[styles.input, { height: 50 }]}
-            multiline
-            placeholder="Enter notes"
-            placeholderTextColor="black"
-            value={note}
-            onChangeText={(text) => {
-              setNote(text);
-              setNoteError("");
-            }}
-            // editable={isClientNameValid} // Only editable if client name is valid
-          />
+    {/* </TouchableOpacity> */}
+    {/* {isClientNameTouched && !isClientNameValid && client === "" && (
+      <Text style={styles.errorMessage}>Client name is required ***</Text>
+    )} */}
+  </View>
+  {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
+  {/* ================================================================= */}
+  <View style={{ marginTop: 20 }}>
+    <Text style={styles.label}>Order Date</Text>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => showDatepicker("order")}
 
-          {noteError ? <Text style={{ color: "red" }}>{noteError}</Text> : null}
-        </View>
+      // Disable if client name is not valid
+      // disabled={!isClientNameValid}
+    >
+      {showOrderDatePicker && (
+        <DateTimePicker
+          value={orderDate}
+          mode="date"
+          display="default"
+          onChange={(event, selectedDate) =>
+            handleOrderDate(event, selectedDate)
+          }
+        />
+      )}
 
-        {/* <TouchableOpacity
-          style={styles.nextButton}
-          onPress={fetchCreatenewOrderData} 
-        >
-         <Text style={styles.nextButtonText}>Nextt</Text>
-        </TouchableOpacity> */}
+      <Text style={{ color: "black" }}>
+        {moment(orderDate).format("DD-MM-YYYY")}
+      </Text>
+    </TouchableOpacity>
+  </View>
 
-        <TouchableOpacity style={{ marginTop: 25 }}>
-          <Button color="#2E97A7" onPress={nextPageComponent}>
-            Next
-          </Button>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+  <View style={{ marginTop: 15 }}>
+    <Text style={styles.label}> Delivery Date</Text>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => showDatepicker("delivery")}
+
+      // Disable if client name is not valid
+      // disabled={!isClientNameValid}
+    >
+      {showDeliveryDatePicker && (
+        <DateTimePicker
+          value={deliveryDate}
+          mode="date"
+          display="default"
+          onChange={(event, selectedDate) =>
+            handleDateDelivery(event, selectedDate)
+          }
+        />
+      )}
+
+      <Text style={{ color: "black" }}>
+        {moment(deliveryDate).format("DD-MM-YYYY")}
+      </Text>
+    </TouchableOpacity>
+    {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+  </View>
+
+  {/* ===================================================================================================== */}
+  <View style={{ marginTop: 15 }}>
+    <Text style={styles.label}>Note</Text>
+    <TextInput
+      // style={[styles.input, { height: 50, backgroundColor: '' }]}
+      style={[styles.input, { height: 50 }]}
+      multiline
+      placeholder="Enter notes"
+      placeholderTextColor="black"
+      value={note}
+      onChangeText={(text) => {
+        setNote(text);
+        setNoteError("");
+      }}
+      // editable={isClientNameValid} // Only editable if client name is valid
+    />
+
+    {noteError ? <Text style={{ color: "red" }}>{noteError}</Text> : null}
+  </View>
+
+  {/* <TouchableOpacity
+    style={styles.nextButton}
+    onPress={fetchCreatenewOrderData} 
+  >
+    <Text style={styles.nextButtonText}>Nextt</Text>
+  </TouchableOpacity> */}
+
+  <TouchableOpacity style={{ marginTop: 25 }}>
+    <Button color="#2E97A7" onPress={nextPageComponent}>
+      Next
+    </Button>
+  </TouchableOpacity>
+</View>
   );
 };
 

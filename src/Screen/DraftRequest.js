@@ -769,7 +769,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     padding: 10,
-    color: "#80A896",
+    color: "#0b090a",
   },
   iconx: {
     marginRight: 10,

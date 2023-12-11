@@ -88,7 +88,9 @@ welcomeText: {
     fontSize: 30,
 
     fontWeight: "700",
-    fontFamily: 'Roboto-bold', // font weight issue solve when using this property
+    fontFamily: 'Roboto-bold', 
+    
+    // font weight issue solve when using this property
 
     color: "#57cc99",
     marginBottom: 10, // Add margin bottom for separation
@@ -145,6 +147,54 @@ YourAppName\android\app\build\outputs\apk\release\app-release.apk
     fontSize: 16,
   },
 
+
+
+//==============//
+
+ <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter customer name..."
+            placeholderTextColor="#001427"
+            onChangeText={(text) => setSearchTerm(text)}
+          />
+          <Icon
+            name="search" // Font Awesome icon name
+            size={24}
+            style={styles.icon}
+          />
+        </View>
+
+
+
+        inputContainer: {
+    // flexDirection: "row",
+    // alignItems: "center",
+    // borderColor: "gray",
+    // borderWidth: 1,
+    // margin: 10,
+    // padding: 5,
+
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "#242423",
+    borderWidth: 1,
+    margin: 10,
+    padding: 5,
+    borderRadius: 15,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    padding: 10,
+    color: "black",
+  },
+  icon: {
+    marginRight: 10,
+    opacity: 0.5,
+  },
+
+  //=============//
 
 
 

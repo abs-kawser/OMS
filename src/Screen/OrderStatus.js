@@ -24,18 +24,21 @@ import { useCustomerInfo } from "../Context/CustomerProvider";
 const OrderStatus = () => {
   const navigation = useNavigation();
 
-  const { customerInformation, setCustomerInformation } = useCustomerInfo();
-
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
   const [error, setError] = useState("");
-  const [orderDate, setOrderDate] = useState(null);
-  const [deliveryDate, setDeliveryDate] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState([]);
 
-  const [customerId, setCustomerId] = useState();
+  // const [orderDate, setOrderDate] = useState(null);
+  // const [deliveryDate, setDeliveryDate] = useState(null);
+
+  const [orderDate, setOrderDate] = useState(new Date());
+  const [deliveryDate, setDeliveryDate] = useState(new Date());
+  const [customerId, setCustomerId] = useState("");
+
+  console.log("orderDate", orderDate);
+  console.log("deliveryDate", deliveryDate);
   console.log("customerID", customerId);
+
   // context
 
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -59,16 +62,11 @@ const OrderStatus = () => {
   // ================================================
   const handleOrderDate = (event, selectedDate) => {
     setShowOrderDatePicker(false);
-    if (selectedDate) {
-      const dateTime = moment(selectedDate);
-      const gmtTime = dateTime.utc().add(1, "days");
-
-      console.log(gmtTime.toLocaleString());
-
+    if (selectedDate !== undefined) {
       setOrderDate(selectedDate);
       // Attempt to set the delivery date
       if (selectedDate > deliveryDate) {
-        // setError("Delivery date cannot be earlier than order date");
+        setError("Delivery date cannot be earlier than order date");
       } else {
         setError("");
       }
@@ -78,10 +76,6 @@ const OrderStatus = () => {
   const handleDateDelivery = (event, selectedDate) => {
     setShowDeliveryDatePicker(false);
     if (selectedDate) {
-      const dateTime = moment(selectedDate);
-      const gmtTime = dateTime.utc().add(1, "days");
-
-      console.log(gmtTime.toLocaleString());
       setDeliveryDate(selectedDate);
       // Attempt to set the delivery date
       if (selectedDate < orderDate) {
@@ -92,90 +86,91 @@ const OrderStatus = () => {
       }
     }
   };
-  // ===============================
 
   // Api caaling
+  // const fetchOrderStatus = async () => {
+  //   try {
+  //     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+  //     const response = await fetch(
+  //       `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${userDetails.EmpCode}&OrderDate=${orderDate}&DeliveryDate=${deliveryDate}&CustomerId=${customerId}`,
+  //       {
+  //         headers: {
+  //           Authorization: authHeader,
+  //         },
+  //       }
+  //     );
 
-  const fetchOrderStatus = async () => {
-    try {
-      // const emp = "U21080273";
-      // const customer = "300255";
-      // console.log({
-      //   orderDate,
-      //   deliveryDate,
-      //   baseUrl: `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${
-      //     userDetails.EmpCode
-      //   }&OrderDate=${orderDate
-      //     .toISOString()
-      //     .substring(0, 10)}&DeliveryDate=${deliveryDate
-      //     .toISOString()
-      //     .substring(0, 10)}&CustomerId=${customerId}`,
-      //   PASSWORD,
-      //   USERNAME,
-      // });
+  //     if (!response.ok) {
+  //       setError("An error occurred while fetching data.");
+  //       console.log(response.statusText);
+  //     } else {
+  //       setError(""); // Clear the error state
+  //       const jsonData = await response.json();
 
-      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-      const response = await fetch(
-        `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${
-          userDetails.EmpCode
-        }&OrderDate=${orderDate
-          .toLocaleString()
-          .substring(0, 10)}&DeliveryDate=${deliveryDate
-          .toLocaleString()
-          .substring(0, 10)}&CustomerId=${customerId}`,
-        {
-          headers: {
-            Authorization: authHeader,
-          },
-        }
-      );
+  //       if (jsonData.status === "No Data Found !") {
+  //         // setError(jsonData.status);
+  //         ToastAndroid.show(jsonData.status, ToastAndroid.SHORT);
+  //       } else {
+  //         navigation.navigate("Order Status Info", { OrderStatus: jsonData });
+  //       }
+  //     }
+  //   } catch (error) {
+  //     setError("Please fill up all fields");
+  //     console.error("Error fetching data:", error);
 
-      if (!response.ok) {
-        setError("An error occurred while fetching data.");
-        console.log(response.statusText);
-      } else {
-        setError(""); // Clear the error state
-        const jsonData = await response.json();
+  //     throw error;
+  //   }
+  // };
 
-        if (jsonData.status === "No Data Found !") {
-          // setError(jsonData.status);
-          ToastAndroid.show(jsonData.status, ToastAndroid.SHORT);
-        } else {
-          navigation.navigate("Order Status Info", { OrderStatus: jsonData });
-        }
-      }
+  // /api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${userDetails?.EmpCode}&OrderDate=${orderDate}&DeliveryDate=${deliveryDate}&CustomerId=${customerId}
 
-      // console.log(response);
-      // const jsonData = await response.json();
-      // console.log(JSON.stringify(jsonData, null, 2));
-      // navigation.navigate("Order Status Info", { OrderStatus: jsonData });
-      //await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
-      // setData(jsonData);
-      // setFilteredData(jsonData);
-      // setIsLoading(false);
-      //return jsonData;
-    } catch (error) {
-      setError("Please fill up all fields");
-      console.error("Error fetching data:", error);
+const fetchOrderStatus = async () => {
+try {
+  const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
 
-      throw error;
+  const response = await fetch(
+    `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=U21080273&OrderDate=2023-12-11&DeliveryDate=2023-12-11&CustomerId=318233`,
+    {
+      headers: {
+        Authorization: authHeader,
+      },
     }
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      setOrderDate(null);
-      setDeliveryDate(null);
-      setCustomerId("");
-      setError("");
-    }, [])
   );
 
-  // useEffect(() => {
-  //   if (customerInformation?.CustomerId) {
-  //     setCustomerId(customerInformation.CustomerId);
-  //   }
-  // }, [customerInformation]);
+  console.log("response",response);
+
+  if (!response.ok) {
+    setError("An error occurred while fetching data.");
+    console.log(response.statusText);
+  } else {
+    setError(""); // Clear the error state
+    const jsonData = await response.json();
+
+    if (jsonData.status === "No Data Found !") {
+      ToastAndroid.show(jsonData.status, ToastAndroid.SHORT);
+    } else {
+      navigation.navigate("Order Status Info", { OrderStatus: jsonData });
+    }
+  }
+} catch (error) {
+  setError("Please fill up all fields");
+  console.error("Error fetching data:", error);
+
+  throw error;
+}
+};
+
+
+ 
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     setOrderDate(null);
+  //     setDeliveryDate(null);
+  //     setCustomerId("");
+  //     setError("");
+  //   }, [])
+  // );
 
   return (
     <View style={styles.container}>
@@ -183,68 +178,57 @@ const OrderStatus = () => {
         <Text style={styles.label}>Order Date</Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => showOrderDatepicker()}
+          onPress={() => showDatepicker("order")}
+
+          // Disable if client name is not valid
+          // disabled={!isClientNameValid}
         >
-          <Text>
-            {orderDate ? moment(orderDate).format("DD-MM-YYYY") : "DD-MM-YYYY"}
-          </Text>
-        </TouchableOpacity>
-        <Modal
-          transparent={true}
-          animationType="slide"
-          visible={showOrderDatePicker}
-          onRequestClose={() => setShowOrderDatePicker(false)}
-        >
-          <View>
+          {showOrderDatePicker && (
             <DateTimePicker
               value={orderDate || new Date()}
               mode="date"
               display="default"
-              style={{ height: 50 }}
               onChange={(event, selectedDate) =>
                 handleOrderDate(event, selectedDate)
               }
             />
-          </View>
-        </Modal>
+          )}
+          <Text style={{ color: "black" }}>
+            {moment(orderDate).format("DD-MM-YYYY")}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* delivery date */}
-      <View style={{ marginTop: 20 }}>
+      <View style={{ marginTop: 15 }}>
         <Text style={styles.label}> Delivery Date</Text>
-
         <TouchableOpacity
           style={styles.button}
           onPress={() => showDatepicker("delivery")}
+
+          // Disable if client name is not valid
+          // disabled={!isClientNameValid}
         >
-          {showDeliveryDatePicker ? (
+          {showDeliveryDatePicker && (
             <DateTimePicker
-              value={deliveryDate || new Date()} // Use a default date if deliveryDate is null
+              value={deliveryDate || new Date()}
               mode="date"
               display="default"
               onChange={(event, selectedDate) =>
                 handleDateDelivery(event, selectedDate)
               }
             />
-          ) : (
-            <Text>
-              {deliveryDate
-                ? moment(deliveryDate).format("DD-MM-YYYY")
-                : "DD-MM-YYYY"}
-              {/* Show placeholder if deliveryDate is null */}
-            </Text>
           )}
+
+          <Text style={{ color: "black" }}>
+            {moment(deliveryDate).format("DD-MM-YYYY")}
+          </Text>
         </TouchableOpacity>
+        {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
       </View>
 
-      {/* ===================================================================================================== */}
-
-      {/* Customer ID Input */}
       <View style={{ marginTop: 20 }}>
-        <Text style={styles.label}>
-          Customer ID
-          {/* ({customerInformation?.CustomerId}) */}
-        </Text>
+        <Text style={styles.label}>Customer ID</Text>
         <TextInput
           style={[styles.input, { height: 50 }]}
           mode="outlined"
@@ -252,27 +236,14 @@ const OrderStatus = () => {
           placeholder="Enter customer ID"
           placeholderTextColor="black"
           onChangeText={(text) => setCustomerId(text)}
-          keyboardType="numeric"
           value={customerId}
-          // value={customerId}
+          keyboardType="numeric"
         />
-        
-      {error ? (
-        <Text
-          style={{
-            color: "red",
-            marginLeft:10,
-            fontSize: 15,
-             // marginTop: 20,
-             // alignSelf: "center",
-            // fontWeight: "700",
-            // fontFamily: "Roboto-bold",
-          }}
-        >
-          {error}
-        </Text>
-      ) : null}
-        {/* Search Button */}
+
+        {error ? (
+          <Text style={{ color: "red", marginTop: 5 }}>{error}</Text>
+        ) : null}
+
         <Button
           mode="contained"
           style={styles.searchButton}
@@ -288,48 +259,20 @@ const OrderStatus = () => {
 export default OrderStatus;
 
 const styles = StyleSheet.create({
-  input: {
-    // borderWidth: 1,
-    // borderColor: "#0096c7",
-    // borderRadius: 5,
-    // padding: 10,
-    // marginBottom: 16,
-    // fontSize: 16,
-    // width:"33%",
-    // height:40
-
-    borderWidth: 1,
-    borderColor: "#0096c7",
-    borderRadius: 5,
-    height: 40,
-    // backgroundColor: '#FFFFFF',
-    justifyContent: "center",
-    // marginBottom: 16,
-  },
-
   container: {
     flex: 1,
     padding: 16,
   },
   label: {
     fontSize: 18,
-    fontWeight: "bold",   
+    fontWeight: "bold",
     //alignSelf: "center",
   },
   input: {
-    // borderWidth: 1,
-    // borderColor: "#0096c7",
-    // borderRadius: 5,
-    // padding: 10,
-    // marginBottom: 16,
-    // fontSize: 16,
-    // width:"33%",
-    // height:40
-
     borderWidth: 1,
-    borderColor: "#0096c7",
+    borderColor: "#9667e0",
     borderRadius: 5,
-    height: 40,
+    height: 0,
     justifyContent: "center",
     marginBottom: 16,
   },
@@ -358,6 +301,21 @@ const styles = StyleSheet.create({
 });
 
 
+// const emp = "U21080273";
+// const customer = "300255";
+// console.log({
+//   orderDate,
+//   deliveryDate,
+//   baseUrl: `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${
+//     userDetails.EmpCode
+//   }&OrderDate=${orderDate
+//     .toISOString()
+//     .substring(0, 10)}&DeliveryDate=${deliveryDate
+//     .toISOString()
+//     .substring(0, 10)}&CustomerId=${customerId}`,
+//   PASSWORD,
+//   USERNAME,
+// });
 
 // useEffect(() => {
 //   // declare the data fetching function
