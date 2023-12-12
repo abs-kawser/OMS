@@ -266,9 +266,7 @@ const DraftRequest = ({ route }) => {
         ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
       }
     } catch (error) {
-      // Handle network errors here if needed
-      // console.error("Network error:", error);
-      // ToastAndroid.show("Network error", ToastAndroid.LONG);
+      
     }
   };
 

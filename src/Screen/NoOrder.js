@@ -274,6 +274,8 @@ const NoOrder = () => {
   //==========================||==============================//
 
   return (
+
+    
     <ScrollView style={styles.container}>
       <View>
         <Text style={styles.label}>Customer</Text>
@@ -398,6 +400,8 @@ const NoOrder = () => {
         <Button color="#2E97A7" onPress={fetchNorderData}>Submit</Button>
       </TouchableOpacity>
     </ScrollView>
+
+
   );
 };
 

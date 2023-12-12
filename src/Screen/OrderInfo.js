@@ -41,6 +41,8 @@ const OrderInfo = ({ route }) => {
     fetchOrderInfoData();
   }, []);
 
+
+  
   // Initialize a variable to store the grand total
   let grandTotal = 0;
 

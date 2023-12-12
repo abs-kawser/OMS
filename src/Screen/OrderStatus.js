@@ -26,10 +26,10 @@ const OrderStatus = () => {
 
   const [showOrderDatePicker, setShowOrderDatePicker] = useState(false);
   const [showDeliveryDatePicker, setShowDeliveryDatePicker] = useState(false);
-  const [error, setError] = useState("");
 
-  // const [orderDate, setOrderDate] = useState(null);
-  // const [deliveryDate, setDeliveryDate] = useState(null);
+  //validation state
+  const [error, setError] = useState("");
+  const [customerError, setCustomerError] = useState("");
 
   const [orderDate, setOrderDate] = useState(new Date());
   const [deliveryDate, setDeliveryDate] = useState(new Date());
@@ -46,10 +46,6 @@ const OrderStatus = () => {
 
   //const [orderDate, setOrderDate] = useState(new Date());
   //const [deliveryDate, setDeliveryDate] = useState(new Date());
-
-  const showOrderDatepicker = () => {
-    setShowOrderDatePicker(true);
-  };
 
   const showDatepicker = (type) => {
     if (type === "order") {
@@ -87,90 +83,60 @@ const OrderStatus = () => {
     }
   };
 
-  // Api caaling
-  // const fetchOrderStatus = async () => {
-  //   try {
-  //     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-  //     const response = await fetch(
-  //       `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${userDetails.EmpCode}&OrderDate=${orderDate}&DeliveryDate=${deliveryDate}&CustomerId=${customerId}`,
-  //       {
-  //         headers: {
-  //           Authorization: authHeader,
-  //         },
-  //       }
-  //     );
+  const handleCustomerIdChange = (number) => {
+    setCustomerId(number);
+    setCustomerError("");
+  };
 
-  //     if (!response.ok) {
-  //       setError("An error occurred while fetching data.");
-  //       console.log(response.statusText);
-  //     } else {
-  //       setError(""); // Clear the error state
-  //       const jsonData = await response.json();
+  const fetchOrderStatus = async () => {
+    try {
+      if (!customerId) {
+        setCustomerError("Please fill up the customer ID");
+        return; // Exit the function if customer ID is not provided
+      }
 
-  //       if (jsonData.status === "No Data Found !") {
-  //         // setError(jsonData.status);
-  //         ToastAndroid.show(jsonData.status, ToastAndroid.SHORT);
-  //       } else {
-  //         navigation.navigate("Order Status Info", { OrderStatus: jsonData });
-  //       }
-  //     }
-  //   } catch (error) {
-  //     setError("Please fill up all fields");
-  //     console.error("Error fetching data:", error);
+      // Reset customerError if user provides the customer ID
+      setCustomerError("");
+      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
 
-  //     throw error;
-  //   }
-  // };
+      const url = `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${
+        userDetails?.EmpCode
+      }&OrderDate=${moment(orderDate).format(
+        "YYYY-MM-DD"
+      )}&DeliveryDate=${moment(deliveryDate).format(
+        "YYYY-MM-DD"
+      )}&CustomerId=${customerId}`;
 
-  // /api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${userDetails?.EmpCode}&OrderDate=${orderDate}&DeliveryDate=${deliveryDate}&CustomerId=${customerId}
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader,
+        },
+      });
 
-const fetchOrderStatus = async () => {
-try {
-  const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+      const Result = await response.json();
 
-  const response = await fetch(
-    `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=U21080273&OrderDate=2023-12-11&DeliveryDate=2023-12-11&CustomerId=318233`,
-    {
-      headers: {
-        Authorization: authHeader,
-      },
+      if (Result && Result.length > 0) {
+        navigation.navigate("Order Status Info", { OrderStatus: Result });
+      } else {
+        ToastAndroid.show(Result.status, ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      // setError("Please fill up all fields");
+      console.error("Error fetching data:", error);
+      // throw error;
     }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setOrderDate(new Date());
+      setDeliveryDate(new Date());
+      setCustomerId("");
+      setError("");
+      setCustomerError("");
+    }, [])
   );
-
-  console.log("response",response);
-
-  if (!response.ok) {
-    setError("An error occurred while fetching data.");
-    console.log(response.statusText);
-  } else {
-    setError(""); // Clear the error state
-    const jsonData = await response.json();
-
-    if (jsonData.status === "No Data Found !") {
-      ToastAndroid.show(jsonData.status, ToastAndroid.SHORT);
-    } else {
-      navigation.navigate("Order Status Info", { OrderStatus: jsonData });
-    }
-  }
-} catch (error) {
-  setError("Please fill up all fields");
-  console.error("Error fetching data:", error);
-
-  throw error;
-}
-};
-
-
- 
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     setOrderDate(null);
-  //     setDeliveryDate(null);
-  //     setCustomerId("");
-  //     setError("");
-  //   }, [])
-  // );
 
   return (
     <View style={styles.container}>
@@ -179,9 +145,6 @@ try {
         <TouchableOpacity
           style={styles.button}
           onPress={() => showDatepicker("order")}
-
-          // Disable if client name is not valid
-          // disabled={!isClientNameValid}
         >
           {showOrderDatePicker && (
             <DateTimePicker
@@ -224,30 +187,34 @@ try {
             {moment(deliveryDate).format("DD-MM-YYYY")}
           </Text>
         </TouchableOpacity>
-        {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+
+        {error ? (
+          <Text style={{ color: "red", marginTop: 5 }}>{error}</Text>
+        ) : null}
       </View>
 
       <View style={{ marginTop: 20 }}>
         <Text style={styles.label}>Customer ID</Text>
         <TextInput
-          style={[styles.input, { height: 50 }]}
+          style={[styles.input, { height: 50, marginTop: 10 }]}
           mode="outlined"
           label="Customer ID"
           placeholder="Enter customer ID"
           placeholderTextColor="black"
-          onChangeText={(text) => setCustomerId(text)}
+          onChangeText={handleCustomerIdChange}
           value={customerId}
           keyboardType="numeric"
+          // onChangeText={(text) => setCustomerId(text)}
         />
 
-        {error ? (
-          <Text style={{ color: "red", marginTop: 5 }}>{error}</Text>
+        {customerError ? (
+          <Text style={{ color: "red", marginTop: 5 }}>{customerError}</Text>
         ) : null}
 
         <Button
           mode="contained"
           style={styles.searchButton}
-          onPress={fetchOrderStatus}
+          onPress={() => fetchOrderStatus()}
         >
           Search
         </Button>
@@ -270,7 +237,8 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#9667e0",
+    // borderColor: "#9667e0",
+    borderColor: "#0096c7",
     borderRadius: 5,
     height: 0,
     justifyContent: "center",
@@ -279,10 +247,11 @@ const styles = StyleSheet.create({
 
   button: {
     borderWidth: 1,
-    borderColor: "#7209b7",
+    // borderColor: "#7209b7",
+    borderColor: "#0096c7",
     borderRadius: 5,
     padding: 10,
-
+    height: 50,
     marginTop: 10,
     fontSize: 16,
   },
@@ -300,6 +269,60 @@ const styles = StyleSheet.create({
   },
 });
 
+// Api caaling
+// const fetchOrderStatus = async () => {
+//   try {
+//     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+//     const response = await fetch(
+//       `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${userDetails.EmpCode}&OrderDate=${orderDate}&DeliveryDate=${deliveryDate}&CustomerId=${customerId}`,
+//       {
+//         headers: {
+//           Authorization: authHeader,
+//         },
+//       }
+//     );
+
+//     if (!response.ok) {
+//       setError("An error occurred while fetching data.");
+//       console.log(response.statusText);
+//     } else {
+//       setError(""); // Clear the error state
+//       const jsonData = await response.json();
+
+//       if (jsonData.status === "No Data Found !") {
+//         // setError(jsonData.status);
+//         ToastAndroid.show(jsonData.status, ToastAndroid.SHORT);
+//       } else {
+//         navigation.navigate("Order Status Info", { OrderStatus: jsonData });
+//       }
+//     }
+//   } catch (error) {
+//     setError("Please fill up all fields");
+//     console.error("Error fetching data:", error);
+
+//     throw error;
+//   }
+// };
+
+// /api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${userDetails?.EmpCode}&OrderDate=${orderDate}&DeliveryDate=${deliveryDate}&CustomerId=${customerId}
+
+//  /api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=U21080273&        OrderDate=2023-12-11&DeliveryDate=2023-12-11&CustomerId=318233
+
+// if (!response.ok) {
+//   setError("An error occurred while fetching data.");
+//   console.log(response.statusText);
+// } else {
+//   setError(""); // Clear the error state
+//   const jsonData = await response.json();
+
+//   if (jsonData.status === "No Data Found !") {
+//     ToastAndroid.show(jsonData.status, ToastAndroid.SHORT);
+//   } else {
+//     navigation.navigate("Order Status Info", { OrderStatus: jsonData });
+//   }
+// }
+
+// const url = `${BASE_URL}/api/OrdersStatusCheckingAPI/GetOrdersStatus?EmpId=${userDetails?.EmpCode}&OrderDate=${orderDate}&DeliveryDate=${deliveryDate}&CustomerId=${customerId}`;
 
 // const emp = "U21080273";
 // const customer = "300255";
