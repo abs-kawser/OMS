@@ -265,9 +265,7 @@ const DraftRequest = ({ route }) => {
         console.error("API request failed with status code:", response.status);
         ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   // ==================================
@@ -289,96 +287,6 @@ const DraftRequest = ({ route }) => {
       prevIds.filter((id) => id !== productId)
     );
   };
-
-  // const handleDeleteProduct = (productId) => {
-  //   console.log("Deleting product with ID:", productId);
-
-  //   setSelectedProductIds((prevIds) => {
-  //     const newIds = prevIds.filter((id) => id !== productId);
-  //     console.log("New selectedProductIds:", newIds);
-  //     return newIds;
-  //   });
-  // };
-
-  // =========================================================
-
-  // const handleDeleteOrderItem = (productId) => {
-  //   setOrderItems((prevItems) => prevItems.filter((item) => item.ProductId !== productId));
-  //   console.log("Deleting product with ID:", productId);
-  // };
-
-  //this code is for draft save product delete  semi working ocde
-
-  // const handleDeleteOrderItem = async (productId) => {
-  //   const updatedOrderDetails = selectedItem.OrderDetails.filter(
-  //     (orderItem) => orderItem.ProductId !== productId
-  //   );
-  //   setSelectedItem((prevSelectedItem) => ({
-  //     ...prevSelectedItem,
-  //     OrderDetails: updatedOrderDetails,
-  //   }));
-
-  //   // Update the AsyncStorage data
-  //   // await AsyncStorage.setItem("customerInformation", JSON.stringify(updatedOrderDetails));
-
-  //     // Update the state with the modified data
-  //     // setDraftData(updatedOrderDetails);
-
-  // };
-
-  // ============== amar kaj kora ============
-
-  // const handleDeleteOrderItem = async (productId) => {
-  //   try {
-  //     // Create a copy of the selected item and its OrderDetails
-  //     const updatedOrderDetails = [...selectedItem.OrderDetails];
-
-  //     // Filter out the item with the specified productId
-  //     const updatedOrderDetailsFiltered = updatedOrderDetails.filter(
-  //       (orderItem) => orderItem.ProductId !== productId
-  //     );
-
-  //     // Update the selected item's OrderDetails with the filtered data
-  //     setSelectedItem((prevSelectedItem) => ({
-  //       ...prevSelectedItem,
-  //       OrderDetails: updatedOrderDetailsFiltered,
-  //     }));
-
-  //     // Update the AsyncStorage data with the modified OrderDetails
-  //     const updatedData = { ...draftData, OrderDetails: updatedOrderDetailsFiltered };
-  //     await AsyncStorage.setItem("customerInformation", JSON.stringify(updatedData));
-
-  //     setDraftData(updatedData);
-
-  //   } catch (error) {
-  //     console.error("Error deleting item:", error);
-  //   }
-  // };
-
-  // const handleDeleteOrderItem = async (productId) => {
-  //   try {
-  //     // Create a copy of the selected item
-  //     const updatedSelectedItem = { ...selectedItem };
-
-  //     // Filter out the item with the specified productId from OrderDetails
-  //     const updatedOrderDetailsFiltered = updatedSelectedItem.OrderDetails.filter(
-  //       (orderItem) => orderItem.ProductId !== productId
-  //     );
-
-  //     // Update the selected item's OrderDetails with the filtered data
-  //     updatedSelectedItem.OrderDetails = updatedOrderDetailsFiltered;
-
-  //     setSelectedItem(updatedSelectedItem)
-
-  //     // Update the AsyncStorage data with the modified selected item
-  //     await AsyncStorage.setItem("customerInformation", JSON.stringify(updatedSelectedItem));
-
-  //     // Update the state with the modified data
-  //     setDraftData(updatedSelectedItem);
-  //   } catch (error) {
-  //     console.error("Error deleting item:", error);
-  //   }
-  // };
 
   const handleDeleteOrderItem = async (productId) => {
     try {
@@ -536,9 +444,9 @@ const DraftRequest = ({ route }) => {
                       </Text>
 
                       {/* <Text 
-                style={[styles.cellText, isSelectedProduct(specificProduct.ProductId) && styles.quantityWithMargin]}>
-                    {quantity}
-                    </Text> */}
+            style={[styles.cellText, isSelectedProduct(specificProduct.ProductId) && styles.quantityWithMargin]}>
+                {quantity}
+                </Text> */}
 
                       <Text style={styles.headerText}>Amount</Text>
                       <Text style={styles.headerText}>Action</Text>
@@ -628,8 +536,8 @@ const DraftRequest = ({ route }) => {
       </>
 
       {/* <Text style={styles.totalPriceText}>
-        Total Price: {calculateTotalPrice()}
-      </Text> */}
+    Total Price: {calculateTotalPrice()}
+  </Text> */}
     </View>
   );
 };

@@ -22,6 +22,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import * as Animatable from "react-native-animatable";
 
 const LoginPage = () => {
+  
   const navigation = useNavigation();
   const [userId, setUserId] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +30,6 @@ const LoginPage = () => {
 
   //error handleing
   const [error, setError] = useState(null);
-  const [loginResponse, setloginResponse] = useState(null);
 
   //useContext api
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -100,7 +100,7 @@ const LoginPage = () => {
 
           <TextInput
             style={styles.input}
-            placeholder="User Id"
+            placeholder="User ID"
             placeholderTextColor="black"
             onChangeText={(text) => setUserId(text)}
             value={userId}

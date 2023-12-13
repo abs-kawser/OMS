@@ -294,6 +294,7 @@ const CreateOrderDetails = ({ route }) => {
   });
 
   const handleDraftSave = async () => {
+
     if (!orderQuantities || Object.keys(orderQuantities).length === 0) {
       console.log("No data in orderQuantities. Cannot submit.");
       ToastAndroid.show("No data in order details", ToastAndroid.LONG);
@@ -322,7 +323,6 @@ const CreateOrderDetails = ({ route }) => {
 
       // Parse the existing data (or initialize an empty array)
       const customerInfoArray = existingData ? JSON.parse(existingData) : [];
-
       // Add the current customerInformation to the array
       customerInfoArray.push(requestData);
       // Save the updated array to AsyncStorage
@@ -508,10 +508,7 @@ const CreateOrderDetails = ({ route }) => {
                     <Button color="#2E97A7" onPress={handleDraftSave}>
                       Save
                     </Button>
-                    <Button
-                      color="#2E97A7"
-                      onPress={fetchCreatenewOrderData}
-                    >
+                    <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
                       Submit
                     </Button>
                   </View>
@@ -525,6 +522,7 @@ const CreateOrderDetails = ({ route }) => {
       <Text style={styles.totalPriceText}>
         Total Price: {calculateTotalPrice()} Tk
       </Text>
+
     </View>
   );
 };

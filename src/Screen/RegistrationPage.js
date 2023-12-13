@@ -22,7 +22,11 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 
+
+
 const RegistrationPage = ({ navigation }) => {
+
+
   const [userId, setUserId] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
@@ -58,9 +62,7 @@ const RegistrationPage = ({ navigation }) => {
         MobileNo: mobile,
         Password: password,
       };
-
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-
       const response = await fetch(`${BASE_URL}/api/HomeApi/Registration`, {
         method: "POST",
         headers: {
@@ -86,6 +88,7 @@ const RegistrationPage = ({ navigation }) => {
 
   const isRegisterDisabled = !setUserId || !password || !mobile;
 
+
   return (
     <>
       <View style={styles.container}>
@@ -93,7 +96,6 @@ const RegistrationPage = ({ navigation }) => {
           <View style={styles.header}>
             <Text style={styles.headerText}>Sign Up Here</Text>
           </View>
-
           <TextInput
             style={styles.input}
             placeholder="User ID"
@@ -130,9 +132,7 @@ const RegistrationPage = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-
           {error !== "" && <Text style={styles.errorMessage}>{error}</Text>}
-
           <TouchableOpacity
             style={[
               styles.loginButton,
@@ -188,6 +188,7 @@ const RegistrationPage = ({ navigation }) => {
       </View>
     </>
   );
+
 };
 
 const styles = StyleSheet.create({

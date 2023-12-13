@@ -65,8 +65,7 @@ const Draft = ({ navigation }) => {
     // Alert.alert(selectedItem.Note);
   };
 
-  return (  
-    
+  return (
     <SafeAreaView>
       <ScrollView>
         <View style={styles.container}>
@@ -119,7 +118,6 @@ const Draft = ({ navigation }) => {
         </View>
       </ScrollView>
     </SafeAreaView>
-
   );
 };
 

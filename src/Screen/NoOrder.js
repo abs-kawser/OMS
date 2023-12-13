@@ -22,11 +22,11 @@ import { useCustomerInfo } from "../Context/CustomerProvider";
 import { Button } from "@rneui/themed";
 import { useFocusEffect } from "@react-navigation/native";
 // import Toast from "react-native-toast-notifications";
-import {useToast} from 'react-native-toast-notifications';
+import { useToast } from "react-native-toast-notifications";
 
 const NoOrder = () => {
-   // toast message
-   const toast = useToast();
+  // toast message
+  const toast = useToast();
   const route = useRoute();
 
   const navigation = useNavigation();
@@ -45,7 +45,6 @@ const NoOrder = () => {
   const [orderDate, setOrderDate] = useState(new Date());
   const [deliveryDate, setDeliveryDate] = useState(new Date());
   const [note, setNote] = useState("");
-
 
   //take sate for validtion
   const [error, setError] = useState("");
@@ -73,11 +72,6 @@ const NoOrder = () => {
     "customerIn formation",
     JSON.stringify(customerInformation, null, 2)
   );
-
-
- 
-
-
 
   // ================================================
   const handleOrderDate = (event, selectedDate) => {
@@ -187,8 +181,6 @@ const NoOrder = () => {
     //fetchCustomerData();
   }, [userDetails]);
 
-
-
   //=======================no order api calling ==========
 
   const fetchNorderData = async () => {
@@ -204,7 +196,6 @@ const NoOrder = () => {
     };
 
     try {
-
       // if (!value || !note || !deliveryDate || !orderDate) {
       //   // setError('Please fill in both username and password fields');
       //   ToastAndroid.show(
@@ -221,7 +212,10 @@ const NoOrder = () => {
         //   duration: 3000,
         //   textStyle: { fontSize: 15 },
         // });
-        toast.show('Please fill up all fields❌',{type: 'normal', duration: 2000});
+        toast.show("Please fill up all fields❌", {
+          type: "normal",
+          duration: 2000,
+        });
         //toast.show('successfully submited',{type: 'normal', duration: 2000});
 
         return;
@@ -240,8 +234,10 @@ const NoOrder = () => {
       const jsonData = await response.json();
       if (jsonData.Success === true) {
         // ToastAndroid.show(jsonData.Message, ToastAndroid.SHORT);
-        toast.show('successfully submited',{type: 'success', duration: 2000});
-
+        toast.show("successfully submited", {
+          type: "success",
+          duration: 2000,
+        });
       }
 
       // if (jsonData.Success === true) {
@@ -274,8 +270,6 @@ const NoOrder = () => {
   //==========================||==============================//
 
   return (
-
-    
     <ScrollView style={styles.container}>
       <View>
         <Text style={styles.label}>Customer</Text>
@@ -316,7 +310,8 @@ const NoOrder = () => {
                     <Text style={styles.customerIdText}>{item.CustomerId}</Text>
                   </Text>
                   <Text style={[styles.text, isSelected && styles.boldText]}>
-                    Address: <Text style={styles.addressText}>{item.Address}</Text>     
+                    Address:{" "}
+                    <Text style={styles.addressText}>{item.Address}</Text>
                   </Text>
                 </View>
               </>
@@ -348,7 +343,9 @@ const NoOrder = () => {
               }
             />
           )}
-          <Text style={{ color: "black" }}>{moment(orderDate).format("DD-MM-YYYY")}</Text>
+          <Text style={{ color: "black" }}>
+            {moment(orderDate).format("DD-MM-YYYY")}
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -369,7 +366,9 @@ const NoOrder = () => {
             />
           )}
 
-          <Text style={{ color: "black" }}>{moment(deliveryDate).format("DD-MM-YYYY")}</Text>
+          <Text style={{ color: "black" }}>
+            {moment(deliveryDate).format("DD-MM-YYYY")}
+          </Text>
         </TouchableOpacity>
         {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
       </View>
@@ -397,17 +396,15 @@ const NoOrder = () => {
          <Text style={styles.nextButtonText}>Nextt</Text>
         </TouchableOpacity> */}
       <TouchableOpacity style={{ marginTop: 25 }}>
-        <Button color="#2E97A7" onPress={fetchNorderData}>Submit</Button>
+        <Button color="#2E97A7" onPress={fetchNorderData}>
+          Submit
+        </Button>
       </TouchableOpacity>
     </ScrollView>
-
-
   );
 };
 
 export default NoOrder;
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -552,10 +549,6 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
 });
-
-
-
-
 
 //const customerId = route.params?.customerId;
 

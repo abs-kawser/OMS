@@ -129,6 +129,7 @@ const OrderStatus = () => {
   };
 
   useFocusEffect(
+    
     React.useCallback(() => {
       setOrderDate(new Date());
       setDeliveryDate(new Date());
@@ -268,6 +269,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
 });
+
 
 // Api caaling
 // const fetchOrderStatus = async () => {
