@@ -12,6 +12,7 @@ import {
   Alert,
   ToastAndroid,
   FlatList,
+  Image
 } from "react-native";
 import { fetchProductData } from "../Api/ProductListApi";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -95,6 +96,19 @@ const CreateOrderDetails = ({ route }) => {
     // Call the function to check stored data or fetch from API
     getProductList();
   }, []);
+
+  useEffect(() => {
+    // Inside this effect, filter and set the selected products based on product IDs
+    const selectedProducts= selectedProductIds.map((productId) => {
+      return products.find((product) => product.ProductId === productId);
+    });
+    setSelectedProduct(
+      selectedProducts.filter((product) => product !== undefined)
+    );
+  }, [selectedProductIds, products]);
+
+
+
 
   const logQuantityValues = () => {
     const quantityValues = selectedProduct.map((product) => {
@@ -224,6 +238,8 @@ const CreateOrderDetails = ({ route }) => {
     };
   });
 
+
+
   const fetchCreatenewOrderData = async () => {
     if (!orderQuantities || Object.keys(orderQuantities).length === 0) {
       console.log("No data in orderQuantities. Cannot submit.");
@@ -245,7 +261,6 @@ const CreateOrderDetails = ({ route }) => {
       JSON.stringify(requestData, null, 2)
     );
     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-
     try {
       const response = await fetch(
         `${BASE_URL}/api/NewOrderApi/CreateNewOrder`,
@@ -278,10 +293,11 @@ const CreateOrderDetails = ({ route }) => {
       }
     } catch (error) {}
   };
+ // ======================= main api calling end =========================\\
 
-  // ================================== main api calling end ==================================================
 
-  // ============== draft save =================
+
+  // ============== Draft save functionality =================\\
   const draftTransformedOrderDetails = selectedProduct.map((product, index) => {
     return {
       ProductId: product.ProductId,
@@ -339,194 +355,190 @@ const CreateOrderDetails = ({ route }) => {
     }
   };
 
-  // ==================================
-  useEffect(() => {
-    // Inside this effect, filter and set the selected products based on product IDs
-    const selectedProducts = selectedProductIds.map((productId) => {
-      return products.find((product) => product.ProductId === productId);
-    });
-    setSelectedProduct(
-      selectedProducts.filter((product) => product !== undefined)
-    );
-  }, [selectedProductIds, products]);
+
+
 
   return (
-    <View style={styles.container}>
-      <View style={styles.userInformation}>
-        <Text style={styles.userText1}>{customerInformation?.Name}</Text>
-        <Text style={{ color: "black" }}>
-          ({customerInformation?.CustomerId})
-        </Text>
+<View style={styles.container}>
+  <View style={styles.userInformation}>
+    <Text style={styles.userText1}>{customerInformation?.Name}</Text>
+    <Text style={{ color: "black" }}>
+      ({customerInformation?.CustomerId})
+    </Text>
+  </View>
+
+  {/* search part*/}
+  <View style={styles.searchBox}>
+    <View style={styles.inputContainerx}>
+      <TextInput
+        style={styles.inputx}
+        placeholder="Search..."
+        onChangeText={(text) => setSearchTerm(text)}
+      />
+      <Icon name="search" size={24} style={styles.iconx} />
+    </View>
+  </View>
+
+  <View style={styles.buttonContainer}>
+    <TouchableOpacity style={{ width: "50%" }}>
+      <Button
+        style={styles.button}
+        onPress={handleProductButtonPress}
+        // disabled={isLoading} // Disable the button when loading
+      >
+        Product List
+      </Button>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={{ width: "50%" }}>
+      <Button color="#2E97A7" onPress={handleOrderButtonPress}>
+        Order Details
+      </Button>
+    </TouchableOpacity>
+  </View>
+
+  {/* {showLoader && <TransitionLoader />} */}
+
+  <>
+    {isLoadingProductData ? (
+      <View style={styles.loadingContainer}>
+        {/* <ActivityIndicator size="large" color="#0077b6" /> */}
+         {/* Replace with your animation file path */}
+        <LottieView
+          source={require("../../Lottie/animation_ln8n5kbe.json")} 
+          autoPlay
+          loop
+          style={styles.lottiContainer}
+        />
       </View>
+    ) : (
+      <ScrollView>
+        <>
+            {showProductData && (
+            <View style={styles.dataContainer}>
+              <FlatList
+                data={filteredProducts}
+                keyExtractor={(product) => product.ProductId.toString()}
+                renderItem={({ item: product }) => (
+                  <View style={styles.row}>
+                    <View style={styles.infoContainer}>
+                      <Text style={styles.name}>{product.Name}</Text>
 
-      <View style={styles.searchBox}>
-        <View style={styles.inputContainerx}>
-          <TextInput
-            style={styles.inputx}
-            placeholder="Search..."
-            onChangeText={(text) => setSearchTerm(text)}
-          />
-          <Icon name="search" size={24} style={styles.iconx} />
-        </View>
-      </View>
+                      <View style={{ flexDirection: "row", gap: 10 }}>
+                        <Text style={styles.price}>
+                          Price: {product.MRP}
+                        </Text>
+                        <Text style={styles.price}>
+                          Pack Size: {product.PackSize}
+                        </Text>
+                      </View>
+                    </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={{ width: "50%" }}>
-          <Button
-            style={styles.button}
-            onPress={handleProductButtonPress}
-            // disabled={isLoading} // Disable the button when loading
-          >
-            Product List
-          </Button>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={{ width: "50%" }}>
-          <Button color="#2E97A7" onPress={handleOrderButtonPress}>
-            Order Details
-          </Button>
-        </TouchableOpacity>
-      </View>
-
-      {/* {showLoader && <TransitionLoader />} */}
-
-      <>
-        {isLoadingProductData ? (
-          <View style={styles.loadingContainer}>
-            {/* <ActivityIndicator size="large" color="#0077b6" /> */}
-            <LottieView
-              source={require("../../Lottie/animation_ln8n5kbe.json")} // Replace with your animation file path
-              autoPlay
-              loop
-              style={styles.lottiContainer}
-            />
-          </View>
-        ) : (
-          //ScrollView
-          <ScrollView>
-            <>
-              {showProductData && (
-                <View style={styles.dataContainer}>
-                  <FlatList
-                    data={filteredProducts}
-                    keyExtractor={(product) => product.ProductId.toString()}
-                    renderItem={({ item: product }) => (
-                      <View style={styles.row}>
-                        <View style={styles.infoContainer}>
-                          <Text style={styles.name}>{product.Name}</Text>
-
-                          <View style={{ flexDirection: "row", gap: 10 }}>
-                            <Text style={styles.price}>
-                              Price: {product.MRP}
-                            </Text>
-                            <Text style={styles.price}>
-                              Pack Size: {product.PackSize}
-                            </Text>
-                          </View>
-                        </View>
-
-                        <View style={styles.quantityContainer}>
-                          <View style={styles.containerx}>
-                            <View style={styles.inputContainer}>
-                              <TextInput
-                                placeholder="QTY"
-                                style={styles.input}
-                                keyboardType="numeric"
-                                value={
-                                  productQuantities[product.ProductId]
-                                    ? productQuantities[
-                                        product.ProductId
-                                      ].toString()
-                                    : ""
-                                }
-                                onChangeText={(text) =>
-                                  handleQuantityChange(product.ProductId, text)
-                                }
-                              />
-                            </View>
-                          </View>
+                    <View style={styles.quantityContainer}>
+                      <View style={styles.containerx}>
+                        <View style={styles.inputContainer}>
+                          <TextInput
+                            placeholder="QTY"
+                            style={styles.input}
+                            keyboardType="numeric"
+                            value={
+                              productQuantities[product.ProductId]
+                                ? productQuantities[
+                                    product.ProductId
+                                  ].toString()
+                                : ""
+                            }
+                            onChangeText={(text) =>
+                              handleQuantityChange(product.ProductId, text)
+                            }
+                          />
                         </View>
                       </View>
-                    )}
-                  />
-                </View>
-              )}
-            </>
-            <View>
-              {showOrderData && (
-                <View style={styles.dataContainer}>
-                  <View style={styles.tableHeader}>
-                    <Text style={styles.headerText}>Name</Text>
-                    <Text style={[styles.headerText, styles.quantity]}>
-                      Quantity
-                    </Text>
-                    <Text style={styles.headerText}>Amount</Text>
-                    <Text style={styles.headerText}>Action</Text>
+                    </View>
                   </View>
-
-                  <>
-                    {selectedProduct.map((specificProduct) => {
-                      // Check if the product has a quantity value
-                      const quantity =
-                        productQuantities[specificProduct.ProductId] || 0;
-                      if (quantity > 0) {
-                        return (
-                          <View
-                            style={styles.tableRow}
-                            key={specificProduct.ProductId}
-                          >
-                            <Text style={styles.cellText} numberOfLines={2}>
-                              {specificProduct.Name}
-                            </Text>
-                            <Text style={[styles.cellText, styles.quantity]}>
-                              {quantity}
-                            </Text>
-
-                            <Text style={styles.cellText}>
-                              {specificProduct.MRP * quantity}
-                            </Text>
-
-                            <TouchableOpacity
-                              style={styles.actionButton}
-                              onPress={
-                                () =>
-                                  handleDeleteProduct(specificProduct.ProductId)
-                                // console.log("Delete button pressed")
-                              }
-                            >
-                              <Icon name="trash" size={20} color="#212529" />
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      }
-
-                      return null;
-                    })}
-                  </>
-
-                  <View style={styles.btngrp}>
-                    <Button color="#2E97A7" onPress={handleDraftSave}>
-                      Save
-                    </Button>
-                    <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
-                      Submit
-                    </Button>
-                  </View>
-                </View>
-              )}
+                )}
+              />
             </View>
-          </ScrollView>
-        )}
-      </>
+          )}
+        </>
+  <View>
+    {showOrderData && (
+      <View style={styles.dataContainer}>
+        <View style={styles.tableHeader}>
+          <Text style={styles.headerText}>Name</Text>
+          <Text style={[styles.headerText, styles.quantity]}>
+            Quantity
+          </Text>
+          <Text style={styles.headerText}>Amount</Text>
+          <Text style={styles.headerText}>Action</Text>
+        </View>
+        
+        <>
+          {selectedProduct.map((specificProduct) => {
+            const quantity =productQuantities[specificProduct.ProductId] || 0;              
+            if (quantity > 0) {
+              return (
+                <View
+                  style={styles.tableRow}
+                  key={specificProduct.ProductId}
+                >
+                  <Text style={styles.cellText} numberOfLines={2}>
+                    {specificProduct.Name}
+                  </Text>
+                  <Text style={[styles.cellText, styles.quantity]}>
+                    {quantity}
+                  </Text>
 
-      <Text style={styles.totalPriceText}>
-        Total Price: {calculateTotalPrice()} Tk
-      </Text>
+                  <Text style={styles.cellText}>
+                    {specificProduct.MRP * quantity}
+                  </Text>
 
-    </View>
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={
+                      () =>
+                        handleDeleteProduct(specificProduct.ProductId)
+                     
+                    }
+                  >
+                    <Image
+                      style={{ height: 25, width: 25, resizeMode: "contain" }}
+                      source={require("../../assets/delete.png")}
+                    />
+                  </TouchableOpacity>
+                </View>
+              );
+            }
+
+            return null;
+          })}
+        </>
+
+        <View style={styles.btngrp}>
+          <Button color="#2E97A7" onPress={handleDraftSave}>
+            Save
+          </Button>
+          <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
+            Submit
+          </Button>
+        </View>
+      </View>
+    )}
+  </View>
+      </ScrollView>
+    )}
+  </>
+
+  <Text style={styles.totalPriceText}>
+    Total Price: {calculateTotalPrice()} Tk
+  </Text>
+
+</View>
+
   );
 };
 export default CreateOrderDetails;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -695,7 +707,8 @@ const styles = StyleSheet.create({
   },
   // ===================
   actionButton: {
-    backgroundColor: "#dee2e6", // Button background color
+    // Button background color
+    // backgroundColor: "#dee2e6", 
     padding: 5,
     borderRadius: 5,
   },
@@ -724,3 +737,8 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
+
+
+// Check if the product has a quantity value
+{/* <Icon name="trash-alt" size={20} color="#212529" /> */}
+

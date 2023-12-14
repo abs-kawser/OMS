@@ -8,7 +8,6 @@ import { useLogin } from "../Context/LoginProvider";
 
 const ChangePassword = () => {
   const navigation = useNavigation();
-
   const { isLoggedIn, setIsLoggedIn } = useLogin();
 
   const { userDetails } = isLoggedIn;
@@ -18,46 +17,46 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
 
-  const SavePassword = async () => {
-    // Check if any field is empty
-    if (!oldPassword || !newPassword || !ConfirmPassword) {
-      ToastAndroid.show("Please fill in all fields.", ToastAndroid.SHORT);
-      return;
-    }
+const SavePassword = async () => {
+  // Check if any field is empty
+  if (!oldPassword || !newPassword || !ConfirmPassword) {
+    ToastAndroid.show("Please fill in all fields.", ToastAndroid.SHORT);
+    return;
+  }
 
-    if (newPassword !== ConfirmPassword) {
-      // Passwords do not match, show a toast message
-      ToastAndroid.show(
-        "New password and confirm password do not match.",
-        ToastAndroid.SHORT
-      );
-      return;
-    }
+  if (newPassword !== ConfirmPassword) {
+    // Passwords do not match, show a toast message
+    ToastAndroid.show(
+      "New password and confirm password do not match.",
+      ToastAndroid.SHORT
+    );
+    return;
+  }
 
-    try {
-      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-      const response = await fetch(
-        `${BASE_URL}/api/HomeApi/ChangePassword?networkId=${userDetails?.EmpNetworkId}&OldPassword=${oldPassword}&NewPassword=${newPassword}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: authHeader,
-          },
-        }
-      );
-
-      const result = await response.json();
-      console.log("response", result);
-      if (result.Success === true) {
-        ToastAndroid.show(result.Message, ToastAndroid.SHORT);
-        //navigation.navigate("Home");
+  try {
+    const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+    const response = await fetch(
+      `${BASE_URL}/api/HomeApi/ChangePassword?networkId=${userDetails?.EmpNetworkId}&OldPassword=${oldPassword}&NewPassword=${newPassword}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader,
+        },
       }
-    } catch (error) {
-      // Handle network errors or other exceptions
-      console.error("An error occurred:", error);
+    );
+
+    const result = await response.json();
+    console.log("response", result);
+    if (result.Success === true) {
+      ToastAndroid.show(result.Message, ToastAndroid.SHORT);
+      //navigation.navigate("Home");
     }
-  };
+  } catch (error) {
+    // Handle network errors or other exceptions
+    console.error("An error occurred:", error);
+  }
+};
 
   // console.log("Name:", networkId);
   //   console.log("oldPassword:", oldPassword);
@@ -66,11 +65,7 @@ const ChangePassword = () => {
 
   return (
     <View style={styles.container}>
-   
-      
-        {/* change password icon  */}
-         
-
+      {/* change password icon  */}
       <PaperTextInput
         mode="outlined"
         label="Old Password"
@@ -108,7 +103,7 @@ const ChangePassword = () => {
         style={styles.button}
         onPress={SavePassword}
       >
-        UPDATE 
+        UPDATE
       </Button>
     </View>
   );

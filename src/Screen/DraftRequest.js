@@ -22,527 +22,532 @@ import { useCustomerInfo } from "../Context/CustomerProvider";
 import { useDraft } from "../Context/DraftProvider";
 
 const DraftRequest = ({ route }) => {
-  const navigation = useNavigation();
 
-  const { draftData, setDraftData } = useDraft();
-  //const { selectedItem, onDeleteItem } = route.params;
-  const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
-  console.log("draft page data", JSON.stringify(selectedItem, null, 2));
-  const data = route.params?.data;
-  const { customerInformation, setCustomerInformation } = useCustomerInfo();
-  console.log(customerInformation, "customerInformation");
-  const { isLoggedIn, setIsLoggedIn } = useLogin();
-  const { userDetails } = isLoggedIn;
-  const [showProductData, setShowProductData] = useState(true);
-  const [showOrderData, setShowOrderData] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [productQuantities, setProductQuantities] = useState([]);
-  console.log("product quantities", productQuantities);
-  const [selectedProductIds, setSelectedProductIds] = useState([]);
-  // console.log("selected  ProductIds:", selectedProductIds);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [orderQuantities, setOrderQuantities] = useState(null);
-  console.log(`Quantities`, orderQuantities);
+const navigation = useNavigation();
+const { draftData, setDraftData } = useDraft();
 
-  const [quantity, setQuantity] = useState([]); // Initialize with an empty string
-  console.log("this is quantity value ", quantity);
+//const { selectedItem, onDeleteItem } = route.params;
+const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
+console.log("draft page data", JSON.stringify(selectedItem, null, 2));
+const data = route.params?.data;
+const { customerInformation, setCustomerInformation } = useCustomerInfo();
+console.log(customerInformation, "customerInformation");
+const { isLoggedIn, setIsLoggedIn } = useLogin();
+const { userDetails } = isLoggedIn;
+const [showProductData, setShowProductData] = useState(true);
+const [showOrderData, setShowOrderData] = useState(false);
+const [isLoading, setIsLoading] = useState(false);
+const [products, setProducts] = useState([]);
+const [productQuantities, setProductQuantities] = useState([]);
+console.log("product quantities", productQuantities);
+const [selectedProductIds, setSelectedProductIds] = useState([]);
+// console.log("selected  ProductIds:", selectedProductIds);
+const [searchTerm, setSearchTerm] = useState("");
+const [orderQuantities, setOrderQuantities] = useState(null);
+console.log(`Quantities`, orderQuantities);
 
-  const [isLoadingProductData, setIsLoadingProductData] = useState(true);
+const [quantity, setQuantity] = useState([]); // Initialize with an empty string
+console.log("this is quantity value ", quantity);
 
-  const [selectedProduct, setSelectedProduct] = useState([]);
+const [isLoadingProductData, setIsLoadingProductData] = useState(true);
 
-  const [orderItems, setOrderItems] = useState([]);
-  //const [orderItems, setOrderItems] = useState(selectedItem.OrderDetails);
-  const [totalAmount, setTotalAmount] = useState([]);
+const [selectedProduct, setSelectedProduct] = useState([]);
 
-  // console.log("total ammount",totalAmount);
-  console.log(
-    "selected Products item :",
-    JSON.stringify(selectedProduct, null, 2)
-  );
+const [orderItems, setOrderItems] = useState([]);
+//const [orderItems, setOrderItems] = useState(selectedItem.OrderDetails);
+const [totalAmount, setTotalAmount] = useState([]);
 
-  // product api calling
-  useEffect(() => {
-    // Check if data is already in AsyncStorage
-    const getProductList = async () => {
-      try {
-        const storedData = await AsyncStorage.getItem("ProductList");
-        if (storedData) {
-          setProducts(JSON.parse(storedData));
-          setIsLoadingProductData(false);
-        } else {
-          // Data not in AsyncStorage, fetch from API
-          try {
-            const jsonData = await fetchProductData();
-            setProducts(jsonData);
-            setIsLoadingProductData(false);
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
-        }
-      } catch (error) {
-        console.error("Error reading stored data:", error);
-      } finally {
-        setIsLoadingProductData(false); // Set loading to false when fetch is complete
-      }
-    };
+// console.log("total ammount",totalAmount);
+console.log(
+"selected Products item :",
+JSON.stringify(selectedProduct, null, 2)
+);
 
-    // Call the function to check stored data or fetch from API
-    getProductList();
-  }, []);
-
-  const handleProductButtonPress = () => {
-    setShowProductData(true);
-    setShowOrderData(false);
-  };
-
-  const logQuantityValues = () => {
-    const quantityValues = selectedProduct.map((product) => {
-      const quantity = productQuantities[product.ProductId] || 0;
-      return quantity;
-    });
-
-    const totalAmountValues = selectedProduct.map((product, index) => {
-      const quantity = quantityValues[index];
-      return product.MRP * quantity;
-    });
-
-    setQuantity(quantityValues);
-    setTotalAmount(totalAmountValues);
-
-    // Log both quantity and totalAmount
-    console.log("Quantity:", quantityValues);
-    console.log("Total Amount:", totalAmountValues);
-  };
-
-  const handleOrderButtonPress = () => {
-    setShowProductData(false);
-    setShowOrderData(true);
-    // Initialize an object to store updated order quantities
-    const updatedOrderQuantities = {};
-    // Iterate over selected products and update order quantities
-    selectedProductIds.forEach((productId) => {
-      const quantity = productQuantities[productId] || 0;
-      if (quantity > 0) {
-        updatedOrderQuantities[productId] = quantity;
-      }
-    });
-
-    logQuantityValues();
-    setOrderQuantities(updatedOrderQuantities);
-  };
-
-  const handleQuantityChange = (productId, text) => {
-    if (text === "") {
-      // If the input is empty, clear the quantity
-      setProductQuantities((prevQuantities) => {
-        const updatedQuantities = { ...prevQuantities };
-        delete updatedQuantities[productId];
-        return updatedQuantities;
-      });
+// product api calling
+useEffect(() => {
+// Check if data is already in AsyncStorage
+const getProductList = async () => {
+  try {
+    const storedData = await AsyncStorage.getItem("ProductList");
+    if (storedData) {
+      setProducts(JSON.parse(storedData));
+      setIsLoadingProductData(false);
     } else {
-      const value = parseInt(text, 10);
-      if (!isNaN(value)) {
-        setProductQuantities((prevQuantities) => ({
-          ...prevQuantities,
-          [productId]: value,
-        }));
-
-        // If the entered quantity is greater than zero, add the productId to selectedProductIds
-        if (value > 0 && !selectedProductIds.includes(productId)) {
-          setSelectedProductIds((prevIds) => [...prevIds, productId]);
-        } else if (value === 0 && selectedProductIds.includes(productId)) {
-          // If the quantity is zero, remove the productId from selectedProductIds
-          setSelectedProductIds((prevIds) =>
-            prevIds.filter((id) => id !== productId)
-          );
-        }
+      // Data not in AsyncStorage, fetch from API
+      try {
+        const jsonData = await fetchProductData();
+        setProducts(jsonData);
+        setIsLoadingProductData(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     }
-  };
+  } catch (error) {
+    console.error("Error reading stored data:", error);
+  } finally {
+    setIsLoadingProductData(false); // Set loading to false when fetch is complete
+  }
+};
 
-  // Function to calculate total price
-  const calculateTotalPrice = () => {
-    let totalPrice = 0;
+// Call the function to check stored data or fetch from API
+getProductList();
+}, []);
 
-    selectedProductIds.forEach((productId) => {
-      const selectedProduct = products.find(
-        (product) => product.ProductId === productId
+const handleProductButtonPress = () => {
+setShowProductData(true);
+setShowOrderData(false);
+};
+
+const logQuantityValues = () => {
+const quantityValues = selectedProduct.map((product) => {
+  const quantity = productQuantities[product.ProductId] || 0;
+  return quantity;
+});
+
+const totalAmountValues = selectedProduct.map((product, index) => {
+  const quantity = quantityValues[index];
+  return product.MRP * quantity;
+});
+
+setQuantity(quantityValues);
+setTotalAmount(totalAmountValues);
+
+// Log both quantity and totalAmount
+console.log("Quantity:", quantityValues);
+console.log("Total Amount:", totalAmountValues);
+};
+
+const handleOrderButtonPress = () => {
+setShowProductData(false);
+setShowOrderData(true);
+// Initialize an object to store updated order quantities
+const updatedOrderQuantities = {};
+// Iterate over selected products and update order quantities
+selectedProductIds.forEach((productId) => {
+  const quantity = productQuantities[productId] || 0;
+  if (quantity > 0) {
+    updatedOrderQuantities[productId] = quantity;
+  }
+});
+
+logQuantityValues();
+setOrderQuantities(updatedOrderQuantities);
+};
+
+const handleQuantityChange = (productId, text) => {
+if (text === "") {
+  // If the input is empty, clear the quantity
+  setProductQuantities((prevQuantities) => {
+    const updatedQuantities = { ...prevQuantities };
+    delete updatedQuantities[productId];
+    return updatedQuantities;
+  });
+} else {
+  const value = parseInt(text, 10);
+  if (!isNaN(value)) {
+    setProductQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: value,
+    }));
+
+    // If the entered quantity is greater than zero, add the productId to selectedProductIds
+    if (value > 0 && !selectedProductIds.includes(productId)) {
+      setSelectedProductIds((prevIds) => [...prevIds, productId]);
+    } else if (value === 0 && selectedProductIds.includes(productId)) {
+      // If the quantity is zero, remove the productId from selectedProductIds
+      setSelectedProductIds((prevIds) =>
+        prevIds.filter((id) => id !== productId)
       );
-      const quantity = productQuantities[productId] || 0;
-      totalPrice += selectedProduct.MRP * quantity;
-    });
+    }
+  }
+}
+};
 
-    return totalPrice;
-  };
+// Function to calculate total price
+const calculateTotalPrice = () => {
+let totalPrice = 0;
 
-  // Filter products based on the search term
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) =>
-      product.Name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [products, searchTerm]);
+selectedProductIds.forEach((productId) => {
+  const selectedProduct = products.find(
+    (product) => product.ProductId === productId
+  );
+  const quantity = productQuantities[productId] || 0;
+  totalPrice += selectedProduct.MRP * quantity;
+});
 
-  // ================================== main api calling ========================================================
+return totalPrice;
+};
 
-  const draftOrderDetails = selectedItem.OrderDetails.map((product) => {
-    return {
-      ProductId: product.ProductId,
-      Quantity: product.Quantity,
-      UnitPrice: product.UnitPrice,
-      Status: 0,
-    };
-  });
+// Filter products based on the search term
+const filteredProducts = useMemo(() => {
+return products.filter((product) =>
+  product.Name.toLowerCase().includes(searchTerm.toLowerCase())
+);
+}, [products, searchTerm]);
 
-  const transformedOrderDetails = selectedProduct.map((product, index) => {
-    return {
-      ProductId: product.ProductId,
-      Quantity: quantity[index],
-      UnitPrice: product.MRP,
-      Status: 0,
-    };
-  });
+// ================================== main api calling ========================================================
 
-  const initialMergedOrderDetails = [
-    ...draftOrderDetails,
-    ...transformedOrderDetails,
-  ];
-  console.log("merge data", JSON.stringify(initialMergedOrderDetails, null, 2));
+const draftOrderDetails = selectedItem.OrderDetails.map((product) => {
+return {
+  ProductId: product.ProductId,
+  Quantity: product.Quantity,
+  UnitPrice: product.UnitPrice,
+  Status: 0,
+};
+});
 
-  const fetchCreatenewOrderData = async () => {
-    const requestData = {
-      OrderDetails: initialMergedOrderDetails,
-      CustomerId: selectedItem?.CustomerId,
-      OrderDate: selectedItem?.OrderDate,
-      DeliveryDate: selectedItem?.DeliveryDate,
-      EntryBy: selectedItem?.EntryBy,
-      Note: selectedItem?.Note,
-      TerritoryId: selectedItem?.TerritoryId,
-    };
+const transformedOrderDetails = selectedProduct.map((product, index) => {
+return {
+  ProductId: product.ProductId,
+  Quantity: quantity[index],
+  UnitPrice: product.MRP,
+  Status: 0,
+};
+});
+
+const initialMergedOrderDetails = [
+...draftOrderDetails,
+...transformedOrderDetails,
+];
+console.log("merge data", JSON.stringify(initialMergedOrderDetails, null, 2));
+
+const fetchCreatenewOrderData = async () => {
+const requestData = {
+  OrderDetails: initialMergedOrderDetails,
+  CustomerId: selectedItem?.CustomerId,
+  OrderDate: selectedItem?.OrderDate,
+  DeliveryDate: selectedItem?.DeliveryDate,
+  EntryBy: selectedItem?.EntryBy,
+  Note: selectedItem?.Note,
+  TerritoryId: selectedItem?.TerritoryId,
+};
+
+console.log(
+  "Posting Create order Api  data:",
+  JSON.stringify(requestData, null, 2)
+);
+
+const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+
+try {
+  const response = await fetch(
+    `${BASE_URL}/api/NewOrderApi/CreateNewOrder`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authHeader,
+      },
+      body: JSON.stringify(requestData),
+    }
+  );
+  console.log(response);
+  if (response.status === 200) {
+    const result = await response.json();
+    // setOutput(result);
 
     console.log(
-      "Posting Create order Api  data:",
-      JSON.stringify(requestData, null, 2)
+      "this is result from draft",
+      JSON.stringify(result, null, 2)
     );
 
-    const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+    // navigation.navigate("Order Info");
 
-    try {
-      const response = await fetch(
-        `${BASE_URL}/api/NewOrderApi/CreateNewOrder`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: authHeader,
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
-      console.log(response);
-      if (response.status === 200) {
-        const result = await response.json();
-        // setOutput(result);
-
-        console.log(
-          "this is result from draft",
-          JSON.stringify(result, null, 2)
-        );
-
-        // navigation.navigate("Order Info");
-
-        navigation.navigate("Order Info", {
-          orderNo: result.OrderNo, // Pass OrderNo as a parameter
-        });
-
-        Toast.show({
-          text1: result.Status,
-          type: "success",
-        });
-      } else {
-        // Handle errors here if needed
-        console.error("API request failed with status code:", response.status);
-        ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
-      }
-    } catch (error) {}
-  };
-
-  // ==================================
-
-  useEffect(() => {
-    // Inside this effect, filter and set the selected products based on product IDs
-    const selectedProducts = selectedProductIds.map((productId) => {
-      return products.find((product) => product.ProductId === productId);
+    navigation.navigate("Order Info", {
+      orderNo: result.OrderNo, // Pass OrderNo as a parameter
     });
 
-    setSelectedProduct(
-      selectedProducts.filter((product) => product !== undefined)
-    );
-  }, [selectedProductIds, products]);
+    Toast.show({
+      text1: result.Status,
+      type: "success",
+    });
+  } else {
+    // Handle errors here if needed
+    console.error("API request failed with status code:", response.status);
+    ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
+  }
+} catch (error) {}
+};
 
-  // ============================
-  const handleDeleteProduct = (productId) => {
-    setSelectedProductIds((prevIds) =>
-      prevIds.filter((id) => id !== productId)
-    );
-  };
+// ==================================
 
-  const handleDeleteOrderItem = async (productId) => {
-    try {
-      // Create a copy of the draftData array
-      const updatedDraftData = [...draftData];
-      // Find the specific item within the cloned array
-      const itemIndex = updatedDraftData.findIndex(
-        (item) => item.CustomerId === selectedItem.CustomerId
+useEffect(() => {
+// Inside this effect, filter and set the selected products based on product IDs
+const selectedProducts = selectedProductIds.map((productId) => {
+  return products.find((product) => product.ProductId === productId);
+});
+
+setSelectedProduct(
+  selectedProducts.filter((product) => product !== undefined)
+);
+}, [selectedProductIds, products]);
+
+// ============================
+const handleDeleteProduct = (productId) => {
+setSelectedProductIds((prevIds) =>
+  prevIds.filter((id) => id !== productId)
+);
+};
+
+const handleDeleteOrderItem = async (productId) => {
+try {
+  // Create a copy of the draftData array
+  const updatedDraftData = [...draftData];
+  // Find the specific item within the cloned array
+  const itemIndex = updatedDraftData.findIndex(
+    (item) => item.CustomerId === selectedItem.CustomerId
+  );
+  if (itemIndex !== -1) {
+    // Clone the selected item within the array
+    const updatedSelectedItem = { ...updatedDraftData[itemIndex] };
+
+    // Filter out the item with the specified productId from OrderDetails
+    const updatedOrderDetailsFiltered =
+      updatedSelectedItem.OrderDetails.filter(
+        (orderItem) => orderItem.ProductId !== productId
       );
-      if (itemIndex !== -1) {
-        // Clone the selected item within the array
-        const updatedSelectedItem = { ...updatedDraftData[itemIndex] };
+    // Update the selected item's OrderDetails with the filtered data
+    updatedSelectedItem.OrderDetails = updatedOrderDetailsFiltered;
+    setSelectedItem(updatedSelectedItem);
+    // Update the draftData array with the modified item
+    updatedDraftData[itemIndex] = updatedSelectedItem;
+    // Update the AsyncStorage data with the modified draftData
+    await AsyncStorage.setItem(
+      "customerInformation",
+      JSON.stringify(updatedDraftData)
+    );
+    // Update the state with the modified data
+    setDraftData(updatedDraftData);
+  }
+} catch (error) {
+  console.error("Error deleting item:", error);
+}
+};
 
-        // Filter out the item with the specified productId from OrderDetails
-        const updatedOrderDetailsFiltered =
-          updatedSelectedItem.OrderDetails.filter(
-            (orderItem) => orderItem.ProductId !== productId
-          );
-        // Update the selected item's OrderDetails with the filtered data
-        updatedSelectedItem.OrderDetails = updatedOrderDetailsFiltered;
-        setSelectedItem(updatedSelectedItem);
-        // Update the draftData array with the modified item
-        updatedDraftData[itemIndex] = updatedSelectedItem;
-        // Update the AsyncStorage data with the modified draftData
-        await AsyncStorage.setItem(
-          "customerInformation",
-          JSON.stringify(updatedDraftData)
-        );
-        // Update the state with the modified data
-        setDraftData(updatedDraftData);
-      }
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
-  };
+//css issue
+const isSelectedProduct = (productId) => {
+return selectedProductIds.includes(productId);
+};
 
-  //css issue
-  const isSelectedProduct = (productId) => {
-    return selectedProductIds.includes(productId);
-  };
+return (
+<View style={styles.container}>
+  <View style={styles.userInformation}>
+    <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
+    <Text style={{ color: "black" }}>({selectedItem?.CustomerId})</Text>
+  </View>
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.userInformation}>
-        <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
-        <Text style={{ color: "black" }}>({selectedItem?.CustomerId})</Text>
+  <View style={styles.searchBox}>
+    <View style={styles.inputContainerx}>
+      <TextInput
+        style={styles.inputx}
+        placeholder="Search..."
+        onChangeText={(text) => setSearchTerm(text)}
+      />
+      <Icon
+        name="search" // Font Awesome icon name
+        size={24}
+        style={styles.iconx}
+      />
+    </View>
+  </View>
+
+  <View style={styles.buttonContainer}>
+    <TouchableOpacity style={{ width: "50%" }}>
+      <Button
+        style={styles.button}
+        onPress={handleProductButtonPress}
+        // disabled={isLoading} // Disable the button when loading
+      >
+        Product List
+      </Button>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={{ width: "50%" }}>
+      <Button color="#2E97A7" onPress={handleOrderButtonPress}>
+        Order Details
+      </Button>
+    </TouchableOpacity>
+  </View>
+
+  <>
+    {isLoadingProductData ? (
+      <View style={styles.loadingContainer}>
+        {/* <ActivityIndicator size="large" color="#0077b6" /> */}
+        <LottieView
+          source={require("../../Lottie/animation_ln8n5kbe.json")}
+          autoPlay
+          loop
+          style={styles.lottiContainer}
+        />
       </View>
+    ) : (
+<View>
+  <>
+    {showProductData && (
+      //key id
+      <View style={styles.dataContainer}>
+        <FlatList
+          data={filteredProducts}
+          keyExtractor={(product) => product.ProductId.toString()}
+          renderItem={({ item: product }) => (
+            <View style={styles.row}>
+              <View style={styles.infoContainer}>
+                <Text style={styles.name}>{product.Name}</Text>
 
-      <View style={styles.searchBox}>
-        <View style={styles.inputContainerx}>
-          <TextInput
-            style={styles.inputx}
-            placeholder="Search..."
-            onChangeText={(text) => setSearchTerm(text)}
-          />
-          <Icon
-            name="search" // Font Awesome icon name
-            size={24}
-            style={styles.iconx}
-          />
-        </View>
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={{ width: "50%" }}>
-          <Button
-            style={styles.button}
-            onPress={handleProductButtonPress}
-            // disabled={isLoading} // Disable the button when loading
-          >
-            Product List
-          </Button>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={{ width: "50%" }}>
-          <Button color="#2E97A7" onPress={handleOrderButtonPress}>
-            Order Details
-          </Button>
-        </TouchableOpacity>
-      </View>
-
-      <>
-        {isLoadingProductData ? (
-          <View style={styles.loadingContainer}>
-            {/* <ActivityIndicator size="large" color="#0077b6" /> */}
-            <LottieView
-              source={require("../../Lottie/animation_ln8n5kbe.json")}
-              autoPlay
-              loop
-              style={styles.lottiContainer}
-            />
-          </View>
-        ) : (
-          <View>
-            <>
-              {showProductData && (
-                //key id
-                <View style={styles.dataContainer}>
-                  <FlatList
-                    data={filteredProducts}
-                    keyExtractor={(product) => product.ProductId.toString()}
-                    renderItem={({ item: product }) => (
-                      <View style={styles.row}>
-                        <View style={styles.infoContainer}>
-                          <Text style={styles.name}>{product.Name}</Text>
-
-                          <View style={{ flexDirection: "row", gap: 10 }}>
-                            <Text style={styles.price}>
-                              price: {product.MRP}
-                            </Text>
-                            <Text style={styles.price}>
-                              PackSize: {product.PackSize}
-                            </Text>
-                          </View>
-                        </View>
-
-                        <View style={styles.quantityContainer}>
-                          <View style={styles.containerx}>
-                            <View style={styles.inputContainer}>
-                              <TextInput
-                                placeholder="QTY"
-                                style={styles.input}
-                                keyboardType="numeric"
-                                value={
-                                  productQuantities[product.ProductId]
-                                    ? productQuantities[
-                                        product.ProductId
-                                      ].toString()
-                                    : ""
-                                }
-                                onChangeText={(text) =>
-                                  handleQuantityChange(product.ProductId, text)
-                                }
-                              />
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                    )}
-                  />
+                <View style={{ flexDirection: "row", gap: 10 }}>
+                  <Text style={styles.price}>
+                    price: {product.MRP}
+                  </Text>
+                  <Text style={styles.price}>
+                    PackSize: {product.PackSize}
+                  </Text>
                 </View>
-              )}
-            </>
+              </View>
 
-            <>
-              <View>
-                {showOrderData && (
-                  <View style={styles.dataContainer}>
-                    <View style={styles.tableHeader}>
-                      <Text style={styles.headerText}>Name</Text>
+              <View style={styles.quantityContainer}>
+                <View style={styles.containerx}>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      placeholder="QTY"
+                      style={styles.input}
+                      keyboardType="numeric"
+                      value={
+                        productQuantities[product.ProductId]
+                          ? productQuantities[
+                              product.ProductId
+                            ].toString()
+                          : ""
+                      }
+                      onChangeText={(text) =>
+                        handleQuantityChange(product.ProductId, text)
+                      }
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+          )}
+        />
+      </View>
+    )}
+  </>
 
-                      {/* <Text style={styles.headerText}>Quantity</Text> */}
-                      <Text style={[styles.headerText, styles.quantity]}>
-                        Quantity
-                      </Text>
+  <>
+    <View>
+      {showOrderData && (
+        <View style={styles.dataContainer}>
+          <View style={styles.tableHeader}>
+            <Text style={styles.headerText}>Name</Text>
 
-                      {/* <Text 
-            style={[styles.cellText, isSelectedProduct(specificProduct.ProductId) && styles.quantityWithMargin]}>
-                {quantity}
-                </Text> */}
+            {/* <Text style={styles.headerText}>Quantity</Text> */}
+            <Text style={[styles.headerText, styles.quantity]}>
+              Quantity
+            </Text>
 
-                      <Text style={styles.headerText}>Amount</Text>
-                      <Text style={styles.headerText}>Action</Text>
-                    </View>
+            {/* <Text 
+  style={[styles.cellText, isSelectedProduct(specificProduct.ProductId) && styles.quantityWithMargin]}>
+      {quantity}
+      </Text> */}
 
-                    {/* Render selectedProduct */}
-                    {selectedProduct.map((specificProduct) => {
-                      const quantity =
-                        productQuantities[specificProduct.ProductId] || 0;
+            <Text style={styles.headerText}>Amount</Text>
+            <Text style={styles.headerText}>Action</Text>
+          </View>
 
-                      if (quantity > 0) {
-                        return (
-                          <View
-                            style={styles.tableRow}
-                            key={specificProduct.ProductId}
-                          >
-                            <Text style={styles.cellText} numberOfLines={2}>
-                              {specificProduct.Name}
-                            </Text>
+          {/* Render selectedProduct */}
+          {selectedProduct.map((specificProduct) => {
+            const quantity =
+              productQuantities[specificProduct.ProductId] || 0;
 
-                            {/* <Text style={styles.cellText}>{quantity}</Text> */}
-                            <Text style={[styles.cellText, styles.quantity]}>
-                              {quantity}
-                            </Text>
+            if (quantity > 0) {
+              return (
+                <View
+                  style={styles.tableRow}
+                  key={specificProduct.ProductId}
+                >
+                  <Text style={styles.cellText} numberOfLines={2}>
+                    {specificProduct.Name}
+                  </Text>
 
-                            <Text style={styles.cellText}>
-                              {specificProduct.MRP * quantity}
-                            </Text>
+                  {/* <Text style={styles.cellText}>{quantity}</Text> */}
+                  <Text style={[styles.cellText, styles.quantity]}>
+                    {quantity}
+                  </Text>
 
-                            <View style={{ flex: 1, alignSelf: "center" }}>
-                              <TouchableOpacity
-                                style={styles.actionButton}
-                                onPress={() =>
-                                  handleDeleteProduct(specificProduct.ProductId)
-                                }
+                  <Text style={styles.cellText}>
+                    {specificProduct.MRP * quantity}
+                  </Text>
 
-                                //onPress={() => console.log("Delete button pressed")}
-                              >
-                                <Icon name="trash" size={20} color="#212529" />
-                              </TouchableOpacity>
-                            </View>
-                          </View>
-                        );
+                  <View style={{ flex: 1, alignSelf: "center" }}>
+                    <TouchableOpacity
+                      style={styles.actionButton}
+                      onPress={() =>
+                        handleDeleteProduct(specificProduct.ProductId)
                       }
 
-                      return null;
-                    })}
-
-                    {/* Render OrderDetails */}
-                    {selectedItem.OrderDetails.map((orderItem) => (
-                      <View style={styles.tableRow} key={orderItem.ProductId}>
-                        <Text style={styles.cellText} numberOfLines={2}>
-                          {orderItem.ProductName}
-                        </Text>
-
-                        <Text style={styles.cellText}>
-                          {orderItem.Quantity}
-                        </Text>
-
-                        <Text style={styles.cellText}>
-                          {orderItem.TotalAmount}
-                        </Text>
-
-                        <View style={{ flex: 1, alignSelf: "center" }}>
-                          <TouchableOpacity
-                            style={[styles.actionButton]}
-                            //onPress={() => handleDeleteOrderItem(orderItem.ProductId)}
-                            onPress={() =>
-                              handleDeleteOrderItem(orderItem.ProductId)
-                            }
-                          >
-                            <Icon name="trash" size={20} color="#212529" />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    ))}
-
-                    <View style={styles.btngrp}>
-                      <Button onPress={fetchCreatenewOrderData}>Submit</Button>
-                    </View>
+                      //onPress={() => console.log("Delete button pressed")}
+                    >
+                      <Icon name="trash" size={20} color="#212529" />
+                    </TouchableOpacity>
                   </View>
-                )}
-              </View>
-            </>
-          </View>
-        )}
-      </>
+                </View>
+              );
+            }
 
-      {/* <Text style={styles.totalPriceText}>
-    Total Price: {calculateTotalPrice()}
-  </Text> */}
+            return null;
+          })}
+
+          {/* Render OrderDetails */}
+          {selectedItem.OrderDetails.map((orderItem) => (
+            <View style={styles.tableRow} key={orderItem.ProductId}>
+              <Text style={styles.cellText} numberOfLines={2}>
+                {orderItem.ProductName}
+              </Text>
+
+              <Text style={styles.cellText}>
+                {orderItem.Quantity}
+              </Text>
+
+              <Text style={styles.cellText}>
+                {orderItem.TotalAmount}
+              </Text>
+
+              <View style={{ flex: 1, alignSelf: "center" }}>
+                <TouchableOpacity
+                  style={[styles.actionButton]}
+                  //onPress={() => handleDeleteOrderItem(orderItem.ProductId)}
+                  onPress={() =>
+                    handleDeleteOrderItem(orderItem.ProductId)
+                  }
+                >
+                  <Icon name="trash" size={20} color="#212529" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+
+          <View style={styles.btngrp}>
+            <Button onPress={fetchCreatenewOrderData}>Submit</Button>
+          </View>
+        </View>
+
+
+
+      )}
     </View>
+  </>
+</View>
+    )}
+  </>
+
+  {/* <Text style={styles.totalPriceText}>
+Total Price: {calculateTotalPrice()}
+</Text> */}
+</View>
   );
 };
 
 export default DraftRequest;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -711,10 +716,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: "bold",
     color: "#00050e",
-
+    textAlign: "center", 
+    flexWrap: "wrap",  
     // borderWidth:1,
     // color: "#1985a1",
-    textAlign: "center",
   },
 
   quantity: {

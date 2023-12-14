@@ -94,7 +94,7 @@ const RegistrationPage = ({ navigation }) => {
       <View style={styles.container}>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
           <View style={styles.header}>
-            <Text style={styles.headerText}>Sign Up Here</Text>
+            <Text style={styles.headerText}>Register Here</Text>
           </View>
           <TextInput
             style={styles.input}

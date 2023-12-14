@@ -129,7 +129,6 @@ const OrderStatus = () => {
   };
 
   useFocusEffect(
-    
     React.useCallback(() => {
       setOrderDate(new Date());
       setDeliveryDate(new Date());

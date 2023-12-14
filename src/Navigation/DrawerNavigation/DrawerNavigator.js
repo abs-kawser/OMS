@@ -39,11 +39,6 @@ const DrawerNavigator = () => {
         component={HomeScreen}
         options={{
           drawerIcon: ({ focused, size }) => (
-            // <FontAwesome
-            //   name="home"
-            //   size={size}
-            //   color={focused ? "black" : "gray"}
-            // />
             <Image
               style={{ height: 30, width: 30, resizeMode: "contain" }}
               source={require("../../../assets/homes.png")}
@@ -58,12 +53,6 @@ const DrawerNavigator = () => {
         options={{
           drawerLabel: "Create Order",
           drawerIcon: ({ focused, size }) => (
-            // <FontAwesome
-            //   name="plus-circle" // Change this to the actual icon name
-            //   size={size}
-            //   color={focused ? "black" : "gray"}
-            // />
-
             <Image
               style={{ height: 30, width: 30, resizeMode: "contain" }}
               source={require("../../../assets/delivery-service.png")}
@@ -84,12 +73,6 @@ const DrawerNavigator = () => {
           headerTitleAlign: "center",
 
           drawerIcon: ({ focused, size }) => (
-            // <FontAwesome
-            //   name="file-export" // Change this to the actual icon name
-            //   size={size}
-            //   color={focused ? "black" : "gray"}
-            // />
-
             <Image
               style={{ height: 30, width: 30, resizeMode: "contain" }}
               source={require("../../../assets/notes.png")}

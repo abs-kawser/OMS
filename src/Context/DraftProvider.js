@@ -6,6 +6,7 @@ const DraftProvider = ({ children }) => {
   const [draftData, setDraftData] = useState([]);
 
   return (
+    
     <DraftContext.Provider value={{draftData, setDraftData}}>
       {children}
     </DraftContext.Provider>
@@ -13,5 +14,4 @@ const DraftProvider = ({ children }) => {
 };
 
 export const useDraft = () => useContext(DraftContext);
-
 export default DraftProvider;
