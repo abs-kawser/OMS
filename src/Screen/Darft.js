@@ -12,6 +12,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useDraft } from "../Context/DraftProvider";
+import { blackColor } from "../../varible";
 
 const Draft = ({ navigation }) => {
   const { draftData, setDraftData } = useDraft();
@@ -51,16 +52,44 @@ const Draft = ({ navigation }) => {
       setDraftData(updatedDraftData);
 
       // Show a success message
+
       ToastAndroid.show("Delete Successful", ToastAndroid.SHORT);
+
+
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
 
+
+    // handle darft data from draft request page
+    const handleDraftItem = async (selectedItem) => {
+      try {
+        // Filter out the selected item from draftData
+        const updatedDraftData = draftData.filter(
+          (item) => item !== selectedItem
+        );
+        // Update the AsyncStorage with the updated data
+        await AsyncStorage.setItem(
+          "customerInformation",
+          JSON.stringify(updatedDraftData)
+        );
+        // Update the state to reflect the changes
+        setDraftData(updatedDraftData);
+  
+        // Show a success message
+        // ToastAndroid.show("Delete Successful", ToastAndroid.SHORT);
+  
+  
+      } catch (error) {
+        console.error("Error deleting item:", error);
+      }
+    };
+
   const handleItemPress = (selectedItem) => {
     navigation.navigate("Draft Request", {
       selectedItem,
-      onDeleteItem: handleDeleteItem,
+      onDeleteItem: handleDraftItem,
     });
     // Alert.alert(selectedItem.Note);
   };
@@ -133,6 +162,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   headerText: {
+    color:blackColor,
     fontWeight: "700",
     fontFamily: "Roboto-bold",
   },
@@ -153,6 +183,8 @@ const styles = StyleSheet.create({
   },
   column60: {
     flex: 6,
+    // fontWeight: "700",
+    // fontFamily: "Roboto-bold",
   },
   iconColumn: {
     flex: 2,

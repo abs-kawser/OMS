@@ -86,9 +86,9 @@ const DrawerItems = (props) => {
             <Text style={[styles.boldWhiteText, styles.italicText]}>
               {userDetails.FullName}
             </Text>
-            <Text style={[styles.grayText, styles.italicText]}>
+            {/* <Text style={[styles.grayText, styles.italicText]}>
               {userDetails.Email}
-            </Text>
+            </Text> */}
           </View>
 
 

@@ -7,6 +7,7 @@ import ElevatedCards from "../../components/ElevatedCards";
 import { useLogin } from "../Context/LoginProvider";
 import FlatCards from "../../components/FlatCards";
 import LinearGradient from "react-native-linear-gradient";
+import { blackColor } from "../../varible";
 
 export default function HomeScreen() {
   //it comes from contex
@@ -15,14 +16,13 @@ export default function HomeScreen() {
 
   return (
     //
-    <ScrollView style={{ backgroundColor: "#f4f3ee" }}>
+    <ScrollView style={{ backgroundColor: "#f4f3ee",marginTop:"30%" }}>
       <View style={styles.centeredContainer}>
         <Text style={styles.welcomeText}>Welcome to OMS</Text>
         {/* <Text style={styles.detailsText}>This is your details</Text> */}
       </View>
 
-      <View style={styles.container}>
-        {/* <Text style={styles.Details}>User Information</Text> */}
+      {/* <View style={styles.container}>
         <Text style={styles.text}>Name: {userDetails.FullName}</Text>
         <Text style={styles.text}>Email: {userDetails.Email}</Text>
         <Text style={styles.text}>Mobile: {userDetails.MobileNo}</Text>
@@ -30,12 +30,11 @@ export default function HomeScreen() {
           Designation: {userDetails.DesignationName}
         </Text>
         <Text style={styles.text}>Full Region: {userDetails.RegionName}</Text>
-        {/* <Text style={styles.text}>EmpId: {userDetails.EmpId}</Text> */}
-      </View>
+      </View> */}
 
       <View
         // backgroundColor: "#90e0ef", elevation: 20,
-        style={{ borderRadius: 10 }}
+        style={{ borderRadius: 10, }}
       >
         <FlatCards />
       </View>
@@ -79,7 +78,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontFamily: "Roboto-bold", // font weight issue solve when using this property
 
-    color: "#57cc99",
+    // color: "#57cc99",
+    color:blackColor,
     marginBottom: 10, // Add margin bottom for separation
   },
   detailsText: {

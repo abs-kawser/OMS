@@ -89,6 +89,14 @@ const OrderStatus = () => {
   };
 
   const fetchOrderStatus = async () => {
+
+    if (deliveryDate < orderDate) {
+      setError("Delivery date cannot be earlier than order date");
+      return;
+    }
+
+
+
     try {
       if (!customerId) {
         setCustomerError("Please fill up the customer ID");

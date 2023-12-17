@@ -52,7 +52,6 @@ const OrderInfo = ({ route }) => {
   });
 
   return (
-    <ScrollView>
       <View style={{ padding: 10, backgroundColor: "#e9ecef", elevation: 5 }}>
         <View style={styles.pageInfoOne}>
           <Text style={styles.text}>Order No: {data?.OrderBaicInfo?.OrderNo}</Text>
@@ -76,7 +75,8 @@ const OrderInfo = ({ route }) => {
           </Text>
         </View>
 
-        <View
+   {/* this part  */}
+        {/* <View
           style={{
             alignSelf: "center",
             width: "100%",
@@ -101,28 +101,61 @@ const OrderInfo = ({ route }) => {
               </View>
             </View>
           ))}
-        </View>
+        </View> */}
+        <ScrollView> 
+      <View style={styles.tableContainer}>
+  <View style={styles.tableHeader}>
+    <View style={styles.column}>
+      <Text style={styles.headerText}>Name</Text>
+    </View>
+    <View style={styles.column2}>
+      <Text style={styles.headerText}>Quantity</Text>
+    </View>
+    <View style={styles.column2}>
+      <Text style={styles.headerText}>Price</Text>
+    </View>
+  </View>
 
-        {/* grand total */}
-
-        <View style={{ alignSelf: "flex-end" }}>
-          <Text style={{ fontSize: 18, color: "black" }}>
-            Total = {grandTotal}
-          </Text>
-        </View>
-
-        <View style={{ width: 100, alignSelf: "center", marginVertical: 30 }}>
-          <Button
-            icon="arrow-left"
-            mode="contained"
-            onPress={() => navigation.navigate("Home")}
-            buttonColor="tomato"
-          >
-            Back
-          </Button>
-        </View>
+  {data?.OrderItemList?.map((item, index) => (
+    <View style={styles.tableRow} key={index}>
+      <View style={styles.column}>
+        <Text style={styles.label} numberOfLines={2}>
+          {item.ProductName}
+        </Text>
       </View>
-    </ScrollView>
+
+      <View style={styles.column2}>
+        <Text style={styles.label}>{item.Quantity}</Text>
+      </View>
+
+      <View style={styles.column2}>
+        <Text style={styles.label}>{item.TotalPrice}</Text>
+      </View>
+    </View>
+  ))}
+</View>
+</ScrollView> 
+
+
+        {/* part end */}
+      {/* grand total */}
+  <View style={{ alignSelf: "flex-end" }}>
+    <Text style={{ fontSize: 18, color: "black" }}>
+      Total = {grandTotal}
+    </Text>
+  </View>
+
+  <View style={{ width: 100, alignSelf: "center", marginVertical: 30 }}>
+    <Button
+      icon="arrow-left"
+      mode="contained"
+      onPress={() => navigation.navigate("Home")}
+      buttonColor="tomato"
+    >
+      Back
+    </Button>
+  </View>
+</View>
   );
 };
 
@@ -143,7 +176,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 5,
     // elevation: 4,
-
     // padding:10
   },
   text: {
@@ -168,5 +200,34 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
+  },
+
+
+  // ===========
+  tableContainer: {
+    alignSelf: "center",
+    width: "100%",
+    marginVertical: 20,
+    backgroundColor: "#ffffff",
+    borderRadius: 5,
+    elevation: 2,
+  },
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
+    backgroundColor: "#f0f0f0",
+  },
+  tableRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
+    borderBottomColor: "#e0e0e0",
+    borderBottomWidth: 1,
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: "700",
+    fontFamily: 'Roboto-bold', 
   },
 });

@@ -13,11 +13,15 @@ import ChangePassword from "../../Screen/ChangePassword";
 import NoOrder from "../../Screen/NoOrder";
 import CreateOrder from "../../Screen/CreateOrder";
 import HomeScreen from "../../Screen/HomeScreen";
+import ProfilePage from "../../Screen/ProfilePage";
 // import { Image } from "react-native-paper/lib/typescript/components/Avatar/Avatar";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const Drawer = createDrawerNavigator();
 
 //Drawer navigation total screen
+
+
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
@@ -43,6 +47,21 @@ const DrawerNavigator = () => {
               style={{ height: 30, width: 30, resizeMode: "contain" }}
               source={require("../../../assets/homes.png")}
             />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="Profile"
+        component={ProfilePage}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Icon name="user" size={38} color="#3498db" />
+
+            // <Image
+            //   style={{ height: 30, width: 30, resizeMode: "contain" }}
+            //   source={require("../../../assets/homes.png")}
+            // />
           ),
         }}
       />
@@ -183,6 +202,9 @@ const DrawerNavigator = () => {
     </Drawer.Navigator>
   );
 };
+
+
+
 
 export default DrawerNavigator;
 

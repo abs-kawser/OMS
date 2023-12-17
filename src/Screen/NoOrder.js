@@ -196,30 +196,31 @@ const NoOrder = () => {
     };
 
     try {
-      // if (!value || !note || !deliveryDate || !orderDate) {
-      //   // setError('Please fill in both username and password fields');
-      //   ToastAndroid.show(
-      //     "Please fill up all input fields",
-      //     ToastAndroid.SHORT
-      //   );
-      //   return;
-      // }
+
+        // Check if delivery date is earlier than order date
+  if (deliveryDate < orderDate) {
+    setError("Delivery date cannot be earlier than order date");
+    return;
+  }
 
       if (!value || !note || !deliveryDate || !orderDate) {
-        // toast.show({
-        //   text: 'Please fill up all input fields',
-        //   position: 'bottom',
-        //   duration: 3000,
-        //   textStyle: { fontSize: 15 },
-        // });
-        toast.show("Please fill up all fields❌", {
-          type: "normal",
-          duration: 2000,
-        });
-        //toast.show('successfully submited',{type: 'normal', duration: 2000});
-
+        // setError('Please fill in both username and password fields');
+        ToastAndroid.show(
+          "Please fill up all input fields",
+          ToastAndroid.SHORT
+        );
         return;
       }
+
+      // if (!value || !note || !deliveryDate || !orderDate) {
+      //   toast.show("Please fill up all fields❌", {
+      //     type: "normal",
+      //     duration: 2000,
+      //   });
+      //   //toast.show('successfully submited',{type: 'normal', duration: 2000});
+
+      //   return;
+      // }
 
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
       const response = await fetch(`${BASE_URL}/api/NoOrderApi/CreateNoOrder`, {

@@ -255,22 +255,55 @@ export default function CreateOrder() {
 
   //Routing
 
+  // const nextPageComponent = () => {
+  //   if (!value || !note) {
+  //     if (!value) {
+  //       // Alert.alert("Customer field required", "Please select a customer.");
+  //       setCustomerError("Customer field is required");
+  //     }
+  //     if (!note) {
+  //       // Alert.alert("Note field required", "Please enter a note.");
+  //       setNoteError("Note field is required");
+  //     }
+  //     return;
+  //   }
+  //   setNoteError("");
+  //   setCustomerError("");
+
+ 
+  // // Navigate to the next page
+  //   navigation.navigate("Order Details", { data: requestData });
+
+  // };
+
+
   const nextPageComponent = () => {
+    // Check if delivery date is earlier than order date
+    if (deliveryDate < orderDate) {
+      setError("Delivery date cannot be earlier than order date");
+      return;
+    }
+  
+    // Check if required fields are filled
     if (!value || !note) {
       if (!value) {
-        // Alert.alert("Customer field required", "Please select a customer.");
         setCustomerError("Customer field is required");
       }
       if (!note) {
-        // Alert.alert("Note field required", "Please enter a note.");
         setNoteError("Note field is required");
       }
       return;
     }
+  
+    // Clear any previous errors
     setNoteError("");
     setCustomerError("");
+    setError("");
+  
+    // Navigate to the next page
     navigation.navigate("Order Details", { data: requestData });
   };
+  
 
 
 
@@ -336,9 +369,6 @@ export default function CreateOrder() {
     <TouchableOpacity
       style={styles.button}
       onPress={() => showDatepicker("order")}
-
-      // Disable if client name is not valid
-      // disabled={!isClientNameValid}
     >
       {showOrderDatePicker && (
         <DateTimePicker
@@ -362,9 +392,6 @@ export default function CreateOrder() {
     <TouchableOpacity
       style={styles.button}
       onPress={() => showDatepicker("delivery")}
-
-      // Disable if client name is not valid
-      // disabled={!isClientNameValid}
     >
       {showDeliveryDatePicker && (
         <DateTimePicker
@@ -398,18 +425,10 @@ export default function CreateOrder() {
         setNote(text);
         setNoteError("");
       }}
-      // editable={isClientNameValid} // Only editable if client name is valid
     />
 
     {noteError ? <Text style={{ color: "red" }}>{noteError}</Text> : null}
   </View>
-
-  {/* <TouchableOpacity
-    style={styles.nextButton}
-    onPress={fetchCreatenewOrderData} 
-  >
-    <Text style={styles.nextButtonText}>Nextt</Text>
-  </TouchableOpacity> */}
 
   <TouchableOpacity style={{ marginTop: 25 }}>
     <Button color="#2E97A7" onPress={nextPageComponent}>
@@ -419,6 +438,8 @@ export default function CreateOrder() {
 </View>
   );
 };
+
+
 
 
 
