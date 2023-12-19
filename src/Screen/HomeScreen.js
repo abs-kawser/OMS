@@ -16,7 +16,7 @@ export default function HomeScreen() {
 
   return (
     //
-    <ScrollView style={{ backgroundColor: "#f4f3ee",marginTop:"30%" }}>
+    <ScrollView style={{ backgroundColor: "#f4f3ee",marginTop:"13%" }}>
       <View style={styles.centeredContainer}>
         <Text style={styles.welcomeText}>Welcome to OMS</Text>
         {/* <Text style={styles.detailsText}>This is your details</Text> */}

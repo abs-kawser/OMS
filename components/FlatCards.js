@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 18,
     margin: 8,
-    elevation:15
+    elevation:5
 
     // padding:15,
     // gap:5,

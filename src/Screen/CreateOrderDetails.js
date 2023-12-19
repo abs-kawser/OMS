@@ -20,7 +20,7 @@ import { useLogin } from "../Context/LoginProvider";
 import { Button } from "@rneui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
+import { BASE_URL, PASSWORD, USERNAME, blackColor } from "../../varible";
 import base64 from "base-64";
 
 import LottieView from "lottie-react-native"; // Import LottieView
@@ -303,6 +303,7 @@ const CreateOrderDetails = ({ route }) => {
   });
 
   const handleDraftSave = async () => {
+    
     if (!orderQuantities || Object.keys(orderQuantities).length === 0) {
       console.log("No data in orderQuantities. Cannot submit.");
       ToastAndroid.show("No data in order details", ToastAndroid.LONG);
@@ -352,195 +353,204 @@ console.log("this is draft request data",JSON.stringify(requestData,null,2))
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.userInformation}>
-        <Text style={styles.userText1}>{customerInformation?.Name}</Text>
-        <Text style={{ color: "black" }}>
-          ({customerInformation?.CustomerId})
-        </Text>
-      </View>
-
-      {/* search part*/}
-      {/* <View style={styles.searchBox}>
-    <View style={styles.inputContainerx}>
-      <TextInput
-        style={styles.inputx}
-        placeholder="Search..."
-        onChangeText={(text) => setSearchTerm(text)}
-      />
-      <Icon name="search" size={24} style={styles.iconx} />
+  <View style={styles.container}>
+    <View style={styles.userInformation}>
+      <Text style={styles.userText1}>{customerInformation?.Name}</Text>
+      <Text style={{ color: "black" }}>
+        ({customerInformation?.CustomerId})
+      </Text>
     </View>
-  </View> */}
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={{ width: "50%" }}>
-          <Button
-            style={styles.button}
-            onPress={handleProductButtonPress}
-            // disabled={isLoading} // Disable the button when loading
-          >
-            Product List
-          </Button>
-        </TouchableOpacity>
+    {/* search part*/}
+    {/* <View style={styles.searchBox}>
+  <View style={styles.inputContainerx}>
+    <TextInput
+      style={styles.inputx}
+      placeholder="Search..."
+      onChangeText={(text) => setSearchTerm(text)}
+    />
+    <Icon name="search" size={24} style={styles.iconx} />
+  </View>
+</View> */}
 
-        <TouchableOpacity style={{ width: "50%" }}>
-          <Button color="#2E97A7" onPress={handleOrderButtonPress}>
-            Order Details
-          </Button>
-        </TouchableOpacity>
-      </View>
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity style={{ width: "50%" }}>
+        <Button
+          style={styles.button}
+          onPress={handleProductButtonPress}
+          // disabled={isLoading} // Disable the button when loading
+        >
+          Product List
+        </Button>
+      </TouchableOpacity>
 
-      {/* {showLoader && <TransitionLoader />} */}
+      <TouchableOpacity style={{ width: "50%" }}>
+        <Button color="#2E97A7" onPress={handleOrderButtonPress}>
+          Order Details
+        </Button>
+      </TouchableOpacity>
+    </View>
 
-      <>
-        {isLoadingProductData ? (
-          <View style={styles.loadingContainer}>
-            {/* <ActivityIndicator size="large" color="#0077b6" /> */}
-            {/* Replace with your animation file path */}
-            <LottieView
-              source={require("../../Lottie/animation_ln8n5kbe.json")}
-              autoPlay
-              loop
-              style={styles.lottiContainer}
-            />
-          </View>
-        ) : (
-          <ScrollView>
-            <>
-              {showProductData && (
-                <View style={styles.dataContainer}>
+    {/* {showLoader && <TransitionLoader />} */}
 
-                  <View style={styles.searchBox}>
-                    <View style={styles.inputContainerx}>
-                      <TextInput
-                        style={styles.inputx}
-                        placeholder="Search..."
-                        onChangeText={(text) => setSearchTerm(text)}
-                      />
-                      <Icon name="search" size={24} style={styles.iconx} />
-                    </View>
+    <>
+      {isLoadingProductData ? (
+        <View style={styles.loadingContainer}>
+          {/* <ActivityIndicator size="large" color="#0077b6" /> */}
+          {/* Replace with your animation file path */}
+          <LottieView
+            source={require("../../Lottie/animation_ln8n5kbe.json")}
+            autoPlay
+            loop
+            style={styles.lottiContainer}
+          />
+        </View>
+      ) : (
+        <ScrollView>
+          <>
+            {showProductData && (
+              <View style={styles.dataContainer}>
+
+                <View style={styles.searchBox}>
+                  <View style={styles.inputContainerx}>
+                    <TextInput
+                      style={styles.inputx}
+                      placeholder="Search..."
+                      onChangeText={(text) => setSearchTerm(text)}
+                    />
+                    <Icon name="search" size={24} style={styles.iconx} />
                   </View>
-                  
-                  <FlatList
-                    data={filteredProducts}
-                    keyExtractor={(product) => product.ProductId.toString()}
-                    renderItem={({ item: product }) => (
-                      <View style={styles.row}>
-                        <View style={styles.infoContainer}>
-                          <Text style={styles.name}>{product.Name}</Text>
+                </View>
+                
+                <FlatList
+                  data={filteredProducts}
+                  keyExtractor={(product) => product.ProductId.toString()}
+                  renderItem={({ item: product }) => (
+                    <View style={styles.row}>
+                      <View style={styles.infoContainer}>
+                        <Text style={styles.name}>{product.Name}</Text>
 
-                          <View style={{ flexDirection: "row", gap: 10 }}>
-                            <Text style={styles.price}>
-                              Price: {product.MRP}
-                            </Text>
-                            <Text style={styles.price}>
-                              Pack Size: {product.PackSize}
-                            </Text>
-                          </View>
+                        <View style={{ flexDirection: "row", gap: 10 }}>
+                          <Text style={styles.price}>
+                            Price: {product.MRP}
+                          </Text>
+                          <Text style={styles.price}>
+                            Pack Size: {product.PackSize}
+                          </Text>
                         </View>
+                      </View>
 
-                        <View style={styles.quantityContainer}>
-                          <View style={styles.containerx}>
-                            <View style={styles.inputContainer}>
-                              <TextInput
-                                placeholder="QTY"
-                                style={styles.input}
-                                keyboardType="numeric"
-                                value={
-                                  productQuantities[product.ProductId]
-                                    ? productQuantities[
-                                        product.ProductId
-                                      ].toString()
-                                    : ""
-                                }
-                                onChangeText={(text) =>
-                                  handleQuantityChange(product.ProductId, text)
-                                }
-                              />
-                            </View>
+                      <View style={styles.quantityContainer}>
+                        <View style={styles.containerx}>
+                          <View style={styles.inputContainer}>
+                            <TextInput
+                              placeholder="QTY"
+                              style={styles.input}
+                              keyboardType="numeric"
+                              value={
+                                productQuantities[product.ProductId]
+                                  ? productQuantities[
+                                      product.ProductId
+                                    ].toString()
+                                  : ""
+                              }
+                              onChangeText={(text) =>
+                                handleQuantityChange(product.ProductId, text)
+                              }
+                            />
                           </View>
                         </View>
                       </View>
-                    )}
-                  />
+                    </View>
+                  )}
+                />
+              </View>
+            )}
+          </>
+          <View>
+            {showOrderData && (
+              <View style={styles.dataContainer}>
+                <View style={styles.tableHeader}>
+                  <Text style={styles.headerTextForname}>Name</Text>
+                  <Text style={[styles.headerText, styles.quantity]}>
+                    Qty
+                  </Text>
+                  <Text style={styles.headerText}>price </Text>
+                  <Text style={styles.headerText}>Action</Text>
                 </View>
-              )}
-            </>
-            <View>
-              {showOrderData && (
-                <View style={styles.dataContainer}>
-                  <View style={styles.tableHeader}>
-                    <Text style={styles.headerText}>Name</Text>
-                    <Text style={[styles.headerText, styles.quantity]}>
-                      Quantity
-                    </Text>
-                    <Text style={styles.headerText}>Amount</Text>
-                    <Text style={styles.headerText}>Action</Text>
-                  </View>
+          {/* render item  */}
+<>
+  {selectedProduct.map((specificProduct) => {
+    const quantity =
+      productQuantities[specificProduct.ProductId] || 0;
+    if (quantity > 0) {
+      return (
+        <View
+          style={styles.tableRow}
+          key={specificProduct.ProductId}
+        >
+          <Text style={styles.cellTextForName} numberOfLines={2}>
+            {specificProduct.Name}
+          </Text>
+          <Text style={[styles.cellText, styles.quantity]}>
+            {quantity}
+          </Text>
 
-                  <>
-                    {selectedProduct.map((specificProduct) => {
-                      const quantity =
-                        productQuantities[specificProduct.ProductId] || 0;
-                      if (quantity > 0) {
-                        return (
-                          <View
-                            style={styles.tableRow}
-                            key={specificProduct.ProductId}
-                          >
-                            <Text style={styles.cellText} numberOfLines={2}>
-                              {specificProduct.Name}
-                            </Text>
-                            <Text style={[styles.cellText, styles.quantity]}>
-                              {quantity}
-                            </Text>
+          <Text style={styles.cellText}>
+            {specificProduct.MRP * quantity}
+          </Text>
 
-                            <Text style={styles.cellText}>
-                              {specificProduct.MRP * quantity}
-                            </Text>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() =>
+              handleDeleteProduct(specificProduct.ProductId)
+            }
+          >
+            {/* <Image
+              style={{
+                height: 25,
+                width: 25,
+                resizeMode: "contain",
+              }}
+              source={require("../../assets/delete.png")}
+            /> */}
 
-                            <TouchableOpacity
-                              style={styles.actionButton}
-                              onPress={() =>
-                                handleDeleteProduct(specificProduct.ProductId)
-                              }
-                            >
-                              <Image
-                                style={{
-                                  height: 25,
-                                  width: 25,
-                                  resizeMode: "contain",
-                                }}
-                                source={require("../../assets/delete.png")}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      }
+        <Icon
+          style={{
+            height: 25,
+            width: 25,
+            resizeMode: "contain",
+          }}
+        name="trash" size={20} color="#212529" />
 
-                      return null;
-                    })}
-                  </>
+          </TouchableOpacity>
+        </View>
+      );
+    }
 
-                  <View style={styles.btngrp}>
-                    <Button color="#2E97A7" onPress={handleDraftSave}>
-                      Save
-                    </Button>
-                    <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
-                      Submit
-                    </Button>
-                  </View>
+    return null;
+  })}
+</>
+
+                <View style={styles.btngrp}>
+                  <Button color="#2E97A7" onPress={handleDraftSave}>
+                    Save
+                  </Button>
+                  <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
+                    Submit
+                  </Button>
                 </View>
-              )}
-            </View>
-          </ScrollView>
-        )}
-      </>
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      )}
+    </>
 
-      <Text style={styles.totalPriceText}>
-        Total Price: {calculateTotalPrice()} Tk
-      </Text>
-    </View>
+    <Text style={styles.totalPriceText}>
+      Total Price: {calculateTotalPrice()} Tk
+    </Text>
+  </View>
   );
 };
 export default CreateOrderDetails;
@@ -572,6 +582,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   dataContainer: {
+    // flex:1
     // marginTop: 20,
   },
 
@@ -680,18 +691,20 @@ const styles = StyleSheet.create({
   iconx: {
     marginRight: 10,
   },
-  // ===============
+  // =============== table =========//
   tableHeader: {
+    
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
-    backgroundColor: "#184e77",
+    backgroundColor: "lightgray",
   },
   headerText: {
     fontSize: 17,
-    color: "white",
-    // flex: 1,
+    color: blackColor,
     textAlign: "center",
+    
+    // flex: 1,
     // fontWeight: "700",
     // fontFamily: 'Roboto-bold',
   },
@@ -712,7 +725,7 @@ const styles = StyleSheet.create({
   },
 
   quantity: {
-    marginLeft: 25,
+    // marginLeft: 25,
   },
   // ===================
   actionButton: {
@@ -725,6 +738,18 @@ const styles = StyleSheet.create({
     color: "white", // Button text color
     fontWeight: "bold",
   },
+// ==============
+headerTextForname:{
+  width:"50%"
+
+},
+cellTextForName:{
+  width:"50%"
+},
+
+
+
+
   // button design for order details
   btngrp: {
     display: "flex",

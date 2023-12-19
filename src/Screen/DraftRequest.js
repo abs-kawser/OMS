@@ -15,56 +15,57 @@ import { useLogin } from "../Context/LoginProvider";
 import { Button } from "@rneui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
+import { BASE_URL, PASSWORD, USERNAME, blackColor } from "../../varible";
 import base64 from "base-64";
 import LottieView from "lottie-react-native"; // Import LottieView
 import { useCustomerInfo } from "../Context/CustomerProvider";
 import { useDraft } from "../Context/DraftProvider";
+import { useFocusEffect } from "@react-navigation/native";
 
 const DraftRequest = ({ route }) => {
   const navigation = useNavigation();
+
   const { draftData, setDraftData } = useDraft();
 
   const { onDeleteItem } = route.params;
-
   //const { selectedItem, onDeleteItem } = route.params;
-
   const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
 
-  console.log("draft page data", JSON.stringify(selectedItem, null, 2));
   const data = route.params?.data;
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
-  console.log(customerInformation, "customerInformation");
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
   const [showProductData, setShowProductData] = useState(true);
   const [showOrderData, setShowOrderData] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [productQuantities, setProductQuantities] = useState([]);
-  console.log("product quantities", productQuantities);
+
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   // console.log("selected  ProductIds:", selectedProductIds);
   const [searchTerm, setSearchTerm] = useState("");
   const [orderQuantities, setOrderQuantities] = useState(null);
-  console.log(`Quantities`, orderQuantities);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [quantity, setQuantity] = useState([]); // Initialize with an empty string
-  console.log("this is quantity value ", quantity);
-
+  const [quantity, setQuantity] = useState([]);
   const [isLoadingProductData, setIsLoadingProductData] = useState(true);
-
   const [selectedProduct, setSelectedProduct] = useState([]);
-
-  const [orderItems, setOrderItems] = useState([]);
-  //const [orderItems, setOrderItems] = useState(selectedItem.OrderDetails);
-  const [totalAmount, setTotalAmount] = useState([]);
-
-  // console.log("total ammount",totalAmount);
   console.log(
     "selected Products item :",
     JSON.stringify(selectedProduct, null, 2)
   );
+  const [orderItems, setOrderItems] = useState([]);
+  //const [orderItems, setOrderItems] = useState(selectedItem.OrderDetails);
+  const [totalAmount, setTotalAmount] = useState([]);
+
+  // take state save data
+  const [mergedOrderDetails, setMergedOrderDetails] = useState([]);
+
+  // console.log("this is quantity value ", quantity);
+  // console.log("total ammount",totalAmount);
+  // console.log("draft page data", JSON.stringify(selectedItem, null, 2));
+  // console.log(`Quantities`, orderQuantities);
+  // console.log("product quantities", productQuantities);
+  // console.log("customerInformation",customerInformation);
 
   // product api calling
   useEffect(() => {
@@ -101,25 +102,6 @@ const DraftRequest = ({ route }) => {
     setShowOrderData(false);
   };
 
-  const logQuantityValues = () => {
-    const quantityValues = selectedProduct.map((product) => {
-      const quantity = productQuantities[product.ProductId] || 0;
-      return quantity;
-    });
-
-    const totalAmountValues = selectedProduct.map((product, index) => {
-      const quantity = quantityValues[index];
-      return product.MRP * quantity;
-    });
-
-    setQuantity(quantityValues);
-    setTotalAmount(totalAmountValues);
-
-    // Log both quantity and totalAmount
-    console.log("Quantity:", quantityValues);
-    console.log("Total Amount:", totalAmountValues);
-  };
-
   const handleOrderButtonPress = () => {
     setShowProductData(false);
     setShowOrderData(true);
@@ -135,6 +117,25 @@ const DraftRequest = ({ route }) => {
 
     logQuantityValues();
     setOrderQuantities(updatedOrderQuantities);
+  };
+
+  const logQuantityValues = () => {
+    const quantityValues = selectedProduct.map((product) => {
+      const quantity = productQuantities[product.ProductId] || 0;
+      return quantity;
+    });
+
+    const totalAmountValues = selectedProduct.map((product, index) => {
+      const quantity = quantityValues[index];
+      return product.MRP * quantity;
+    });
+
+    setQuantity(quantityValues);
+    setTotalAmount(totalAmountValues);
+
+    // Log both quantity and totalAmount
+    // console.log("Quantity:", quantityValues);
+    // console.log("Total Amount:", totalAmountValues);
   };
 
   const handleQuantityChange = (productId, text) => {
@@ -188,10 +189,11 @@ const DraftRequest = ({ route }) => {
     );
   }, [products, searchTerm]);
 
-  // ================================== main api calling ========================================================
+  // ================================== main api calling ===========
 
   const draftOrderDetails = selectedItem.OrderDetails.map((product) => {
     return {
+      ProductName: product.Name,
       ProductId: product.ProductId,
       Quantity: product.Quantity,
       UnitPrice: product.UnitPrice,
@@ -201,6 +203,7 @@ const DraftRequest = ({ route }) => {
 
   const transformedOrderDetails = selectedProduct.map((product, index) => {
     return {
+      ProductName: product.Name,
       ProductId: product.ProductId,
       Quantity: quantity[index],
       UnitPrice: product.MRP,
@@ -208,15 +211,14 @@ const DraftRequest = ({ route }) => {
     };
   });
 
-
   const initialMergedOrderDetails = [
     ...draftOrderDetails,
     ...transformedOrderDetails,
   ];
 
-  console.log("merge data", JSON.stringify(initialMergedOrderDetails, null, 2));
+  // console.log("merge data", JSON.stringify(initialMergedOrderDetails, null, 2));
 
-  // main api calling ============
+  // =======================main api calling ====================//
 
   const fetchCreatenewOrderData = async () => {
     const requestData = {
@@ -229,10 +231,10 @@ const DraftRequest = ({ route }) => {
       TerritoryId: selectedItem?.TerritoryId,
     };
 
-    console.log(
-      "Posting Create order Api  data:",
-      JSON.stringify(requestData, null, 2)
-    );
+    // console.log(
+    //   "Posting Create order Api  data:",
+    //   JSON.stringify(requestData, null, 2)
+    // );
 
     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
 
@@ -248,15 +250,15 @@ const DraftRequest = ({ route }) => {
           body: JSON.stringify(requestData),
         }
       );
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         const result = await response.json();
         // setOutput(result);
 
-        console.log(
-          "this is result from draft",
-          JSON.stringify(result, null, 2)
-        );
+        // console.log(
+        //   "this is result from draft",
+        //   JSON.stringify(result, null, 2)
+        // );
 
         onDeleteItem(selectedItem);
 
@@ -274,12 +276,15 @@ const DraftRequest = ({ route }) => {
   };
 
   // ==================================
-
   useEffect(() => {
     // Inside this effect, filter and set the selected products based on product IDs
     const selectedProducts = selectedProductIds.map((productId) => {
       return products.find((product) => product.ProductId === productId);
     });
+
+    // console.log('Selected Product Ids:', selectedProductIds);
+    // console.log('Products:', products);
+    // console.log('Selected Product:', selectedProducts);
 
     setSelectedProduct(
       selectedProducts.filter((product) => product !== undefined)
@@ -328,10 +333,180 @@ const DraftRequest = ({ route }) => {
     }
   };
 
-  //css issue
-  const isSelectedProduct = (productId) => {
-    return selectedProductIds.includes(productId);
+  // Save part start
+  // const saveData = async () => {
+  //   try {
+  //     // Combine old draftData with the new order details
+  //     const updatedDraftDatax = draftData.map((item) => {
+  //       if (item.CustomerId === selectedItem.CustomerId) {
+  //         return {
+  //           ...item,
+  //           OrderDetails: initialMergedOrderDetails,
+  //         };
+  //       }
+  //       return item;
+  //     });
+
+  //     console.log(
+  //       "updatedDraftDatax",
+  //       JSON.stringify(updatedDraftDatax, null, 2)
+  //     );
+
+  //     // Save the updated data to AsyncStorage
+  //     await AsyncStorage.setItem(
+  //       "customerInformation",
+  //       JSON.stringify(updatedDraftDatax)
+  //     );
+
+  //     console.log("");
+
+  //     // Update the state with the modified data
+  //     setDraftData(updatedDraftDatax);
+  //     ToastAndroid.show("Data Saved Successfully", ToastAndroid.SHORT);
+  //   } catch (error) {
+  //     console.error("Error saving data:", error);
+  //     ToastAndroid.show("Failed to save data", ToastAndroid.LONG);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const storedData = await AsyncStorage.getItem("customerInformation");
+  //       if (storedData) {
+  //         const parsedData = JSON.parse(storedData);
+  //         setDraftData(parsedData);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error reading stored data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  // this code for previous data
+  const saveData = async () => {
+    try {
+      // Combine existing data from selectedItem.OrderDetails 
+      //and newly added data from selectedProduct
+      const updatedMergedOrderDetails = [
+        ...selectedItem.OrderDetails,
+        ...selectedProduct.map((product, index) => ({
+          // Name: product.Name,
+          ProductName: product.Name,
+          ProductId: product.ProductId,
+          Quantity: quantity[index],
+          UnitPrice: product.MRP,
+          Status: 0,
+          TotalAmount: product.MRP * quantity[index], // Calculate total amount
+        })),
+      ];
+      console.log(
+        "Step 1:updatedMergedOrderDetails",
+        JSON.stringify(updatedMergedOrderDetails, null, 2)
+      );
+      // Update the local state with the merged data
+      setMergedOrderDetails(updatedMergedOrderDetails);
+      console.log("Step 2: Local State Updated", mergedOrderDetails);
+      // Update the AsyncStorage with the modified draftData
+      const updatedDraftData = draftData.map((item) => {
+        if (item.CustomerId === selectedItem.CustomerId) {
+          return {
+            ...item,
+            OrderDetails: updatedMergedOrderDetails,
+          };
+        }
+        return item;
+      });
+      console.log("Step 3: Updated Draft Data", updatedDraftData);
+      await AsyncStorage.setItem(
+        "customerInformation",
+        JSON.stringify(updatedDraftData)
+      );
+      console.log("Step 4: AsyncStorage Updated");
+      // Update the state with the modified data
+      setDraftData(updatedDraftData);
+      // setSelectedItem(updatedDraftData)
+      console.log("Step 5: Component State Updated", draftData);
+      ToastAndroid.show("Data Saved Successfully", ToastAndroid.SHORT);
+    } catch (error) {
+      console.error("Error saving data:", error);
+      ToastAndroid.show("Failed to save data", ToastAndroid.LONG);
+    }
   };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const storedData = await AsyncStorage.getItem("customerInformation");
+  //       console.log("Stored Data from AsyncStorage:", storedData);
+
+  //       if (storedData) {
+  //         const parsedData = JSON.parse(storedData);
+  //         setDraftData(parsedData);
+  //       } else {
+  //         // If no data is stored, set initial state to an empty array
+  //         setDraftData([]);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error reading stored data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  // const saveData = async () => {
+  //   try {
+  //     // Combine existing data from selectedItem.OrderDetails and newly added data from selectedProduct
+  //     const updatedMergedOrderDetails = [
+  //       ...selectedItem.OrderDetails,
+  //       ...selectedProduct.map((product, index) => ({
+  //         ProductName: product.ProductName,
+  //         ProductId: product.ProductId,
+  //         Quantity: quantity[index],
+  //         UnitPrice: product.MRP,
+  //         Status: 0,
+  //         TotalAmount: product.MRP * quantity[index], // Calculate total amount
+  //       })),
+  //     ];
+
+  //     // Update the state with the modified data, including the merged order details
+  //     setDraftData((prevData) => {
+  //       return prevData.map((item) => {
+  //         if (item.CustomerId === selectedItem.CustomerId) {
+  //           return {
+  //             ...item,
+  //             OrderDetails: updatedMergedOrderDetails,
+  //           };
+  //         }
+  //         return item;
+  //       });
+  //     });
+
+  //     // Get the latest state after updating
+  //     const updatedDraftData = await AsyncStorage.getItem("customerInformation");
+  //     const parsedDraftData = JSON.parse(updatedDraftData);
+
+  //     // Update the AsyncStorage with the modified draftData
+  //     await AsyncStorage.setItem(
+  //       "customerInformation",
+  //       JSON.stringify({
+  //         ...parsedDraftData, // Keep existing data
+  //         [selectedItem.CustomerId]: {
+  //           ...selectedItem,
+  //           OrderDetails: updatedMergedOrderDetails,
+  //         },
+  //       })
+  //     );
+
+  //     ToastAndroid.show("Data Saved Successfully", ToastAndroid.SHORT);
+  //   } catch (error) {
+  //     console.error("Error saving data:", error);
+  //     ToastAndroid.show("Failed to save data", ToastAndroid.LONG);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -339,21 +514,6 @@ const DraftRequest = ({ route }) => {
         <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
         <Text style={{ color: "black" }}>({selectedItem?.CustomerId})</Text>
       </View>
-
-      {/* <View style={styles.searchBox}>
-    <View style={styles.inputContainerx}>
-      <TextInput
-        style={styles.inputx}
-        placeholder="Search..."
-        onChangeText={(text) => setSearchTerm(text)}
-      />
-      <Icon
-        name="search" // Font Awesome icon name
-        size={24}
-        style={styles.iconx}
-      />
-    </View>
-  </View> */}
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={{ width: "50%" }}>
@@ -415,10 +575,10 @@ const DraftRequest = ({ route }) => {
 
                           <View style={{ flexDirection: "row", gap: 10 }}>
                             <Text style={styles.price}>
-                              price: {product.MRP}
+                              Price: {product.MRP}
                             </Text>
                             <Text style={styles.price}>
-                              PackSize: {product.PackSize}
+                              Pack Size: {product.PackSize}
                             </Text>
                           </View>
                         </View>
@@ -451,46 +611,44 @@ const DraftRequest = ({ route }) => {
               )}
             </>
 
-
-{/* order details */}
+            {/* order details */}
             <>
               <View>
                 {showOrderData && (
                   <View style={styles.dataContainer}>
                     <View style={styles.tableHeader}>
                       <Text style={styles.headerText}>Name</Text>
-
-                      {/* <Text style={styles.headerText}>Quantity</Text> */}
                       <Text style={[styles.headerText, styles.quantity]}>
                         Quantity
                       </Text>
-
                       <Text style={styles.headerText}>Amount</Text>
                       <Text style={styles.headerText}>Action</Text>
                     </View>
 
-                    {/* Render selectedProduct */}
-                    {selectedProduct.map((specificProduct) => {
+
+                    {/* Render selectedProduct  Draft req page*/}
+                    {selectedProduct?.map((specificProduct) => {
                       const quantity =
                         productQuantities[specificProduct.ProductId] || 0;
+                      // const productName = specificProduct.Name || specificProduct.ProductName;
 
                       if (quantity > 0) {
                         return (
                           <View
                             style={styles.tableRow}
-                            key={specificProduct.ProductId}
+                            key={specificProduct?.ProductId}
                           >
-                            <Text style={styles.cellText} numberOfLines={2}>
-                              {specificProduct.Name}
+                            <Text style={styles.cellText}>
+                              {/* {productName} */}
+                              {specificProduct?.Name}
                             </Text>
 
-                            {/* <Text style={styles.cellText}>{quantity}</Text> */}
                             <Text style={[styles.cellText, styles.quantity]}>
                               {quantity}
                             </Text>
 
                             <Text style={styles.cellText}>
-                              {specificProduct.MRP * quantity}
+                              {specificProduct?.MRP * quantity}
                             </Text>
 
                             <View style={{ flex: 1, alignSelf: "center" }}>
@@ -499,8 +657,6 @@ const DraftRequest = ({ route }) => {
                                 onPress={() =>
                                   handleDeleteProduct(specificProduct.ProductId)
                                 }
-
-                                //onPress={() => console.log("Delete button pressed")}
                               >
                                 <Icon name="trash" size={20} color="#212529" />
                               </TouchableOpacity>
@@ -511,8 +667,10 @@ const DraftRequest = ({ route }) => {
 
                       return null;
                     })}
+                    {/* Render selectedProduct  Draft req page   end*/}
 
-                    {/* Render OrderDetails */}
+
+                    {/* Render OrderDetails  this came from create order-page*/}
                     {selectedItem.OrderDetails.map((orderItem) => (
                       <View style={styles.tableRow} key={orderItem.ProductId}>
                         <Text style={styles.cellText} numberOfLines={2}>
@@ -535,13 +693,20 @@ const DraftRequest = ({ route }) => {
                               handleDeleteOrderItem(orderItem.ProductId)
                             }
                           >
-                            <Icon name="trash" size={20} color="#212529" />
+                            <Icon
+                              name="trash"
+                              size={20}
+                              // color="#212529"
+                              color="green"
+                            />
                           </TouchableOpacity>
                         </View>
                       </View>
                     ))}
+                    {/* Render OrderDetails  this came from create order-page end*/}
 
                     <View style={styles.btngrp}>
+                      <Button onPress={saveData}>Save</Button>
                       <Button onPress={fetchCreatenewOrderData}>Submit</Button>
                     </View>
                   </View>
@@ -551,9 +716,6 @@ const DraftRequest = ({ route }) => {
           </View>
         )}
       </>
-      {/* <Text style={styles.totalPriceText}>
-Total Price: {calculateTotalPrice()}
-</Text> */}
     </View>
   );
 };
@@ -627,7 +789,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
 
-    color: "#403d39",
+    color: blackColor,
   },
   quantityContainer: {
     flex: 1,
@@ -707,7 +869,6 @@ const styles = StyleSheet.create({
     // backgroundColor: "#184e77",
     backgroundColor: "lightgray",
 
-
     // backgroundColor: "#f2f2f2", // Header background color
     //  paddingHorizontal:5
     // flex:1,
@@ -781,3 +942,30 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
+
+{
+  /* <Text style={styles.totalPriceText}>
+Total Price: {calculateTotalPrice()}
+</Text> */
+}
+
+// useEffect(() => {
+//   const fetchData = async () => {
+//     try {
+//       const storedData = await AsyncStorage.getItem("customerInformation");
+//       if (storedData) {
+//         const parsedData = JSON.parse(storedData);
+//         setDraftData(parsedData);
+//       }
+//     } catch (error) {
+//       console.error("Error reading stored data:", error);
+//     }
+//   };
+
+//   fetchData();
+// }, []);
+
+//css issue
+// const isSelectedProduct = (productId) => {
+//   return selectedProductIds.includes(productId);
+// };

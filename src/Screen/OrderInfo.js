@@ -52,6 +52,8 @@ const OrderInfo = ({ route }) => {
   });
 
   return (
+
+     <ScrollView> 
       <View style={{ padding: 10, backgroundColor: "#e9ecef", elevation: 5 }}>
         <View style={styles.pageInfoOne}>
           <Text style={styles.text}>Order No: {data?.OrderBaicInfo?.OrderNo}</Text>
@@ -155,7 +157,8 @@ const OrderInfo = ({ route }) => {
       Back
     </Button>
   </View>
-</View>
+   </View>
+   </ScrollView>
   );
 };
 

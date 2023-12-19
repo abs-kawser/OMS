@@ -35,7 +35,7 @@ export default function CreateOrder() {
   const navigation = useNavigation();
   const customerInfoList = route.params?.customerInfoList;
 
-  console.log("customer Info from Create Order page", customerInfoList);
+  // console.log("customer Info from Create Order page", customerInfoList);
   //const customerId = route.params?.customerId;
 
   //check
@@ -80,10 +80,10 @@ export default function CreateOrder() {
   const { userDetails } = isLoggedIn;
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
-  console.log(
-    "customerIn formation create order page",
-    JSON.stringify(customerInformation, null, 2)
-  );
+  // console.log(
+  //   "customerIn formation create order page",
+  //   JSON.stringify(customerInformation, null, 2)
+  // );
 
   //field clearing done
 
@@ -95,7 +95,7 @@ export default function CreateOrder() {
       setNote("");
       // Check for navigation parameters and update state
       const params = route.params?.customerInfoList;
-      console.log("params", params);
+      // console.log("params", params);
       if (params) {
         setCustomerInformation(params || "");
         setClient(params.client || "");
@@ -188,7 +188,7 @@ export default function CreateOrder() {
       //   }
       // );
       const apiUrl = `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${userDetails?.TerritoryId}`;
-      console.log("API URL:", apiUrl);
+      // console.log("API URL:", apiUrl);
       const response = await fetch(apiUrl, {
         headers: {
           Authorization: authHeader,
@@ -251,7 +251,7 @@ export default function CreateOrder() {
     TerritoryId: userDetails?.TerritoryId,
   };
 
-  console.log("reqdata", requestData);
+  // console.log("reqdata", requestData);
 
   //Routing
 

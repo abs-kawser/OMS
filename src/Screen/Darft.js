@@ -15,8 +15,9 @@ import { useDraft } from "../Context/DraftProvider";
 import { blackColor } from "../../varible";
 
 const Draft = ({ navigation }) => {
+
   const { draftData, setDraftData } = useDraft();
-  console.log("this is draft data", JSON.stringify(draftData, null, 2));
+  // console.log("this is draft data", JSON.stringify(draftData, null, 2));
 
   // retrive data from asyncstorage
   useFocusEffect(
@@ -24,6 +25,8 @@ const Draft = ({ navigation }) => {
       const fetchData = async () => {
         try {
           const savedData = await AsyncStorage.getItem("customerInformation");
+          console.log("Stored Data from AsyncStorage:", JSON.stringify(savedData, null, 2));
+
           if (savedData) {
             const parsedData = JSON.parse(savedData);
             setDraftData(parsedData);
@@ -38,27 +41,23 @@ const Draft = ({ navigation }) => {
 
   // handle delete data
   const handleDeleteItem = async (selectedItem) => {
-    try {
-      // Filter out the selected item from draftData
-      const updatedDraftData = draftData.filter(
-        (item) => item !== selectedItem
-      );
-      // Update the AsyncStorage with the updated data
-      await AsyncStorage.setItem(
-        "customerInformation",
-        JSON.stringify(updatedDraftData)
-      );
-      // Update the state to reflect the changes
-      setDraftData(updatedDraftData);
-
-      // Show a success message
-
-      ToastAndroid.show("Delete Successful", ToastAndroid.SHORT);
-
-
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
+try {
+  // Filter out the selected item from draftData
+  const updatedDraftData = draftData.filter(
+    (item) => item !== selectedItem
+  );
+  // Update the AsyncStorage with the updated data
+  await AsyncStorage.setItem(
+    "customerInformation",
+    JSON.stringify(updatedDraftData)
+  );
+  // Update the state to reflect the changes
+  setDraftData(updatedDraftData);
+  // Show a success message
+  ToastAndroid.show("Delete Successful", ToastAndroid.SHORT);
+} catch (error) {
+  console.error("Error deleting item:", error);
+}
   };
 
 
@@ -94,59 +93,62 @@ const Draft = ({ navigation }) => {
     // Alert.alert(selectedItem.Note);
   };
 
-  return (
-    <SafeAreaView>
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <View style={styles.headerColumn60}>
-              <Text style={styles.headerText}>Customer</Text>
-            </View>
-            <View style={styles.headerColumn}>
-              <Text style={styles.headerText}>View</Text>
-            </View>
-            <View style={styles.headerColumn}>
-              <Text style={styles.headerText}>Action</Text>
-            </View>
-          </View>
-          {/* {draftData && Array.isArray(draftData) && draftData.map((item, index)  => ( */}
-          {draftData &&
-            draftData?.map((item, index) => (
-              <View style={styles.row} key={index}>
-                <View style={styles.column60}>
-                  <Text style={styles.textColor}>{item.CustomerName}</Text>
-                  <Text style={styles.textColor}>({item.CustomerId})</Text>
-                  <Text style={styles.textColor}>{item.CustomerAddress}</Text>
-                </View>
-                <View style={styles.iconColumn}>
-                  <TouchableOpacity
-                    style={styles.iconCell}
-                    onPress={() => handleItemPress(item)}
-                  >
-                    <Image
-                      style={{ height: 25, width: 25, resizeMode: "contain" }}
-                      source={require("../../assets/searchs.png")}
-                    />
-                  </TouchableOpacity>
-                </View>
+ 
 
-                <View style={styles.iconColumn}>
-                  <TouchableOpacity
-                    style={styles.iconCell}
-                    onPress={() => handleDeleteItem(item)}
-                  >
-                    {/* <FontAwesome name="trash" size={20} color="black" /> */}
-                    <Image
-                      style={{ height: 25, width: 25, resizeMode: "contain" }}
-                      source={require("../../assets/delete.png")}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+
+  return (
+<SafeAreaView>
+<ScrollView>
+<View style={styles.container}>
+<View style={styles.header}>
+  <View style={styles.headerColumn60}>
+    <Text style={styles.headerText}>Customer</Text>
+  </View>
+  <View style={styles.headerColumn}>
+    <Text style={styles.headerText}>View</Text>
+  </View>
+  <View style={styles.headerColumn}>
+    <Text style={styles.headerText}>Action</Text>
+  </View>
+</View>
+{/* {draftData && Array.isArray(draftData) && draftData.map((item, index)  => ( */}
+{draftData &&
+  draftData?.map((item, index) => (
+    <View style={styles.row} key={index}>
+      <View style={styles.column60}>
+        <Text style={styles.textColor}>{item.CustomerName}</Text>
+        <Text style={styles.textColor}>({item.CustomerId})</Text>
+        <Text style={styles.textColor}>{item.CustomerAddress}</Text>
+      </View>
+      <View style={styles.iconColumn}>
+        <TouchableOpacity
+          style={styles.iconCell}
+          onPress={() => handleItemPress(item)}
+        >
+          <Image
+            style={{ height: 25, width: 25, resizeMode: "contain" }}
+            source={require("../../assets/searchs.png")}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.iconColumn}>
+        <TouchableOpacity
+          style={styles.iconCell}
+          onPress={() => handleDeleteItem(item)}
+        >
+          {/* <FontAwesome name="trash" size={20} color="black" /> */}
+          <Image
+            style={{ height: 25, width: 25, resizeMode: "contain" }}
+            source={require("../../assets/delete.png")}
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  ))}
+</View>
+</ScrollView>
+</SafeAreaView>
   );
 };
 
