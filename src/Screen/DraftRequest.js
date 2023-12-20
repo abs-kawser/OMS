@@ -509,214 +509,217 @@ const DraftRequest = ({ route }) => {
   // };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.userInformation}>
-        <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
-        <Text style={{ color: "black" }}>({selectedItem?.CustomerId})</Text>
-      </View>
+<View style={styles.container}>
+<View style={styles.userInformation}>
+  <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
+  <Text style={{ color: "black" }}>({selectedItem?.CustomerId})</Text>
+</View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={{ width: "50%" }}>
-          <Button
-            style={styles.button}
-            onPress={handleProductButtonPress}
-            // disabled={isLoading} // Disable the button when loading
-          >
-            Product List
-          </Button>
-        </TouchableOpacity>
+<View style={styles.buttonContainer}>
+  <TouchableOpacity style={{ width: "50%" }}>
+    <Button
+      style={styles.button}
+      onPress={handleProductButtonPress}
+      // disabled={isLoading} // Disable the button when loading
+    >
+      Product List
+    </Button>
+  </TouchableOpacity>
 
-        <TouchableOpacity style={{ width: "50%" }}>
-          <Button color="#2E97A7" onPress={handleOrderButtonPress}>
-            Order Details
-          </Button>
-        </TouchableOpacity>
-      </View>
-
+  <TouchableOpacity style={{ width: "50%" }}>
+    <Button color="#2E97A7" onPress={handleOrderButtonPress}>
+      Order Details
+    </Button>
+  </TouchableOpacity>
+</View>
+<ScrollView> 
+<>
+  {isLoadingProductData ? (
+    <View style={styles.loadingContainer}>
+      {/* <ActivityIndicator size="large" color="#0077b6" /> */}
+      <LottieView
+        source={require("../../Lottie/animation_ln8n5kbe.json")}
+        autoPlay
+        loop
+        style={styles.lottiContainer}
+      />
+    </View>
+  ) : (
+    <View>
       <>
-        {isLoadingProductData ? (
-          <View style={styles.loadingContainer}>
-            {/* <ActivityIndicator size="large" color="#0077b6" /> */}
-            <LottieView
-              source={require("../../Lottie/animation_ln8n5kbe.json")}
-              autoPlay
-              loop
-              style={styles.lottiContainer}
-            />
-          </View>
-        ) : (
-          <View>
-            <>
-              {showProductData && (
-                //key id
-                <View style={styles.dataContainer}>
-                  <View style={styles.searchBox}>
-                    <View style={styles.inputContainerx}>
-                      <TextInput
-                        style={styles.inputx}
-                        placeholder="Search..."
-                        onChangeText={(text) => setSearchTerm(text)}
-                      />
-                      <Icon
-                        name="search" // Font Awesome icon name
-                        size={24}
-                        style={styles.iconx}
-                      />
+        {showProductData && (
+          //key id
+          <View style={styles.dataContainer}>
+            <View style={styles.searchBox}>
+              <View style={styles.inputContainerx}>
+                <TextInput
+                  style={styles.inputx}
+                  placeholder="Search..."
+                  onChangeText={(text) => setSearchTerm(text)}
+                />
+                <Icon
+                  name="search" // Font Awesome icon name
+                  size={24}
+                  style={styles.iconx}
+                />
+              </View>
+            </View>
+
+            <FlatList
+              data={filteredProducts}
+              keyExtractor={(product) => product.ProductId.toString()}
+              renderItem={({ item: product }) => (
+                <View style={styles.row}>
+                  <View style={styles.infoContainer}>
+                    <Text style={styles.name}>{product.Name}</Text>
+
+                    <View style={{ flexDirection: "row", gap: 10 }}>
+                      <Text style={styles.price}>
+                        Price: {product.MRP}
+                      </Text>
+                      <Text style={styles.price}>
+                        Pack Size: {product.PackSize}
+                      </Text>
                     </View>
                   </View>
 
-                  <FlatList
-                    data={filteredProducts}
-                    keyExtractor={(product) => product.ProductId.toString()}
-                    renderItem={({ item: product }) => (
-                      <View style={styles.row}>
-                        <View style={styles.infoContainer}>
-                          <Text style={styles.name}>{product.Name}</Text>
-
-                          <View style={{ flexDirection: "row", gap: 10 }}>
-                            <Text style={styles.price}>
-                              Price: {product.MRP}
-                            </Text>
-                            <Text style={styles.price}>
-                              Pack Size: {product.PackSize}
-                            </Text>
-                          </View>
-                        </View>
-
-                        <View style={styles.quantityContainer}>
-                          <View style={styles.containerx}>
-                            <View style={styles.inputContainer}>
-                              <TextInput
-                                placeholder="QTY"
-                                style={styles.input}
-                                keyboardType="numeric"
-                                value={
-                                  productQuantities[product.ProductId]
-                                    ? productQuantities[
-                                        product.ProductId
-                                      ].toString()
-                                    : ""
-                                }
-                                onChangeText={(text) =>
-                                  handleQuantityChange(product.ProductId, text)
-                                }
-                              />
-                            </View>
-                          </View>
-                        </View>
+                  <View style={styles.quantityContainer}>
+                    <View style={styles.containerx}>
+                      <View style={styles.inputContainer}>
+                        <TextInput
+                          placeholder="QTY"
+                          style={styles.input}
+                          keyboardType="numeric"
+                          value={
+                            productQuantities[product.ProductId]
+                              ? productQuantities[
+                                  product.ProductId
+                                ].toString()
+                              : ""
+                          }
+                          onChangeText={(text) =>
+                            handleQuantityChange(product.ProductId, text)
+                          }
+                        />
                       </View>
-                    )}
-                  />
+                    </View>
+                  </View>
                 </View>
               )}
-            </>
-
-            {/* order details */}
-            <>
-              <View>
-                {showOrderData && (
-                  <View style={styles.dataContainer}>
-                    <View style={styles.tableHeader}>
-                      <Text style={styles.headerText}>Name</Text>
-                      <Text style={[styles.headerText, styles.quantity]}>
-                        Quantity
-                      </Text>
-                      <Text style={styles.headerText}>Amount</Text>
-                      <Text style={styles.headerText}>Action</Text>
-                    </View>
-
-
-                    {/* Render selectedProduct  Draft req page*/}
-                    {selectedProduct?.map((specificProduct) => {
-                      const quantity =
-                        productQuantities[specificProduct.ProductId] || 0;
-                      // const productName = specificProduct.Name || specificProduct.ProductName;
-
-                      if (quantity > 0) {
-                        return (
-                          <View
-                            style={styles.tableRow}
-                            key={specificProduct?.ProductId}
-                          >
-                            <Text style={styles.cellText}>
-                              {/* {productName} */}
-                              {specificProduct?.Name}
-                            </Text>
-
-                            <Text style={[styles.cellText, styles.quantity]}>
-                              {quantity}
-                            </Text>
-
-                            <Text style={styles.cellText}>
-                              {specificProduct?.MRP * quantity}
-                            </Text>
-
-                            <View style={{ flex: 1, alignSelf: "center" }}>
-                              <TouchableOpacity
-                                style={styles.actionButton}
-                                onPress={() =>
-                                  handleDeleteProduct(specificProduct.ProductId)
-                                }
-                              >
-                                <Icon name="trash" size={20} color="#212529" />
-                              </TouchableOpacity>
-                            </View>
-                          </View>
-                        );
-                      }
-
-                      return null;
-                    })}
-                    {/* Render selectedProduct  Draft req page   end*/}
-
-
-                    {/* Render OrderDetails  this came from create order-page*/}
-                    {selectedItem.OrderDetails.map((orderItem) => (
-                      <View style={styles.tableRow} key={orderItem.ProductId}>
-                        <Text style={styles.cellText} numberOfLines={2}>
-                          {orderItem.ProductName}
-                        </Text>
-
-                        <Text style={styles.cellText}>
-                          {orderItem.Quantity}
-                        </Text>
-
-                        <Text style={styles.cellText}>
-                          {orderItem.TotalAmount}
-                        </Text>
-
-                        <View style={{ flex: 1, alignSelf: "center" }}>
-                          <TouchableOpacity
-                            style={[styles.actionButton]}
-                            //onPress={() => handleDeleteOrderItem(orderItem.ProductId)}
-                            onPress={() =>
-                              handleDeleteOrderItem(orderItem.ProductId)
-                            }
-                          >
-                            <Icon
-                              name="trash"
-                              size={20}
-                              // color="#212529"
-                              color="green"
-                            />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    ))}
-                    {/* Render OrderDetails  this came from create order-page end*/}
-
-                    <View style={styles.btngrp}>
-                      <Button onPress={saveData}>Save</Button>
-                      <Button onPress={fetchCreatenewOrderData}>Submit</Button>
-                    </View>
-                  </View>
-                )}
-              </View>
-            </>
+            />
           </View>
         )}
       </>
+
+      {/* order details */}
+  <>
+    <View>
+      {showOrderData && (
+        <View style={styles.dataContainer}>
+
+        <View style={styles.tableHeader}>
+          <Text style={styles.headerTextForname}>Name</Text>
+          <Text style={[styles.headerText, styles.quantity]}>
+          Qty
+          </Text>
+          <Text style={styles.headerText}>Price</Text>
+          <Text style={styles.headerText}></Text>
+        </View>
+
+
+          {/* Render selectedProduct  Draft req page*/}
+          {selectedProduct?.map((specificProduct) => {
+            const quantity =
+              productQuantities[specificProduct.ProductId] || 0;
+            // const productName = specificProduct.Name || specificProduct.ProductName;
+
+            if (quantity > 0) {
+              return (
+                <View
+                  style={styles.tableRow}
+                  key={specificProduct?.ProductId}
+                >
+                  <Text style={styles.cellTextForName}>
+                    {/* {productName} */}
+                    {specificProduct?.Name}
+                  </Text>
+
+                  <Text style={[styles.cellText, styles.quantity]}>
+                    {quantity}
+                  </Text>
+
+                  <Text style={styles.cellText}>
+                    {specificProduct?.MRP * quantity}
+                  </Text>
+
+                  <View style={{ flex: 1, alignSelf: "center" }}>
+                    <TouchableOpacity
+                      style={styles.actionButton}
+                      onPress={() =>
+                        handleDeleteProduct(specificProduct.ProductId)
+                      }
+                    >
+                      <Icon name="trash" size={20} color="#212529" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            }
+
+            return null;
+          })}
+          {/* Render selectedProduct  Draft req page   end*/}
+
+
+          {/* Render OrderDetails  this came from create order-page*/}
+    {selectedItem.OrderDetails.map((orderItem) => (
+      <View style={styles.tableRow} key={orderItem.ProductId}>
+        <Text style={styles.cellTextForName} numberOfLines={2}>
+          {orderItem.ProductName}
+        </Text>
+
+        <Text style={styles.cellText}>
+          {orderItem.Quantity}
+        </Text>
+
+        <Text style={styles.cellText}>
+          {orderItem.TotalAmount}
+        </Text>
+
+        <View style={{ flex: 1, alignSelf: "center" }}>
+          <TouchableOpacity
+            style={[styles.actionButton]}
+            //onPress={() => handleDeleteOrderItem(orderItem.ProductId)}
+            onPress={() =>
+              handleDeleteOrderItem(orderItem.ProductId)
+            }
+          >
+            <Icon
+              name="trash"
+              size={20}
+              // color="#212529"
+              color="green"
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    ))}
+          {/* Render OrderDetails  this came from create order-page end*/}
+
+          <View style={styles.btngrp}>
+            <Button onPress={saveData}>Save</Button>
+            <Button onPress={fetchCreatenewOrderData}>Submit</Button>
+          </View>
+        </View>
+      )}
     </View>
+  </>
+    </View>
+  )}
+</>
+</ScrollView>
+
+</View>
   );
 };
 
@@ -859,17 +862,16 @@ const styles = StyleSheet.create({
   iconx: {
     marginRight: 10,
   },
-  // ===============
+  // =============== table =========//
   tableHeader: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
     padding: 10,
-    backgroundColor: "gray",
     marginHorizontal: 10,
-    // backgroundColor: "#184e77",
     backgroundColor: "lightgray",
 
-    // backgroundColor: "#f2f2f2", // Header background color
+    // backgroundColor: "#184e77",
+    // backgroundColor: "#f2f2f2", 
+    // Header background color
     //  paddingHorizontal:5
     // flex:1,
   },
@@ -895,13 +897,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#00050e",
     textAlign: "center",
-
-    // width:"25%"
-
-    // flexWrap: "wrap",
-
-    // borderWidth:1,
-    // color: "#1985a1",
+    alignSelf:"center",
+    
   },
 
   quantity: {
@@ -909,18 +906,41 @@ const styles = StyleSheet.create({
   },
   // ===================
   actionButton: {
-    // backgroundColor: "#dee2e6", // Button background color
+    // backgroundColor: "#dee2e6", 
+    // Button background color
     padding: 5,
     borderRadius: 5,
-
     display: "flex",
     justifyContent: "center",
     flexDirection: "row",
   },
   actionText: {
-    color: "white", // Button text color
+    color: "white", 
     fontWeight: "bold",
+    // Button text color
   },
+ //==========================
+ headerTextForname:{
+  alignSelf:"center",
+  fontSize: 17,
+  color: "#00050e",
+  width:"50%",
+  
+// fontWeight: "bold",
+// backgroundColor:"red"
+},
+cellTextForName:{
+  alignSelf:"center",
+  width:"50%",
+  fontSize: 13,
+  fontWeight: "bold",
+  color: "#00050e",
+},
+
+
+
+
+//=======table end ===========
   // button design for order details
   btngrp: {
     display: "flex",
@@ -942,6 +962,37 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {
   /* <Text style={styles.totalPriceText}>

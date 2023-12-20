@@ -76,34 +76,6 @@ const OrderInfo = ({ route }) => {
             {data?.OrderBaicInfo?.CustomerAddress}
           </Text>
         </View>
-
-   {/* this part  */}
-        {/* <View
-          style={{
-            alignSelf: "center",
-            width: "100%",
-            marginVertical: 20,
-            // padding: 10,
-          }}
-        >
-          {data?.OrderItemList?.map((item, index) => (
-            <View style={styles.container}>
-              <View style={styles.column}>
-                <Text style={styles.label} numberOfLines={2}>
-                  {item.ProductName}
-                </Text>
-              </View>
-
-              <View style={styles.column2}>
-                <Text style={styles.label}>{item.Quantity}</Text>
-              </View>
-
-              <View style={styles.column2}>
-                <Text style={styles.label}>{item.TotalPrice}</Text>
-              </View>
-            </View>
-          ))}
-        </View> */}
         <ScrollView> 
       <View style={styles.tableContainer}>
   <View style={styles.tableHeader}>
