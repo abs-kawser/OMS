@@ -46,7 +46,7 @@ const StackNavigator = () => {
         options={{
           headerShown: true,
           headerBackVisible: false,
-          title: "Order  Information",
+          title: "Order Information",
           headerStyle: { backgroundColor: "#8338ec" },
           headerTintColor: "white",
           headerTitleAlign: "center",

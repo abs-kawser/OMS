@@ -214,13 +214,6 @@ export default function CustomerList() {
         </View>
 
         {isLoading ? (
-          // <ActivityIndicator
-          //   size="large"
-          //   color="#0000ff"
-          //   // colors={COLORS.primary}
-          //   style={styles.activityIndicator}
-          // />
-
           <View style={styles.loadingContainer}>
             {/* <ActivityIndicator size="large" color="#0077b6" /> */}
             <LottieView
@@ -233,7 +226,7 @@ export default function CustomerList() {
         ) : (
           <FlatList
             data={filteredData}
-            keyExtractor={(Customer, index) => index.toString()} // You can use a more unique key if available
+            keyExtractor={(Customer, index) => index.toString()} 
             keyboardShouldPersistTaps="handled"
             renderItem={({ item: Customer, index }) => (
               <View
@@ -260,7 +253,7 @@ export default function CustomerList() {
                   <Text>Depot Name:</Text> {Customer?.DepotName}
                 </Text>
 
-                <View style={{ alignSelf: "flex-start" }}>
+                <View style={{ alignSelf: "flex-start" ,}}>
                   <Button
                     title="Create Order"
                     // buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
@@ -268,6 +261,7 @@ export default function CustomerList() {
                       height: 40,
                       marginTop: 20,
                       borderRadius: 25,
+                      color:"#2E97A7",
                     }}
                     titleStyle={{
                       color: "#ebf2fa",

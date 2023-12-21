@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: 16,
     color: "black",
-    fontStyle: "italic",
+    // fontStyle: "italic",
     // A slightly darker shade for better visibility
     // Italics for a stylish touch
   },

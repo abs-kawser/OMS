@@ -408,6 +408,8 @@ const CreateOrderDetails = ({ route }) => {
           </View>
         ) : (
           <ScrollView>
+
+            {/* Product data  */}
             <>
               {showProductData && (
                 <View style={styles.dataContainer}>
@@ -468,10 +470,10 @@ const CreateOrderDetails = ({ route }) => {
               )}
             </>
 
+       {/* Order  data  */}
       <>
         {showOrderData && (
           <View style={styles.dataContainer}>
-            {/* render item  */}
             <>
               <View style={styles.tableHeader}>
                 <Text style={styles.headerTextForname}>Name</Text>

@@ -345,12 +345,10 @@ export default function CreateOrder() {
               Name: <Text style={styles.nameText}>{item.Name}</Text>
             </Text>
             <Text style={[styles.text, isSelected && styles.boldText]}>
-              Customer Id:
-              <Text style={styles.customerIdText}>{item.CustomerId}</Text>
+              Customer Id: <Text style={styles.customerIdText}>{item.CustomerId}</Text>             
             </Text>
             <Text style={[styles.text, isSelected && styles.boldText]}>
-              Address:{" "}
-              <Text style={styles.addressText}>{item.Address}</Text>
+              Address: <Text style={styles.addressText}>{item.Address}</Text>
             </Text>
           </View>
         </>
@@ -513,7 +511,7 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: 16,
     color: "black", // A slightly darker shade for better visibility
-    fontStyle: "italic", // Italics for a stylish touch
+    // fontStyle: "italic", // Italics for a stylish touch
   },
   selectedTextStyle: {
     fontSize: 16,
