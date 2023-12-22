@@ -400,12 +400,12 @@ const DraftRequest = ({ route }) => {
 
 
   useEffect(() => {
-   if (selectedProduct.length > 0) {
-    setSaveButtonDisabled(false) 
-   } else {
+    if (selectedProduct.length > 0) {
+      setSaveButtonDisabled(false)
+    } else {
       "check error"
-   }
- },[selectedProduct])
+    }
+  }, [selectedProduct])
 
 
 
@@ -735,12 +735,12 @@ const DraftRequest = ({ route }) => {
                       })}
                       {/* Render selectedProduct  Draft req page   end*/}
                       {/* ||saveButtonDisabled */}
-      <View style={styles.btngrp}>
-        <Button onPress={saveData} disabled={selectedProduct.length === 0 }>Save</Button>
-        <Button onPress={fetchCreatenewOrderData}>
-          Submit
-        </Button>
-      </View>
+                      <View style={styles.btngrp}>
+                        <Button onPress={saveData} disabled={selectedProduct.length === 0}>Save</Button>
+                        <Button onPress={fetchCreatenewOrderData}>
+                          Submit
+                        </Button>
+                      </View>
                     </View>
                   )}
                 </View>

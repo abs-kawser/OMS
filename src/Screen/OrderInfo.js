@@ -37,7 +37,7 @@ const OrderInfo = ({ route }) => {
     }
   };
 
-  useEffect(() => {
+    useEffect(() => {
     fetchOrderInfoData();
   }, []);
 
@@ -134,7 +134,7 @@ const OrderInfo = ({ route }) => {
     color="#2E97A7"  
     >
     Back
-  </Button>
+            </Button>
         </View>
         
     <View style={{ alignSelf: "flex-end" }}>

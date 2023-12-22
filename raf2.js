@@ -7,7 +7,7 @@ const raf2 = () => {
       <Text>raf2</Text>
 
          <TextComponent>
-          
+          wd wd
          </TextComponent>
     </View>
   )
