@@ -6,6 +6,10 @@ import base64 from "base-64";
 import { useNavigation } from "@react-navigation/native";
 import { useLogin } from "../Context/LoginProvider";
 
+
+
+
+
 const ChangePassword = () => {
   const navigation = useNavigation();
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -17,46 +21,53 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
 
-const SavePassword = async () => {
-  // Check if any field is empty
-  if (!oldPassword || !newPassword || !ConfirmPassword) {
-    ToastAndroid.show("Please fill in all fields.", ToastAndroid.SHORT);
-    return;
-  }
-
-  if (newPassword !== ConfirmPassword) {
-    // Passwords do not match, show a toast message
-    ToastAndroid.show(
-      "New password and confirm password do not match.",
-      ToastAndroid.SHORT
-    );
-    return;
-  }
-
-  try {
-    const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-    const response = await fetch(
-      `${BASE_URL}/api/HomeApi/ChangePassword?networkId=${userDetails?.EmpNetworkId}&OldPassword=${oldPassword}&NewPassword=${newPassword}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: authHeader,
-        },
-      }
-    );
-
-    const result = await response.json();
-    console.log("response", result);
-    if (result.Success === true) {
-      ToastAndroid.show(result.Message, ToastAndroid.SHORT);
-      //navigation.navigate("Home");
+  const SavePassword = async () => {
+    // Check if any field is empty
+    if (!oldPassword || !newPassword || !ConfirmPassword) {
+      ToastAndroid.show("Please fill in all fields.", ToastAndroid.SHORT);
+      return;
     }
-  } catch (error) {
-    // Handle network errors or other exceptions
-    console.error("An error occurred:", error);
-  }
-};
+
+    if (newPassword !== ConfirmPassword) {
+      // Passwords do not match, show a toast message
+      ToastAndroid.show(
+        "New password and confirm password do not match.",
+        ToastAndroid.SHORT
+      );
+      return;
+    }
+
+    try {
+      const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+      const response = await fetch(
+        `${BASE_URL}/api/HomeApi/ChangePassword?networkId=${userDetails?.EmpNetworkId}&OldPassword=${oldPassword}&NewPassword=${newPassword}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authHeader,
+          },
+        }
+      );
+
+      const result = await response.json();
+      console.log("response", result);
+      if (result.Success === true) {
+        navigation.navigate("Home");
+        ToastAndroid.show(result.Message, ToastAndroid.SHORT);
+        setOldPassword("")
+        setNewPassword("")
+        setConfirmPassword("")
+
+      } else {
+        ToastAndroid.show(result.Message, ToastAndroid.SHORT);
+      }
+
+    } catch (error) {
+      // Handle network errors or other exceptions
+      console.error("An error occurred:", error);
+    }
+  };
 
   // console.log("Name:", networkId);
   //   console.log("oldPassword:", oldPassword);

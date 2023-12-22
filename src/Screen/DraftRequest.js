@@ -31,6 +31,7 @@ const DraftRequest = ({ route }) => {
   //const { selectedItem, onDeleteItem } = route.params;
   const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
 
+
   const data = route.params?.data;
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -274,7 +275,7 @@ const DraftRequest = ({ route }) => {
         console.error("API request failed with status code:", response.status);
         ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // ==================================
@@ -381,19 +382,33 @@ const DraftRequest = ({ route }) => {
       console.log("Step 4: AsyncStorage Updated");
       // Update the state with the modified data
       setDraftData(updatedDraftData);
-
-
       // setSelectedItem(updatedDraftData)
       console.log("Step 5: Component State Updated", draftData);
-      ToastAndroid.show("Data Saved Successfully", ToastAndroid.SHORT);
+
+      if (!saveButtonDisabled) {
+        ToastAndroid.show("Data Saved Successfully", ToastAndroid.SHORT);
+        setSaveButtonDisabled(true)
+      } else {
+        ToastAndroid.show("No new data added", ToastAndroid.SHORT);
+
+      }
     } catch (error) {
       console.error("Error saving data:", error);
       ToastAndroid.show("Failed to save data", ToastAndroid.LONG);
     }
   };
 
-  
-  
+
+  useEffect(() => {
+   if (selectedProduct.length > 0) {
+    setSaveButtonDisabled(false) 
+   } else {
+      "check error"
+   }
+ },[selectedProduct])
+
+
+
 
   // const saveData = async () => {
   //   try {
@@ -525,7 +540,7 @@ const DraftRequest = ({ route }) => {
           <Button
             style={styles.button}
             onPress={handleProductButtonPress}
-            // disabled={isLoading} // Disable the button when loading
+          // disabled={isLoading} // Disable the button when loading
           >
             Product List
           </Button>
@@ -598,8 +613,8 @@ const DraftRequest = ({ route }) => {
                                   value={
                                     productQuantities[product.ProductId]
                                       ? productQuantities[
-                                          product.ProductId
-                                        ].toString()
+                                        product.ProductId
+                                      ].toString()
                                       : ""
                                   }
                                   onChangeText={(text) =>
@@ -719,13 +734,13 @@ const DraftRequest = ({ route }) => {
                         return null;
                       })}
                       {/* Render selectedProduct  Draft req page   end*/}
-
-                      <View style={styles.btngrp}>
-                        <Button onPress={saveData}>Save</Button>
-                        <Button onPress={fetchCreatenewOrderData}>
-                          Submit
-                        </Button>
-                      </View>
+                      {/* ||saveButtonDisabled */}
+      <View style={styles.btngrp}>
+        <Button onPress={saveData} disabled={selectedProduct.length === 0 }>Save</Button>
+        <Button onPress={fetchCreatenewOrderData}>
+          Submit
+        </Button>
+      </View>
                     </View>
                   )}
                 </View>

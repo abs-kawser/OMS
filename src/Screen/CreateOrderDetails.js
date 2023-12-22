@@ -471,79 +471,79 @@ const CreateOrderDetails = ({ route }) => {
             </>
 
        {/* Order  data  */}
+<>
+  {showOrderData && (
+    <View style={styles.dataContainer}>
       <>
-        {showOrderData && (
-          <View style={styles.dataContainer}>
-            <>
-              <View style={styles.tableHeader}>
-                <Text style={styles.headerTextForname}>Name</Text>
+        <View style={styles.tableHeader}>
+          <Text style={styles.headerTextForname}>Name</Text>
 
-                <Text style={[styles.headerText]}>Qty</Text>
+          <Text style={[styles.headerText]}>Qty</Text>
 
-                <View style={{ marginLeft: 20 }}>
-                  <Text style={[styles.headerText]}>Price </Text>
-                </View>
-
-                <Text style={styles.headerText}></Text>
-              </View>
-              {selectedProduct.map((specificProduct) => {
-                const quantity =
-                  productQuantities[specificProduct.ProductId] || 0;
-                if (quantity > 0) {
-                  return (
-                    <View
-                      style={styles.tableRow}
-                      key={specificProduct.ProductId}
-                    >
-                      <Text style={styles.cellTextForName}>
-                        {specificProduct.Name}
-                      </Text>
-
-                      <Text style={[styles.cellText, styles.quantity]}>
-                        {quantity}
-                      </Text>
-
-                      <Text style={styles.cellText}>
-                        {specificProduct.MRP * quantity}
-                      </Text>
-
-                      <TouchableOpacity
-                        style={styles.actionButton}
-                        onPress={() =>
-                          handleDeleteProduct(specificProduct.ProductId)
-                        }
-                      >
-
-                        <Icon
-                          style={{
-                            height: 25,
-                            width: 25,
-                            resizeMode: "contain",
-                          }}
-                          name="trash"
-                          size={20}
-                          color="#212529"
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  );
-                }
-
-                return null;
-              })}
-            </>
-
-            <View style={styles.btngrp}>
-              <Button color="#2E97A7" onPress={handleDraftSave}>
-                Save
-              </Button>
-              <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
-                Submit
-              </Button>
-            </View>
+          <View style={{ marginLeft: 20 }}>
+            <Text style={[styles.headerText]}>Price </Text>
           </View>
-        )}
+
+          <Text style={styles.headerText}></Text>
+        </View>
+        {selectedProduct.map((specificProduct) => {
+          const quantity =
+            productQuantities[specificProduct.ProductId] || 0;
+          if (quantity > 0) {
+            return (
+              <View
+                style={styles.tableRow}
+                key={specificProduct.ProductId}
+              >
+                <Text style={styles.cellTextForName}>
+                  {specificProduct.Name}
+                </Text>
+
+                <Text style={[styles.cellText, styles.quantity]}>
+                  {quantity}
+                </Text>
+
+                <Text style={styles.cellText}>
+                  {specificProduct.MRP * quantity}
+                </Text>
+
+                <TouchableOpacity
+                  style={styles.actionButton}
+                  onPress={() =>
+                    handleDeleteProduct(specificProduct.ProductId)
+                  }
+                >
+
+                  <Icon
+                    style={{
+                      height: 25,
+                      width: 25,
+                      resizeMode: "contain",
+                    }}
+                    name="trash"
+                    size={20}
+                    color="#212529"
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          }
+
+          return null;
+        })}
       </>
+
+      <View style={styles.btngrp}>
+        <Button color="#2E97A7" onPress={handleDraftSave}>
+          Save
+        </Button>
+        <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
+          Submit
+        </Button>
+      </View>
+    </View>
+  )}
+</>
 
 
   </ScrollView>
@@ -557,6 +557,236 @@ const CreateOrderDetails = ({ route }) => {
   );
 };
 export default CreateOrderDetails;
+
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//   },
+//   userInformation: {
+//     flexDirection: "row",
+//     justifyContent: "center",
+//     textAlign: "center",
+//     alignItems: "center",
+//     marginTop: 10,
+//     gap: 3,
+//   },
+//   userText1: {
+//     fontSize: 16,
+//     color: "black",
+//     // marginTop:10,
+//   },
+//   userText2: {
+//     fontSize: 16,
+//     color: "#168aad",
+//   },
+//   buttonContainer: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     padding: 10,
+//   },
+//   dataContainer: {
+//     // flex:1
+//     // marginTop: 20,
+//   },
+
+//   button: {
+//     width: "50%",
+//     backgroundColor: "#3498db",
+//     padding: 10,
+//   },
+//   button2: {
+//     width: "50%",
+//     backgroundColor: "#e74c3c",
+//     padding: 10,
+//   },
+//   buttonText: {
+//     color: "white",
+//     textAlign: "center",
+//   },
+
+//   row: {
+//     flexDirection: "row",
+//     //justifyContent: "space-between",
+//     alignItems: "center",
+//     paddingHorizontal: 16,
+//     paddingVertical: 8,
+//     borderBottomWidth: 1,
+//     borderBottomColor: "#ccc",
+//   },
+//   infoContainer: {
+//     flex: 1,
+//     flexDirection: "column",
+//   },
+//   name: {
+//     fontSize: 15,
+//     marginRight: 10,
+//     color: "black",
+//     fontWeight: "bold",
+//   },
+//   price: {
+//     fontSize: 16,
+//     color: "#403d39",
+//     fontWeight: "600",
+//     fontFamily: "Roboto-bold",
+//   },
+//   quantityContainer: {
+//     flex: 1,
+//     //justifyContent: "space-between",
+//     alignItems: "flex-end",
+//     paddingHorizontal: 20,
+//   },
+
+//   checkboxContainer: {
+//     flex: 0.2,
+//     alignItems: "flex-end",
+//   },
+//   containerx: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//   },
+//   label: {
+//     fontSize: 16,
+//     marginRight: 10,
+//   },
+//   inputContainer: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//   },
+
+//   input: {
+//     fontSize: 15,
+//     borderWidth: 1,
+//     borderColor: "#0b090a",
+//     padding: 7,
+//     minWidth: 40,
+//     // borderBottomWidth:1,
+//   },
+//   totalPriceText: {
+//     color: "black",
+//     textAlign: "center",
+//     fontSize: 15,
+//     fontWeight: "bold",
+//   },
+//   searchBox: {
+//     // marginLeft: 50,
+//     alignSelf: "center",
+//     marginVertical: 10,
+//     background: "#F4F4F4",
+//   },
+
+//   inputContainerx: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     width: "80%",
+//     borderColor: "black",
+//     borderWidth: 1,
+//     margin: 5,
+//     padding: 5,
+//     marginLeft: 5,
+//     borderRadius: 50,
+//   },
+//   inputx: {
+//     flex: 1,
+//     height: 40,
+//     padding: 10,
+//     color: "#0b090a",
+//   },
+//   iconx: {
+//     marginRight: 10,
+//   },
+//   // =============== table =========//
+//   tableHeader: {
+//     flexDirection: "row",
+//     padding: 10,
+//     marginHorizontal: 10,
+//     backgroundColor: "lightgray",
+//   },
+//   headerText: {
+//     fontSize: 17,
+//     color: blackColor,
+//     textAlign: "center",
+//     flex: 1,
+
+//     // flex: 1,
+//     // fontWeight: "700",
+//     // fontFamily: 'Roboto-bold',
+//   },
+//   tableRow: {
+//     flexDirection: "row",
+//     // justifyContent: "space-between",
+//     padding: 10,
+//     borderBottomWidth: 1,
+//     borderBottomColor: "#ccc",
+//     marginHorizontal: 10,
+//   },
+//   cellText: {
+//     fontSize: 13,
+//     flex: 1,
+//     fontWeight: "bold",
+//     color: "#00050e",
+//     //for responsive
+//     // flexWrap: "wrap",
+//     alignSelf: "center",
+//   },
+
+//   quantity: {
+//     // marginLeft: 50,
+//   },
+//   // ===================
+//   actionButton: {
+//     padding: 5,
+//     borderRadius: 5,
+//     display: "flex",
+//     justifyContent: "center",
+//     flexDirection: "row",
+//   },
+//   actionText: {
+//     color: "white", // Button text color
+//     fontWeight: "bold",
+//   },
+//   // ==============
+//   headerTextForname: {
+//     alignSelf: "center",
+//     fontSize: 17,
+//     color: "#00050e",
+//     width: "50%",
+//     // fontWeight: "bold",
+//     // backgroundColor:"red"
+//   },
+//   cellTextForName: {
+//     alignSelf: "center",
+//     width: "56%",
+//     fontSize: 13,
+//     fontWeight: "bold",
+//     color: "#00050e",
+
+//     // backgroundColor:"red"
+//   },
+//   //=======table end ===========
+
+//   // button design for order details
+//   btngrp: {
+//     display: "flex",
+//     flexDirection: "row",
+//     justifyContent: "flex-end",
+//     alignItems: "center",
+//     marginTop: 20,
+//     paddingHorizontal: 10,
+//     gap: 5,
+//   },
+//   loadingContainer: {
+//     alignSelf: "center",
+//     flex: 1,
+//     // justifyContent:"center",
+//     // alignItems:"center"
+//   },
+//   lottiContainer: {
+//     height: 50,
+//     width: 50,
+//   },
+// });
+
 
 
 const styles = StyleSheet.create({
@@ -586,7 +816,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   dataContainer: {
-    // flex:1
     // marginTop: 20,
   },
 
@@ -626,9 +855,8 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    color: "#403d39",
-    fontWeight: "600",
-    fontFamily: "Roboto-bold",
+
+    color: blackColor,
   },
   quantityContainer: {
     flex: 1,
@@ -653,7 +881,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-
+  // button: {
+  //   fontSize: 24,
+  //   paddingHorizontal: 10,
+  // },
   input: {
     fontSize: 15,
     borderWidth: 1,
@@ -671,7 +902,7 @@ const styles = StyleSheet.create({
   searchBox: {
     // marginLeft: 50,
     alignSelf: "center",
-    marginVertical: 10,
+    // marginVertical: 10,
     background: "#F4F4F4",
   },
 
@@ -701,14 +932,18 @@ const styles = StyleSheet.create({
     padding: 10,
     marginHorizontal: 10,
     backgroundColor: "lightgray",
+
+    // backgroundColor: "#184e77",
+    // backgroundColor: "#f2f2f2",
+    // Header background color
+    //  paddingHorizontal:5
+    // flex:1,
   },
   headerText: {
     fontSize: 17,
-    color: blackColor,
-    textAlign: "center",
+    color: "black",
     flex: 1,
-
-    // flex: 1,
+    textAlign: "center",
     // fontWeight: "700",
     // fontFamily: 'Roboto-bold',
   },
@@ -725,16 +960,17 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: "bold",
     color: "#00050e",
-    //for responsive
-    // flexWrap: "wrap",
+    textAlign: "center",
     alignSelf: "center",
   },
 
   quantity: {
-    // marginLeft: 50,
+    // marginLeft: 25,
   },
   // ===================
   actionButton: {
+    // backgroundColor: "#dee2e6",
+    // Button background color
     padding: 5,
     borderRadius: 5,
     display: "flex",
@@ -742,29 +978,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   actionText: {
-    color: "white", // Button text color
+    color: "white",
     fontWeight: "bold",
+    // Button text color
   },
-  // ==============
+  //==========================
   headerTextForname: {
     alignSelf: "center",
     fontSize: 17,
     color: "#00050e",
     width: "50%",
+
     // fontWeight: "bold",
     // backgroundColor:"red"
   },
   cellTextForName: {
     alignSelf: "center",
-    width: "56%",
+    width: "50%",
     fontSize: 13,
     fontWeight: "bold",
     color: "#00050e",
-
-    // backgroundColor:"red"
   },
-  //=======table end ===========
 
+  //=======table end ===========
   // button design for order details
   btngrp: {
     display: "flex",
@@ -786,5 +1022,3 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
-
-

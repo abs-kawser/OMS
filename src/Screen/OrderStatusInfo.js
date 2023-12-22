@@ -107,6 +107,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button } from "@rneui/themed";
+import moment from "moment";
 
 const OrderStatusInfo = ({ route, navigation }) => {
   const { OrderStatus } = route.params; // Retrieve the order data passed as a parameter
@@ -131,7 +132,9 @@ const OrderStatusInfo = ({ route, navigation }) => {
               {new Date(item.OrderDate).toLocaleDateString()}
             </Text>
             <Text style={styles.cell}>
-              {new Date(item.DeliveryDate).toLocaleDateString()}
+              {/* {new Date(item.DeliveryDate).toLocaleDateString()} */}
+              {moment(item.DeliveryDate).format('DD/MM/YYYY')}
+
             </Text>
             <Text style={styles.cell}>{item.OrderStatus}</Text>
           </View>

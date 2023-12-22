@@ -51,11 +51,30 @@ const OrderInfo = ({ route }) => {
     grandTotal += item.TotalPrice;
   });
 
+  const NumberWithCommas = ( number ) => {
+    // Ensure that the input is a valid number
+    const parsedNumber = parseFloat(number);
+  
+    // Check if the input is a valid number
+    if (isNaN(parsedNumber)) {
+      return 0;
+    }
+  
+    // Format the number with commas using toLocaleString
+    const formattedNumber = parsedNumber.toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+  
+    return formattedNumber;
+  };
+
+
   return (
 
 
    <>
-     <ScrollView> 
+     <ScrollView > 
 <View style={styles.container}>
 <View style={styles.card}>
   <Text style={styles.cardText} selectable={true}>Order No: {data?.OrderBaicInfo?.OrderNo}</Text>
@@ -106,22 +125,27 @@ const OrderInfo = ({ route }) => {
     </View>
     ))}
     </View>
-    </ScrollView> 
-
-    <View style={{ alignSelf: "flex-end" }}>
-  <Text style={{ fontSize: 18, color: "black" }}>
-    Total = {grandTotal}
-  </Text>
-</View>  
-
-<View style={{width:"20%",}}>
+      </ScrollView> 
+      
+      <View style={{ display: 'flex', flexDirection: "row",justifyContent:"space-around" }}>
+      <View style={{width:"20%",}}>
   <Button
     onPress={() => navigation.navigate("Home")}
     color="#2E97A7"  
     >
     Back
   </Button>
-</View>
+        </View>
+        
+    <View style={{ alignSelf: "flex-end" }}>
+  <Text style={{ fontSize: 18, color: "black",marginBottom:10 }}>
+    Total = {NumberWithCommas(grandTotal)}
+  </Text>
+</View>  
+
+
+      </View> 
+
     </>
 
   );
