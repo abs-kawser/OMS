@@ -23,7 +23,10 @@ const Drawer = createDrawerNavigator();
 
 
 const DrawerNavigator = () => {
+
+  
   return (
+
     <Drawer.Navigator
       drawerContent={(props) => <DrawerItems {...props} />}
       screenOptions={{
@@ -38,6 +41,7 @@ const DrawerNavigator = () => {
         },
       }}
     >
+
       <Drawer.Screen
         name="Home"
         component={HomeScreen}

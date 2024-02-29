@@ -22,8 +22,8 @@ import LottieView from "lottie-react-native";
 import axios from "axios";
 
 export default function CustomerList() {
-  const rainbowColors = ["#9bf6ff", "#f3ffbd"];
 
+  const rainbowColors = ["#9bf6ff", "#f3ffbd"];
   const navigation = useNavigation();
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
@@ -43,30 +43,19 @@ export default function CustomerList() {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Initialize with null
-
+ // Filter data based on the search term
   useEffect(() => {
-    // Filter data based on the search term
     const filtered = data.filter((item) =>
       item.Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filtered);
   }, [searchTerm]);
 
+  
   //fetch customer api
   const fetchCustomerData = async () => {
     try {
       const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-
-      // const response = await fetch(
-      //   `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
-      //     userDetails?.TerritoryId
-      //   }&scId=${userDetails?.ScId !== null ? userDetails?.ScId : 1}`,
-      //   {
-      //     headers: {
-      //       Authorization: authHeader,
-      //     },
-      //   }
-      // );     ${userDetails?.ScId !== null ? userDetails?.ScId : 1}
       const apiUrl = `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${userDetails?.TerritoryId}`;
       console.log("API URL:", apiUrl);
       const response = await fetch(apiUrl, {
@@ -90,73 +79,6 @@ export default function CustomerList() {
       //throw error;
     }
   };
-
-  // const fetchCustomerData = async () => {
-  //   const apiUrl = 'http://184.168.127.174:6565/api/CustomerApi/GetAllCustomer?territoryId=46&scId=1';
-  //   const USERNAME = 'OMS';
-  //   const PASSWORD = '123456';
-
-  //   try {
-  //     // Create an Authorization header with the encoded credentials
-  //     const authHeader = 'Basic ' + base64.encode(USERNAME + ':' + PASSWORD);
-  //     const headers = new Headers();
-  //     headers.set('Authorization', authHeader);
-
-  //     // Fetch data from the API using the Authorization header
-  //     const response = await fetch(apiUrl, {
-  //       method: 'GET',
-  //       headers: headers,
-  //     });
-
-  //     // Check if the response is successful (status code 200)
-  //     if (response.ok) {
-  //       // Parse the response JSON
-  //       const data = await response.json();
-  //       console.log('API Response:', data);
-  //       return data;
-  //     } else {
-  //       // Handle non-successful responses
-  //       console.error('Error fetching API:', response.status, response.statusText);
-  //       return null;
-  //     }
-  //   } catch (error) {
-  //     // Handle any network errors
-  //     console.error('Network error:', error.message);
-  //     return null;
-  //   }
-  // };
-
-  //============useing axious ================//
-  // const fetchCustomerData = async () => {
-  //   try {
-  //     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-
-  //     const response = await axios.get(
-  //       `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
-  //         userDetails?.TerritoryId
-  //       }&scId=${userDetails.ScId !== null ? userDetails.ScId : 1}`,
-  //       {
-  //         headers: {
-  //           Authorization: authHeader,
-  //         },
-  //       }
-  //     );
-
-  //     const jsonData = response.data; // Axios response data is directly available as `data` property
-  //     console.log(JSON.stringify(jsonData, null, 2));
-  //     await AsyncStorage.setItem("customerData", JSON.stringify(jsonData));
-  //     // await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
-  //     setData(jsonData);
-  //     setFilteredData(jsonData);
-  //     setIsLoading(false);
-  //     return jsonData;
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     setIsLoading(false);
-  //     // setIsLoading(false);
-  //     throw error;
-  //   }
-  // };
 
   useEffect(() => {
     // Fetch data from AsyncStorage
@@ -190,8 +112,6 @@ export default function CustomerList() {
     <>
       {/* implement search  part*/}
       <View style={styles.container}>
-
-        
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -216,8 +136,9 @@ export default function CustomerList() {
         {isLoading ? (
           <View style={styles.loadingContainer}>
             {/* <ActivityIndicator size="large" color="#0077b6" /> */}
+            
             <LottieView
-              source={require("../../Lottie/Animation6.json")} // Replace with your animation file path
+              source={require("../../Lottie/Animation6.json")} 
               autoPlay
               loop
               style={styles.lottiContainer}
@@ -226,7 +147,7 @@ export default function CustomerList() {
         ) : (
           <FlatList
             data={filteredData}
-            keyExtractor={(Customer, index) => index.toString()} 
+            keyExtractor={(Customer, index) => index.toString()}
             keyboardShouldPersistTaps="handled"
             renderItem={({ item: Customer, index }) => (
               <View
@@ -252,8 +173,7 @@ export default function CustomerList() {
                 <Text style={styles.DepotName}>
                   <Text>Depot Name:</Text> {Customer?.DepotName}
                 </Text>
-
-                <View style={{ alignSelf: "flex-start" ,}}>
+                <View style={{ alignSelf: "flex-start" }}>
                   <Button
                     title="Create Order"
                     // buttonStyle={{ backgroundColor: "rgba(127, 220, 103, 1)" }}
@@ -261,7 +181,7 @@ export default function CustomerList() {
                       height: 40,
                       marginTop: 20,
                       borderRadius: 25,
-                      color:"#2E97A7",
+                      color: "#2E97A7",
                     }}
                     titleStyle={{
                       color: "#ebf2fa",
@@ -392,8 +312,6 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
 
-
-
   textContainer: {
     flexDirection: "row",
     gap: 5,
@@ -417,3 +335,83 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
+
+
+
+// const response = await fetch(
+//   `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
+//     userDetails?.TerritoryId
+//   }&scId=${userDetails?.ScId !== null ? userDetails?.ScId : 1}`,
+//   {
+//     headers: {
+//       Authorization: authHeader,
+//     },
+//   }
+// );     ${userDetails?.ScId !== null ? userDetails?.ScId : 1}
+
+// const fetchCustomerData = async () => {
+//   const apiUrl = 'http://184.168.127.174:6565/api/CustomerApi/GetAllCustomer?territoryId=46&scId=1';
+//   const USERNAME = 'OMS';
+//   const PASSWORD = '123456';
+
+//   try {
+//     // Create an Authorization header with the encoded credentials
+//     const authHeader = 'Basic ' + base64.encode(USERNAME + ':' + PASSWORD);
+//     const headers = new Headers();
+//     headers.set('Authorization', authHeader);
+
+//     // Fetch data from the API using the Authorization header
+//     const response = await fetch(apiUrl, {
+//       method: 'GET',
+//       headers: headers,
+//     });
+
+//     // Check if the response is successful (status code 200)
+//     if (response.ok) {
+//       // Parse the response JSON
+//       const data = await response.json();
+//       console.log('API Response:', data);
+//       return data;
+//     } else {
+//       // Handle non-successful responses
+//       console.error('Error fetching API:', response.status, response.statusText);
+//       return null;
+//     }
+//   } catch (error) {
+//     // Handle any network errors
+//     console.error('Network error:', error.message);
+//     return null;
+//   }
+// };
+
+//============useing axious ================//
+// const fetchCustomerData = async () => {
+//   try {
+//     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+
+//     const response = await axios.get(
+//       `${BASE_URL}/api/CustomerApi/GetAllCustomer?territoryId=${
+//         userDetails?.TerritoryId
+//       }&scId=${userDetails.ScId !== null ? userDetails.ScId : 1}`,
+//       {
+//         headers: {
+//           Authorization: authHeader,
+//         },
+//       }
+//     );
+
+//     const jsonData = response.data; // Axios response data is directly available as `data` property
+//     console.log(JSON.stringify(jsonData, null, 2));
+//     await AsyncStorage.setItem("customerData", JSON.stringify(jsonData));
+//     // await AsyncStorage.setItem('ApprovalSummary', JSON.stringify(jsonData));
+//     setData(jsonData);
+//     setFilteredData(jsonData);
+//     setIsLoading(false);
+//     return jsonData;
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     setIsLoading(false);
+//     // setIsLoading(false);
+//     throw error;
+//   }
+// };

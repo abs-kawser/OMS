@@ -15,7 +15,7 @@ const OrderInfo = ({ route }) => {
 
   const [data, setData] = useState(null);
 
-  //======================= Order info   Api Calling ==========================
+  //======================= Order info   Api Calling =====================\\
   const fetchOrderInfoData = async () => {
     try {
       const url = `${BASE_URL}/api/NewOrderApi/GetPoInfo?orderNo=${orderNo}&verId=1`;
@@ -37,12 +37,10 @@ const OrderInfo = ({ route }) => {
     }
   };
 
-    useEffect(() => {
+  useEffect(() => {
     fetchOrderInfoData();
   }, []);
 
-
-  
   // Initialize a variable to store the grand total
   let grandTotal = 0;
 
@@ -51,102 +49,101 @@ const OrderInfo = ({ route }) => {
     grandTotal += item.TotalPrice;
   });
 
-  const NumberWithCommas = ( number ) => {
+  const NumberWithCommas = (number) => {
     // Ensure that the input is a valid number
     const parsedNumber = parseFloat(number);
-  
+
     // Check if the input is a valid number
     if (isNaN(parsedNumber)) {
       return 0;
     }
-  
+
     // Format the number with commas using toLocaleString
-    const formattedNumber = parsedNumber.toLocaleString('en-US', {
+    const formattedNumber = parsedNumber.toLocaleString("en-US", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     });
-  
+
     return formattedNumber;
   };
-
 
   return (
 
 
-   <>
-     <ScrollView > 
-<View style={styles.container}>
-<View style={styles.card}>
-  <Text style={styles.cardText} selectable={true}>Order No: {data?.OrderBaicInfo?.OrderNo}</Text>
-      <Text style={styles.cardText} selectable={true}>Order Date: {data?.OrderBaicInfo?.OrderDate &&
-        moment(data.OrderBaicInfo.OrderDate).format("DD-MM-YYYY")}  
-      </Text>
-  <Text style={styles.cardText} selectable={true}>Delivery Date: {data?.OrderBaicInfo?.DeliveryDate &&
-        moment(data.OrderBaicInfo.DeliveryDate).format("DD-MM-YYYY")}</Text>
-  <Text style={styles.cardText} selectable={true}>{data?.OrderBaicInfo?.CustomerName}</Text>
-  <Text style={styles.cardText} selectable={true}>{data?.OrderBaicInfo?.CustomerAddress}</Text>
-
-</View>
-</View>
-
-  
-    <View style={styles.tableContainer}>
-
-    <View style={styles.tableHeader}>
-    <View style={styles.column}>
-    <Text style={styles.headerText}>Name</Text>
-    </View>
-
-    <View style={styles.column2}>
-    <Text style={[styles.headerText,{marginLeft:1}]}>Quantity</Text>
-    </View>
-
-    <View style={styles.column2}>
-    <Text style={styles.headerText}>Price</Text>
-    </View>
-    </View>
-
-    {data?.OrderItemList?.map((item, index) => (
-    <View style={styles.tableRow} key={index}>
-
-    <View style={styles.column}>
-    <Text style={styles.label} >
-    {item.ProductName}
-    </Text>
-    </View>
-
-    <View style={styles.column2}>
-    <Text style={styles.label}>{item.Quantity}</Text>
-    </View>
-
-    <View style={styles.column2}>
-    <Text style={styles.label}>{item.TotalPrice}</Text>
-    </View>
-    </View>
-    ))}
-    </View>
-      </ScrollView> 
-      
-      <View style={{ display: 'flex', flexDirection: "row",justifyContent:"space-around" }}>
-      <View style={{width:"20%",}}>
-  <Button
-    onPress={() => navigation.navigate("Home")}
-    color="#2E97A7"  
-    >
-    Back
-            </Button>
+    <>
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.card}>
+            <Text style={styles.cardText} selectable={true}>
+              Order No: {data?.OrderBaicInfo?.OrderNo}
+            </Text>
+            <Text style={styles.cardText} selectable={true}>
+              Order Date:{" "}
+              {data?.OrderBaicInfo?.OrderDate &&
+                moment(data.OrderBaicInfo.OrderDate).format("DD-MM-YYYY")}
+            </Text>
+            <Text style={styles.cardText} selectable={true}>
+              Delivery Date:{" "}
+              {data?.OrderBaicInfo?.DeliveryDate &&
+                moment(data.OrderBaicInfo.DeliveryDate).format("DD-MM-YYYY")}
+            </Text>
+            <Text style={styles.cardText} selectable={true}>
+              {data?.OrderBaicInfo?.CustomerName}
+            </Text>
+            <Text style={styles.cardText} selectable={true}>
+              {data?.OrderBaicInfo?.CustomerAddress}
+            </Text>
+          </View>
         </View>
-        
-    <View style={{ alignSelf: "flex-end" }}>
-  <Text style={{ fontSize: 18, color: "black",marginBottom:10 }}>
-    Total = {NumberWithCommas(grandTotal)}
-  </Text>
-</View>  
-
-
-      </View> 
-
+        <View style={styles.tableContainer}>
+          <View style={styles.tableHeader}>
+            <View style={styles.column}>
+              <Text style={styles.headerText}>Name</Text>
+            </View>
+            <View style={styles.column2}>
+              <Text style={[styles.headerText, { marginLeft: 1 }]}>
+                Quantity
+              </Text>
+            </View>
+            <View style={styles.column2}>
+              <Text style={styles.headerText}>Price</Text>
+            </View>
+          </View>
+          {data?.OrderItemList?.map((item, index) => (
+            <View style={styles.tableRow} key={index}>
+              <View style={styles.column}>
+                <Text style={styles.label}>{item.ProductName}</Text>
+              </View>
+              <View style={styles.column2}>
+                <Text style={styles.label}>{item.Quantity}</Text>
+              </View>
+              <View style={styles.column2}>
+                <Text style={styles.label}>{item.TotalPrice}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+        }}
+      >
+        <View style={{ width: "20%" }}>
+          <Button onPress={() => navigation.navigate("Home")} color="#2E97A7">
+            Back
+          </Button>
+        </View>
+        <View style={{ alignSelf: "flex-end" }}>
+          <Text style={{ fontSize: 18, color: "black", marginBottom: 10 }}>
+            Total = {NumberWithCommas(grandTotal)}
+          </Text>
+        </View>
+      </View>
     </>
+
 
   );
 };
@@ -156,88 +153,77 @@ export default OrderInfo;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F2', 
+    backgroundColor: "#F2F2F2",
     // justifyContent: 'center',
     // alignItems: 'center',
   },
   card: {
-    backgroundColor: '#9bf6ff',
+    backgroundColor: "#9bf6ff",
     padding: 16,
     borderRadius: 8,
-    width: '90%',
-  alignSelf:"center",
-  marginTop:20
-
+    width: "90%",
+    alignSelf: "center",
+    marginTop: 20,
   },
   cardText: {
     // marginBottom: 8,
-    fontSize:16,
-    color: 'black',
-    padding:8,
-    alignSelf:"flex-start",
+    fontSize: 16,
+    color: "black",
+    padding: 8,
+    alignSelf: "flex-start",
     // fontWeight: "700",
     // fontFamily: 'Roboto-bold',
-    marginLeft:25 
+    marginLeft: 25,
   },
 
+  // ============table design ================
+  tableContainer: {
+    marginTop: 20,
 
-// ============table design ================
-tableContainer: {
-   marginTop:20,
+    // Add any additional styles for your table container
+  },
+  tableHeader: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    paddingVertical: 10,
+    backgroundColor: "lightgray",
+    marginHorizontal: 10,
+  },
+  column: {
+    width: "50%",
+    justifyContent: "center",
+    // alignItems: 'center',
+    alignItems: "flex-start",
+  },
+  column2: {
+    width: "25%", // Each column takes 25% of the width
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingRight: 30,
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    paddingVertical: 10,
+    marginHorizontal: 10,
+    backgroundColor: "#f3ffbd",
+  },
+  label: {
+    color: blackColor,
 
-  // Add any additional styles for your table container
-},
-tableHeader: {
-  flexDirection: 'row',
-  borderBottomWidth: 1,
-  paddingVertical: 10,
-  backgroundColor: "lightgray",
-  marginHorizontal: 10,
-
-},
-column: {
-  width: '50%',
-  justifyContent: 'center',
-  // alignItems: 'center',
-  alignItems:"flex-start"
-
-},
-column2: {
-  width: '25%', // Each column takes 25% of the width
-  justifyContent: 'center',
-  alignItems: "flex-end",
-  paddingRight:30
-},
-tableRow: {
-  flexDirection: 'row',
-  borderBottomWidth: 1,
-  paddingVertical: 10,
-  marginHorizontal: 10,
-  backgroundColor: "#f3ffbd",
-
-},
-label: {
-  color:blackColor
-
-  // Add any additional styles for your label text
-},
-headerText: {
-  fontWeight: "700",
-  fontFamily: 'Roboto-bold',
-  color:blackColor
-  // Add any additional styles for your header text
-},
-
-
+    // Add any additional styles for your label text
+  },
+  headerText: {
+    fontWeight: "700",
+    fontFamily: "Roboto-bold",
+    color: blackColor,
+    // Add any additional styles for your header text
+  },
 });
 
 
 
-
-
-
-
-//      <ScrollView> 
+//      <ScrollView>
 //       <View style={{ padding: 10, backgroundColor: "#e9ecef", elevation: 5 }}>
 
 //         <View style={styles.pageInfoOne}>
@@ -246,13 +232,13 @@ headerText: {
 //     <Text style={styles.text}>{data?.OrderBaicInfo?.DeliveryDate} </Text> */}
 //           <Text style={styles.text}>
 //           Order Date: {data?.OrderBaicInfo?.OrderDate &&
-//               moment(data.OrderBaicInfo.OrderDate).format("DD-MM-YYYY")}  
-           
+//               moment(data.OrderBaicInfo.OrderDate).format("DD-MM-YYYY")}
+
 //           </Text>
 //           <Text style={styles.text}>
 //           Delivery Date: {data?.OrderBaicInfo?.DeliveryDate &&
 //               moment(data.OrderBaicInfo.DeliveryDate).format("DD-MM-YYYY")}
-            
+
 //           </Text>
 //           <View style={styles.divider}></View>
 
@@ -262,10 +248,7 @@ headerText: {
 //           </Text>
 //         </View>
 
-
-
-
-//         <ScrollView> 
+//         <ScrollView>
 
 //       <View style={styles.tableContainer}>
 //   <View style={styles.tableHeader}>
@@ -299,8 +282,7 @@ headerText: {
 //   ))}
 // </View>
 
-// </ScrollView> 
-
+// </ScrollView>
 
 //         {/* part end */}
 //       {/* grand total */}
@@ -322,8 +304,6 @@ headerText: {
 //   </View>
 //    </View>
 //    </ScrollView>
-
-
 
 // const styles = StyleSheet.create({
 //   container: {
@@ -366,7 +346,6 @@ headerText: {
 //     fontSize: 16,
 //   },
 
-
 //   // ===========
 //   tableContainer: {
 //     alignSelf: "center",
@@ -392,6 +371,6 @@ headerText: {
 //   headerText: {
 //     fontSize: 16,
 //     fontWeight: "700",
-//     fontFamily: 'Roboto-bold', 
+//     fontFamily: 'Roboto-bold',
 //   },
 // });

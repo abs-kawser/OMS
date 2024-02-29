@@ -11,7 +11,7 @@ const ProfilePage = () => {
   const { isLoggedIn, setIsLoggedIn } = useLogin();
   const { userDetails } = isLoggedIn;
 
-
+ 
 
   const profileData = {
     FullName: 'Shahidul Islam',

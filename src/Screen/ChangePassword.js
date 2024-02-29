@@ -6,11 +6,8 @@ import base64 from "base-64";
 import { useNavigation } from "@react-navigation/native";
 import { useLogin } from "../Context/LoginProvider";
 
-
-
-
-
 const ChangePassword = () => {
+
   const navigation = useNavigation();
   const { isLoggedIn, setIsLoggedIn } = useLogin();
 
@@ -21,6 +18,7 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
 
+  
   const SavePassword = async () => {
     // Check if any field is empty
     if (!oldPassword || !newPassword || !ConfirmPassword) {
@@ -55,18 +53,17 @@ const ChangePassword = () => {
       if (result.Success === true) {
         navigation.navigate("Home");
         ToastAndroid.show(result.Message, ToastAndroid.SHORT);
-        setOldPassword("")
-        setNewPassword("")
-        setConfirmPassword("")
-
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
       } else {
         ToastAndroid.show(result.Message, ToastAndroid.SHORT);
       }
-
     } catch (error) {
       // Handle network errors or other exceptions
       console.error("An error occurred:", error);
     }
+
   };
 
   // console.log("Name:", networkId);
@@ -141,4 +138,3 @@ const styles = StyleSheet.create({
 });
 
 export default ChangePassword;
-

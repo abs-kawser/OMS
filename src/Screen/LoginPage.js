@@ -30,12 +30,11 @@ const LoginPage = () => {
 
   //error handleing
   const [error, setError] = useState(null);
-
   //useContext api
   const { isLoggedIn, setIsLoggedIn } = useLogin();
-
   //loading
   const [isLoading, setIsLoading] = useState(false);
+
 
   const handleLogin = async () => {
     try {
@@ -52,9 +51,6 @@ const LoginPage = () => {
         }
       );
       const result = await response.json();
-      // setloginResponse(result);
-      // console.log("API response:", result);
-
       setIsLoading(false);
       // Stop loading
       // console.log('this is login details', result.EmployeeId);
@@ -81,6 +77,7 @@ const LoginPage = () => {
     }
   };
 
+
   const handleRegisterNow = () => {
     navigation.navigate("Register");
   };
@@ -88,6 +85,7 @@ const LoginPage = () => {
   const isLoginButtonDisabled = !userId || !password;
 
   return (
+
     <>
       <View style={styles.container}>
         {/* <View style={styles.header}>
@@ -154,7 +152,12 @@ const LoginPage = () => {
             onPress={handleLogin}
             disabled={isLoginButtonDisabled}
           >
-            <Text style={styles.loginButtonText}>Login</Text>
+            {isLoading ? (
+              <ActivityIndicator color="#FFFFFF" size="small" />
+            ) : (
+              <Text style={styles.loginButtonText}>Login</Text>
+            )}
+            {/* <Text style={styles.loginButtonText}>Login</Text> */}
           </TouchableOpacity>
 
           <View style={styles.signupContainer}>
@@ -164,34 +167,12 @@ const LoginPage = () => {
                 Register
               </Text>
             </TouchableOpacity>
-          </View>
-
-          {/* <Text
-            style={{
-              alignSelf: "center",
-              fontSize: 18,
-              color: "#495867",
-              fontWeight: "700",
-              fontFamily: "Roboto-bold",
-            }}
-          >
-            or
-          </Text>
-          <Button
-            // icon="arrow-right"
-            mode="contained"
-            onPress={handleRegisterNow}
-            buttonColor="#00b4d8"
-            contentStyle={{ flexDirection: "row-reverse" }}
-            style={styles.buttonRegister}
-          >
-            Register
-          </Button> */}
-
-          
+          </View>          
         </Animatable.View>
       </View>
     </>
+
+
   );
 };
 
@@ -403,3 +384,29 @@ const styles = StyleSheet.create({
 // });
 
 export default LoginPage;
+
+
+
+
+
+ {/* <Text
+            style={{
+              alignSelf: "center",
+              fontSize: 18,
+              color: "#495867",
+              fontWeight: "700",
+              fontFamily: "Roboto-bold",
+            }}
+          >
+            or
+          </Text>
+          <Button
+            // icon="arrow-right"
+            mode="contained"
+            onPress={handleRegisterNow}
+            buttonColor="#00b4d8"
+            contentStyle={{ flexDirection: "row-reverse" }}
+            style={styles.buttonRegister}
+          >
+            Register
+          </Button> */}

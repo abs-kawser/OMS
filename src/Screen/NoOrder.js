@@ -551,10 +551,10 @@ const styles = StyleSheet.create({
   },
 });
 
+
+
 //const customerId = route.params?.customerId;
-
 //check
-
 //   const [client, setClient] = useState("");
 //   const [isClientNameValid, setClientNameValid] = useState(false);
 //   const [isClientNameTouched, setClientNameTouched] = useState(false);

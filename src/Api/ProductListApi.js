@@ -5,28 +5,55 @@ import axios from 'axios';
 
 
 
-export const fetchProductData = async ( setIsLoading) => {
+// export const fetchProductData = async ( setIsLoading) => {
+//   try {
+//     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
+//     const response = await fetch(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
+//       headers: {
+//         Authorization: authHeader,
+//       },
+//     });
+//     const jsonData = await response.json();
+//     //console.log(JSON.stringify(jsonData, null, 2));
+//     await AsyncStorage.setItem('ProductList', JSON.stringify(jsonData));
+//     // setData(jsonData);
+//     // setFilteredData(jsonData);
+//     // setIsLoading(false);
+//     return jsonData;
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     setIsLoading(false);
+//     // setIsLoading(false);
+//     throw error;
+//   }
+// };
+
+
+export const fetchProductData = async (setIsLoading) => {
   try {
     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-    const response = await fetch(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
+    const response = await axios.get(`${BASE_URL}/api/ProductApi/GetAllProduct`, {
       headers: {
         Authorization: authHeader,
       },
     });
-    const jsonData = await response.json();
-    //console.log(JSON.stringify(jsonData, null, 2));
+
+    const jsonData = response.data;
+
+    // Save fetched data to AsyncStorage
     await AsyncStorage.setItem('ProductList', JSON.stringify(jsonData));
-    // setData(jsonData);
-    // setFilteredData(jsonData);
-    // setIsLoading(false);
+    setIsLoading(false);
+
     return jsonData;
   } catch (error) {
     console.error("Error fetching data:", error);
     setIsLoading(false);
-    // setIsLoading(false);
-    throw error;
+    // Handle the error here or rethrow it based on your requirements
+    throw error; // You may remove this line if you handle the error here
   }
 };
+
+
 
 
 // export const fetchProductData = async (setIsLoading) => {

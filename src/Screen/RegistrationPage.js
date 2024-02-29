@@ -22,8 +22,6 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 import { BASE_URL, PASSWORD, USERNAME } from "../../varible";
 
-
-
 const RegistrationPage = ({ navigation }) => {
 
 
@@ -84,12 +82,14 @@ const RegistrationPage = ({ navigation }) => {
       // setIsLoading(false);
       throw error;
     }
+
   };
 
   const isRegisterDisabled = !setUserId || !password || !mobile;
 
 
   return (
+
     <>
       <View style={styles.container}>
         <Animatable.View animation="fadeInUp" style={styles.formContainer}>
@@ -184,11 +184,12 @@ const RegistrationPage = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           </View>
+
         </Animatable.View>
       </View>
     </>
-  );
 
+  );
 };
 
 const styles = StyleSheet.create({
@@ -299,3 +300,5 @@ const styles = StyleSheet.create({
   },
 });
 export default RegistrationPage;
+
+

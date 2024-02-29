@@ -197,6 +197,8 @@ YourAppName\android\app\build\outputs\apk\release\app-release.apk
   //=============//
 For select anything use selectable={true}
 
+testing app: all bugs remove ,Play store update process start 
+
 
 
 

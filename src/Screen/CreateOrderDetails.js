@@ -89,7 +89,7 @@ const CreateOrderDetails = ({ route }) => {
       } catch (error) {
         console.error("Error reading stored data:", error);
       } finally {
-        setIsLoadingProductData(false); // Set loading to false when fetch is complete
+        setIsLoadingProductData(false);
       }
     };
 
@@ -207,6 +207,19 @@ const CreateOrderDetails = ({ route }) => {
     );
   }, [products, searchTerm]);
 
+  // Filter products based on the search item
+  // const filteredProducts = useMemo(() => {
+  //   if (searchTerm.trim() === "") {
+  //     // If the search term is empty, show all products
+  //     return products;
+  //   } else {
+  //     // If there is a search term, filter based on it
+  //     return products.filter((product) =>
+  //       product.Name.toLowerCase().includes(searchTerm.toLowerCase())
+  //     );
+  //   }
+  // }, [products, searchTerm]);
+
   //delete product
   const handleDeleteProduct = (productId) => {
     // Remove the product from selectedProductIds
@@ -225,7 +238,7 @@ const CreateOrderDetails = ({ route }) => {
     setHasSelectedProducts(selectedProductIds.length > 0);
   };
 
-  // ================================== main api calling ========================================================
+  // ===================== main api calling =============================
   const transformedOrderDetails = selectedProduct.map((product, index) => {
     return {
       ProductId: product.ProductId,
@@ -236,6 +249,7 @@ const CreateOrderDetails = ({ route }) => {
   });
 
   const fetchCreatenewOrderData = async () => {
+    
     if (!orderQuantities || Object.keys(orderQuantities).length === 0) {
       console.log("No data in orderQuantities. Cannot submit.");
       ToastAndroid.show("No data in order details", ToastAndroid.LONG);
@@ -329,7 +343,6 @@ const CreateOrderDetails = ({ route }) => {
     try {
       // Retrieve the existing data from AsyncStorage
       const existingData = await AsyncStorage.getItem("customerInformation");
-
       console.log(
         "existing data in async storage",
         JSON.stringify(existingData, null, 2)
@@ -352,6 +365,7 @@ const CreateOrderDetails = ({ route }) => {
       console.error("Error saving data:", error);
     }
   };
+  
 
   return (
     <View style={styles.container}>
@@ -364,14 +378,14 @@ const CreateOrderDetails = ({ route }) => {
 
       {/* search part*/}
       {/* <View style={styles.searchBox}>
-  <View style={styles.inputContainerx}>
-    <TextInput
-      style={styles.inputx}
-      placeholder="Search..."
-      onChangeText={(text) => setSearchTerm(text)}
-    />
-    <Icon name="search" size={24} style={styles.iconx} />
-  </View>
+<View style={styles.inputContainerx}>
+<TextInput
+style={styles.inputx}
+placeholder="Search..."
+onChangeText={(text) => setSearchTerm(text)}
+/>
+<Icon name="search" size={24} style={styles.iconx} />
+</View>
 </View> */}
 
       <View style={styles.buttonContainer}>
@@ -408,7 +422,6 @@ const CreateOrderDetails = ({ route }) => {
           </View>
         ) : (
           <ScrollView>
-
             {/* Product data  */}
             <>
               {showProductData && (
@@ -470,83 +483,80 @@ const CreateOrderDetails = ({ route }) => {
               )}
             </>
 
-       {/* Order  data  */}
-<>
-  {showOrderData && (
-    <View style={styles.dataContainer}>
+            {/* Order  data  */}
       <>
-        <View style={styles.tableHeader}>
-          <Text style={styles.headerTextForname}>Name</Text>
+        {showOrderData && (
+          <View style={styles.dataContainer}>
+            <>
+              <View style={styles.tableHeader}>
+                <Text style={styles.headerTextForname}>Name</Text>
 
-          <Text style={[styles.headerText]}>Qty</Text>
+                <Text style={[styles.headerText]}>Qty</Text>
 
-          <View style={{ marginLeft: 20 }}>
-            <Text style={[styles.headerText]}>Price </Text>
-          </View>
+                <View style={{ marginLeft: 20 }}>
+                  <Text style={[styles.headerText]}>Price </Text>
+                </View>
 
-          <Text style={styles.headerText}></Text>
-        </View>
-        {selectedProduct.map((specificProduct) => {
-          const quantity =
-            productQuantities[specificProduct.ProductId] || 0;
-          if (quantity > 0) {
-            return (
-              <View
-                style={styles.tableRow}
-                key={specificProduct.ProductId}
-              >
-                <Text style={styles.cellTextForName}>
-                  {specificProduct.Name}
-                </Text>
-
-                <Text style={[styles.cellText, styles.quantity]}>
-                  {quantity}
-                </Text>
-
-                <Text style={styles.cellText}>
-                  {specificProduct.MRP * quantity}
-                </Text>
-
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() =>
-                    handleDeleteProduct(specificProduct.ProductId)
-                  }
-                >
-
-                  <Icon
-                    style={{
-                      height: 25,
-                      width: 25,
-                      resizeMode: "contain",
-                    }}
-                    name="trash"
-                    size={20}
-                    color="#212529"
-                  />
-                </TouchableOpacity>
+                <Text style={styles.headerText}></Text>
               </View>
-            );
-          }
+              {selectedProduct.map((specificProduct) => {
+                const quantity =
+                  productQuantities[specificProduct.ProductId] || 0;
+                if (quantity > 0) {
+                  return (
+                    <View
+                      style={styles.tableRow}
+                      key={specificProduct.ProductId}
+                    >
+                      <Text style={styles.cellTextForName}>
+                        {specificProduct.Name}
+                      </Text>
 
-          return null;
-        })}
+                      <Text style={[styles.cellText, styles.quantity]}>
+                        {quantity}
+                      </Text>
+
+                      <Text style={styles.cellText}>
+                        {specificProduct.MRP * quantity}
+                      </Text>
+
+                      <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() =>
+                          handleDeleteProduct(specificProduct.ProductId)
+                        }
+                      >
+                        <Icon
+                          style={{
+                            height: 25,
+                            width: 25,
+                            resizeMode: "contain",
+                          }}
+                          name="trash"
+                          size={20}
+                          color="#212529"
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  );
+                }
+
+                return null;
+              })}
+            </>
+
+            <View style={styles.btngrp}>
+              <Button color="#2E97A7" onPress={handleDraftSave}>
+                Save
+              </Button>
+              <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
+                Submit
+              </Button>
+            </View>
+          </View>
+        )}
       </>
-
-      <View style={styles.btngrp}>
-        <Button color="#2E97A7" onPress={handleDraftSave}>
-          Save
-        </Button>
-        <Button color="#2E97A7" onPress={fetchCreatenewOrderData}>
-          Submit
-        </Button>
-      </View>
-    </View>
-  )}
-</>
-
-
-  </ScrollView>
+          </ScrollView>
         )}
       </>
 
@@ -557,7 +567,6 @@ const CreateOrderDetails = ({ route }) => {
   );
 };
 export default CreateOrderDetails;
-
 
 // const styles = StyleSheet.create({
 //   container: {
@@ -786,8 +795,6 @@ export default CreateOrderDetails;
 //     width: 50,
 //   },
 // });
-
-
 
 const styles = StyleSheet.create({
   container: {

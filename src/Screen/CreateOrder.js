@@ -25,9 +25,6 @@ import { useCustomerInfo } from "../Context/CustomerProvider";
 import { Button } from "@rneui/themed";
 import { useFocusEffect } from "@react-navigation/native";
 
-
-
-
 export default function CreateOrder() {
   const rainbowColors = ["#9bf6ff", "#f3ffbd"];
 
@@ -60,7 +57,8 @@ export default function CreateOrder() {
   const [value, setValue] = useState(customerInfoList?.CustomerId);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [outPut, setOutput] = useState([]);
+
+
   //const [dropDown, setDropDown] = useState(null);
   //checking on log
   // console.log("client name ", client);
@@ -115,7 +113,6 @@ export default function CreateOrder() {
     }, [route.params?.customerInfoList])
   );
 
-  
   // ================================================
   // if (selectedDate) {
   //   setShowOrderDatePicker(false);
@@ -252,9 +249,7 @@ export default function CreateOrder() {
   };
 
   // console.log("reqdata", requestData);
-
   //Routing
-
   // const nextPageComponent = () => {
   //   if (!value || !note) {
   //     if (!value) {
@@ -269,13 +264,9 @@ export default function CreateOrder() {
   //   }
   //   setNoteError("");
   //   setCustomerError("");
-
- 
   // // Navigate to the next page
   //   navigation.navigate("Order Details", { data: requestData });
-
   // };
-
 
   const nextPageComponent = () => {
     // Check if delivery date is earlier than order date
@@ -283,7 +274,7 @@ export default function CreateOrder() {
       setError("Delivery date cannot be earlier than order date");
       return;
     }
-  
+
     // Check if required fields are filled
     if (!value || !note) {
       if (!value) {
@@ -294,154 +285,153 @@ export default function CreateOrder() {
       }
       return;
     }
-  
+
     // Clear any previous errors
     setNoteError("");
     setCustomerError("");
     setError("");
-  
-    // Navigate to the next page
+
+    // Navigate to the next page d
     navigation.navigate("Order Details", { data: requestData });
   };
-  
-
-
 
   return (
-<View style={styles.container}>
-  <View>
-    <Text style={styles.label}>Customer</Text>
-    {/* <TouchableOpacity> */}
-    <Dropdown
-      style={styles.dropdown}
-      placeholderStyle={styles.placeholderStyle}
-      selectedTextStyle={styles.selectedTextStyle}
-      inputSearchStyle={styles.inputSearchStyle}
-      iconStyle={styles.iconStyle}
-      data={data}
-      search
-      maxHeight={800}
-      labelField="Name"
-      valueField="CustomerId"
-      placeholder="Select Customer"
-      searchPlaceholder="Search..."
-      value={value}
-      onChange={(item) => {
-        // it comes from customer list
-        setValue(item.CustomerId);
-        setCustomerInformation(item);
-        setCustomerError("");
-      }}
-      renderItem={(item, index, isSelected) => (
-        // <View style={styles.dropdownItem}>
-        <>
-          <View
-            style={[
-              styles.dropdownItem,
-              isSelected && styles.selectedItem,
-            ]}
-          >
-            <Text style={[styles.text, isSelected && styles.boldText]}>
-              Name: <Text style={styles.nameText}>{item.Name}</Text>
-            </Text>
-            <Text style={[styles.text, isSelected && styles.boldText]}>
-              Customer Id: <Text style={styles.customerIdText}>{item.CustomerId}</Text>             
-            </Text>
-            <Text style={[styles.text, isSelected && styles.boldText]}>
-              Address: <Text style={styles.addressText}>{item.Address}</Text>
-            </Text>
-          </View>
-        </>
-      )}
-    />
 
-    {/* </TouchableOpacity> */}
-    {/* {isClientNameTouched && !isClientNameValid && client === "" && (
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.label}>Customer</Text>
+        {/* <TouchableOpacity> */}
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          search
+          maxHeight={800}
+          labelField="Name"
+          valueField="CustomerId"
+          placeholder="Select Customer"
+          searchPlaceholder="Search..."
+          value={value}
+          onChange={(item) => {
+            // it comes from customer list
+            setValue(item.CustomerId);
+            setCustomerInformation(item);
+            setCustomerError("");
+          }}
+          renderItem={(item, index, isSelected) => (
+            // <View style={styles.dropdownItem}>
+            <>
+              <View
+                style={[styles.dropdownItem, isSelected && styles.selectedItem]}
+              >
+                <Text style={[styles.text, isSelected && styles.boldText]}>
+                  Name: <Text style={styles.nameText}>{item.Name}</Text>
+                </Text>
+                <Text style={[styles.text, isSelected && styles.boldText]}>
+                  Customer Id:{" "}
+                  <Text style={styles.customerIdText}>{item.CustomerId}</Text>
+                </Text>
+                <Text style={[styles.text, isSelected && styles.boldText]}>
+                  Address:{" "}
+                  <Text style={styles.addressText}>{item.Address}</Text>
+                </Text>
+              </View>
+            </>
+          )}
+        />
+
+        {/* </TouchableOpacity> */}
+        {/* {isClientNameTouched && !isClientNameValid && client === "" && (
       <Text style={styles.errorMessage}>Client name is required ***</Text>
-    )} */}
-  </View>
-  {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
-  {/* ================================================================= */}
-  <View style={{ marginTop: 20 }}>
-    <Text style={styles.label}>Order Date</Text>
-    <TouchableOpacity
-      style={styles.button}
-      onPress={() => showDatepicker("order")}
-    >
-      {showOrderDatePicker && (
-        <DateTimePicker
-          value={orderDate}
-          mode="date"
-          display="default"
-          onChange={(event, selectedDate) =>
-            handleOrderDate(event, selectedDate)
-          }
+       )} */}
+
+
+      </View>
+
+      {customerError && <Text style={{ color: "red" }}>{customerError}</Text>}
+      {/* ================================================================= */}
+      <View style={{ marginTop: 20 }}>
+        <Text style={styles.label}>Order Date</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => showDatepicker("order")}
+        >
+          {showOrderDatePicker && (
+            <DateTimePicker
+              value={orderDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) =>
+                handleOrderDate(event, selectedDate)
+              }
+            />
+          )}
+
+         <Text style={{ color: "black" }}>
+            {moment(orderDate).format("DD-MM-YYYY")}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={{ marginTop: 15 }}>
+        <Text style={styles.label}> Delivery Date</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => showDatepicker("delivery")}
+        >
+          {showDeliveryDatePicker && (
+            <DateTimePicker
+              value={deliveryDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) =>
+                handleDateDelivery(event, selectedDate)
+              }
+            />
+          )}
+
+          <Text style={{ color: "black" }}>
+            {moment(deliveryDate).format("DD-MM-YYYY")}
+          </Text>
+        </TouchableOpacity>
+        {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+      </View>
+
+      {/* ===================================================================================================== */}
+      <View style={{ marginTop: 15 }}>
+        <Text style={styles.label}>Note</Text>
+        <TextInput
+          // style={[styles.input, { height: 50, backgroundColor: '' }]}
+          style={[styles.input, { height: 50 }]}
+          multiline
+          placeholder="Enter notes"
+          placeholderTextColor="black"
+          value={note}
+          onChangeText={(text) => {
+            setNote(text);
+            setNoteError("");
+          }}
         />
-      )}
 
-      <Text style={{ color: "black" }}>
-        {moment(orderDate).format("DD-MM-YYYY")}
-      </Text>
-    </TouchableOpacity>
-  </View>
+        {noteError ? <Text style={{ color: "red" }}>{noteError}</Text> : null}
+      </View>
 
-  <View style={{ marginTop: 15 }}>
-    <Text style={styles.label}> Delivery Date</Text>
-    <TouchableOpacity
-      style={styles.button}
-      onPress={() => showDatepicker("delivery")}
-    >
-      {showDeliveryDatePicker && (
-        <DateTimePicker
-          value={deliveryDate}
-          mode="date"
-          display="default"
-          onChange={(event, selectedDate) =>
-            handleDateDelivery(event, selectedDate)
-          }
-        />
-      )}
-
-      <Text style={{ color: "black" }}>
-        {moment(deliveryDate).format("DD-MM-YYYY")}
-      </Text>
-    </TouchableOpacity>
-    {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
-  </View>
-
-  {/* ===================================================================================================== */}
-  <View style={{ marginTop: 15 }}>
-    <Text style={styles.label}>Note</Text>
-    <TextInput
-      // style={[styles.input, { height: 50, backgroundColor: '' }]}
-      style={[styles.input, { height: 50 }]}
-      multiline
-      placeholder="Enter notes"
-      placeholderTextColor="black"
-      value={note}
-      onChangeText={(text) => {
-        setNote(text);
-        setNoteError("");
-      }}
-    />
-
-    {noteError ? <Text style={{ color: "red" }}>{noteError}</Text> : null}
-  </View>
-
-  <TouchableOpacity style={{ marginTop: 25 }}>
-    <Button color="#2E97A7" onPress={nextPageComponent}>
-      Next
-    </Button>
-  </TouchableOpacity>
-</View>
+      <TouchableOpacity style={{ marginTop: 25 }}>
+        <Button color="#2E97A7" onPress={nextPageComponent}>
+          Next
+        </Button>
+      </TouchableOpacity>
+    </View>
   );
-};
-
-
+}
 
 
 
 const styles = StyleSheet.create({
+
   container: {
     padding: 16,
   },
@@ -452,6 +442,13 @@ const styles = StyleSheet.create({
     color: "black",
   },
   input: {
+
+    borderWidth: 1,
+    borderColor: "#0096c7",
+    borderRadius: 5,
+    height: 40,
+    justifyContent: "center",
+
     // borderWidth: 1,
     // borderColor: "#0096c7",
     // borderRadius: 5,
@@ -459,25 +456,22 @@ const styles = StyleSheet.create({
     // marginBottom: 16,
     // fontSize: 16,
     // width:"33%",
-    // height:40
-
-    borderWidth: 1,
-    borderColor: "#0096c7",
-    borderRadius: 5,
-    height: 40,
-    // backgroundColor: '#FFFFFF',
-    justifyContent: "center",
+    // height:40,
     // marginBottom: 16,
+    // backgroundColor: '#FFFFFF',
+    
   },
 
   nextButton: {
-    backgroundColor: "#0096c7", // Light blue background color
+    backgroundColor: "#0096c7", 
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 5,
     alignItems: "center",
-    alignSelf: "flex-end", // Align button to the left
+    alignSelf: "flex-end", 
     marginTop: 20,
+    // Light blue background color
+    // Align button to the left
   },
   nextButtonText: {
     fontSize: 16,
@@ -496,7 +490,7 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: "red",
     fontSize: 18,
-    marginTop: 5, 
+    marginTop: 5,
     // Adjust the spacing from the input field
     //fontStyle: 'italic', // You can use italic for error messages
   },
@@ -510,7 +504,8 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
-    color: "black", // A slightly darker shade for better visibility
+    color: "black",
+    // A slightly darker shade for better visibility
     // fontStyle: "italic", // Italics for a stylish touch
   },
   selectedTextStyle: {
@@ -590,8 +585,6 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
 });
-
-
 
 
 // ========= api calling =========

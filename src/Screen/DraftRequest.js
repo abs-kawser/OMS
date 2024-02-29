@@ -26,12 +26,11 @@ const DraftRequest = ({ route }) => {
   const navigation = useNavigation();
 
   const { draftData, setDraftData } = useDraft();
+  
+  //const { selectedItem, onDeleteItem } = route.params;
 
   const { onDeleteItem } = route.params;
-  //const { selectedItem, onDeleteItem } = route.params;
   const [selectedItem, setSelectedItem] = useState(route.params.selectedItem);
-
-
   const data = route.params?.data;
   const { customerInformation, setCustomerInformation } = useCustomerInfo();
   const { isLoggedIn, setIsLoggedIn } = useLogin();
@@ -240,7 +239,6 @@ const DraftRequest = ({ route }) => {
     // );
 
     const authHeader = "Basic " + base64.encode(USERNAME + ":" + PASSWORD);
-
     try {
       const response = await fetch(
         `${BASE_URL}/api/NewOrderApi/CreateNewOrder`,
@@ -275,7 +273,7 @@ const DraftRequest = ({ route }) => {
         console.error("API request failed with status code:", response.status);
         ToastAndroid.show("Failed to create order", ToastAndroid.LONG);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // ==================================
@@ -336,9 +334,6 @@ const DraftRequest = ({ route }) => {
     }
   };
 
-
-
-
   // this code for previous data
 
   const saveData = async () => {
@@ -387,10 +382,9 @@ const DraftRequest = ({ route }) => {
 
       if (!saveButtonDisabled) {
         ToastAndroid.show("Data Saved Successfully", ToastAndroid.SHORT);
-        setSaveButtonDisabled(true)
+        setSaveButtonDisabled(true);
       } else {
         ToastAndroid.show("No new data added", ToastAndroid.SHORT);
-
       }
     } catch (error) {
       console.error("Error saving data:", error);
@@ -398,17 +392,13 @@ const DraftRequest = ({ route }) => {
     }
   };
 
-
   useEffect(() => {
     if (selectedProduct.length > 0) {
-      setSaveButtonDisabled(false)
+      setSaveButtonDisabled(false);
     } else {
-      "check error"
+      ("check error");
     }
-  }, [selectedProduct])
-
-
-
+  }, [selectedProduct]);
 
   // const saveData = async () => {
   //   try {
@@ -529,6 +519,7 @@ const DraftRequest = ({ route }) => {
   // };
 
   return (
+
     <View style={styles.container}>
       <View style={styles.userInformation}>
         <Text style={styles.userText1}>{selectedItem?.CustomerName}</Text>
@@ -540,7 +531,7 @@ const DraftRequest = ({ route }) => {
           <Button
             style={styles.button}
             onPress={handleProductButtonPress}
-          // disabled={isLoading} // Disable the button when loading
+            // disabled={isLoading} // Disable the button when loading
           >
             Product List
           </Button>
@@ -602,7 +593,6 @@ const DraftRequest = ({ route }) => {
                               </Text>
                             </View>
                           </View>
-
                           <View style={styles.quantityContainer}>
                             <View style={styles.containerx}>
                               <View style={styles.inputContainer}>
@@ -613,8 +603,8 @@ const DraftRequest = ({ route }) => {
                                   value={
                                     productQuantities[product.ProductId]
                                       ? productQuantities[
-                                        product.ProductId
-                                      ].toString()
+                                          product.ProductId
+                                        ].toString()
                                       : ""
                                   }
                                   onChangeText={(text) =>
@@ -636,123 +626,128 @@ const DraftRequest = ({ route }) => {
 
               {/* order details */}
               <>
-                <View>
-                  {showOrderData && (
-                    <View style={styles.dataContainer}>
-                      <View style={styles.tableHeader}>
-                        <Text style={styles.headerTextForname}>Name</Text>
-                        <Text style={[styles.headerText, styles.quantity]}>
-                          Qty
-                        </Text>
-                        <Text style={styles.headerText}>Price</Text>
-                        <Text style={styles.headerText}></Text>
-                      </View>
-
-                      {/* Render OrderDetails  this came from create order-page*/}
-                      {selectedItem.OrderDetails.map((orderItem) => (
-                        <View style={styles.tableRow} key={orderItem.ProductId}>
-                          <Text
-                            style={styles.cellTextForName}
-                            numberOfLines={2}
-                          >
-                            {orderItem.ProductName}
-                          </Text>
-
-                          <Text style={styles.cellText}>
-                            {orderItem.Quantity}
-                          </Text>
-
-                          <Text style={styles.cellText}>
-                            {orderItem.TotalAmount}
-                          </Text>
-
-                          <View style={{ flex: 1, alignSelf: "center" }}>
-                            <TouchableOpacity
-                              style={[styles.actionButton]}
-                              //onPress={() => handleDeleteOrderItem(orderItem.ProductId)}
-                              onPress={() =>
-                                handleDeleteOrderItem(orderItem.ProductId)
-                              }
-                            >
-                              <Icon
-                                name="trash"
-                                size={20}
-                                // color="#212529"
-                                color="green"
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      ))}
-                      {/* Render OrderDetails  this came from create order-page end*/}
-
-                      {/* Render selectedProduct  Draft req page*/}
-                      {selectedProduct?.map((specificProduct) => {
-                        const quantity =
-                          productQuantities[specificProduct.ProductId] || 0;
-                        // const productName = specificProduct.Name || specificProduct.ProductName;
-
-                        if (quantity > 0) {
-                          return (
-                            <View
-                              style={styles.tableRow}
-                              key={specificProduct?.ProductId}
-                            >
-                              <Text style={styles.cellTextForName}>
-                                {/* {productName} */}
-                                {specificProduct?.Name}
-                              </Text>
-
-                              <Text style={[styles.cellText, styles.quantity]}>
-                                {quantity}
-                              </Text>
-
-                              <Text style={styles.cellText}>
-                                {specificProduct?.MRP * quantity}
-                              </Text>
-
-                              <View style={{ flex: 1, alignSelf: "center" }}>
-                                <TouchableOpacity
-                                  style={styles.actionButton}
-                                  onPress={() =>
-                                    handleDeleteProduct(
-                                      specificProduct.ProductId
-                                    )
-                                  }
-                                >
-                                  <Icon
-                                    name="trash"
-                                    size={20}
-                                    color="#212529"
-                                  />
-                                </TouchableOpacity>
-                              </View>
-                            </View>
-                          );
-                        }
-
-                        return null;
-                      })}
-                      {/* Render selectedProduct  Draft req page   end*/}
-                      {/* ||saveButtonDisabled */}
-                      <View style={styles.btngrp}>
-                        <Button onPress={saveData} disabled={selectedProduct.length === 0}>Save</Button>
-                        <Button onPress={fetchCreatenewOrderData}>
-                          Submit
-                        </Button>
-                      </View>
-                    </View>
-                  )}
+          <View>
+            {showOrderData && (
+              <View style={styles.dataContainer}>
+                <View style={styles.tableHeader}>
+                  <Text style={styles.headerTextForname}>Name</Text>
+                  <Text style={[styles.headerText, styles.quantity]}>
+                    Qty
+                  </Text>
+                  <Text style={styles.headerText}>Price</Text>
+                  <Text style={styles.headerText}></Text>
                 </View>
+
+                {/* Render OrderDetails  this came from create order-page*/}
+                {selectedItem.OrderDetails.map((orderItem) => (
+                  <View style={styles.tableRow} key={orderItem.ProductId}>
+                    <Text
+                      style={styles.cellTextForName}
+                      numberOfLines={2}
+                    >
+                      {orderItem.ProductName}
+                    </Text>
+
+                    <Text style={styles.cellText}>
+                      {orderItem.Quantity}
+                    </Text>
+
+                    <Text style={styles.cellText}>
+                      {orderItem.TotalAmount}
+                    </Text>
+
+                    <View style={{ flex: 1, alignSelf: "center" }}>
+                      <TouchableOpacity
+                        style={[styles.actionButton]}
+                        //onPress={() => handleDeleteOrderItem(orderItem.ProductId)}
+                        onPress={() =>
+                          handleDeleteOrderItem(orderItem.ProductId)
+                        }
+                      >
+                        <Icon
+                          name="trash"
+                          size={20}
+                          // color="#212529"
+                          color="green"
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ))}
+                {/* Render OrderDetails  this came from create order-page end*/}
+
+                {/* Render selectedProduct  Draft req page*/}
+                {selectedProduct?.map((specificProduct) => {
+                  const quantity =
+                    productQuantities[specificProduct.ProductId] || 0;
+                  // const productName = specificProduct.Name || specificProduct.ProductName;
+
+                  if (quantity > 0) {
+                    return (
+                      <View
+                        style={styles.tableRow}
+                        key={specificProduct?.ProductId}
+                      >
+                        <Text style={styles.cellTextForName}>
+                          {/* {productName} */}
+                          {specificProduct?.Name}
+                        </Text>
+
+                        <Text style={[styles.cellText, styles.quantity]}>
+                          {quantity}
+                        </Text>
+
+                        <Text style={styles.cellText}>
+                          {specificProduct?.MRP * quantity}
+                        </Text>
+
+                        <View style={{ flex: 1, alignSelf: "center" }}>
+                          <TouchableOpacity
+                            style={styles.actionButton}
+                            onPress={() =>
+                              handleDeleteProduct(
+                                specificProduct.ProductId
+                              )
+                            }
+                          >
+                            <Icon
+                              name="trash"
+                              size={20}
+                              color="#212529"
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    );
+                  }
+
+                  return null;
+                })}
+                {/* Render selectedProduct  Draft req page   end*/}
+                {/* ||saveButtonDisabled */}
+                <View style={styles.btngrp}>
+                  <Button
+                    onPress={saveData}
+                    disabled={selectedProduct.length === 0}
+                  >
+                    Save
+                  </Button>
+                  <Button onPress={fetchCreatenewOrderData}>
+                    Submit
+                  </Button>
+                </View>
+              </View>
+            )}
+          </View>
               </>
             </View>
           )}
         </>
       </ScrollView>
     </View>
+
   );
 };
-
 export default DraftRequest;
 
 const styles = StyleSheet.create({
@@ -988,6 +983,8 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
+
+
 
 {
   /* <Text style={styles.totalPriceText}>
