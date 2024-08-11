@@ -24,6 +24,7 @@ import * as Animatable from "react-native-animatable";
 const LoginPage = () => {
   
   const navigation = useNavigation();
+
   const [userId, setUserId] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -85,7 +86,6 @@ const LoginPage = () => {
   const isLoginButtonDisabled = !userId || !password;
 
   return (
-
     <>
       <View style={styles.container}>
         {/* <View style={styles.header}>
@@ -171,11 +171,8 @@ const LoginPage = () => {
         </Animatable.View>
       </View>
     </>
-
-
   );
 };
-
 
 
 const styles = StyleSheet.create({

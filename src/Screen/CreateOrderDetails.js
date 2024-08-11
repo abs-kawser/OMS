@@ -28,6 +28,7 @@ import { useCustomerInfo } from "../Context/CustomerProvider";
 import TransitionLoader from "../../components/TransitionLoader";
 
 const CreateOrderDetails = ({ route }) => {
+  
   const data = route.params?.data;
 
   const { customerInformation, setCustomerInformation } = useCustomerInfo();

@@ -25,8 +25,9 @@ const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
 
   
+  
   return (
-
+    
     <Drawer.Navigator
       drawerContent={(props) => <DrawerItems {...props} />}
       screenOptions={{
@@ -142,6 +143,8 @@ const DrawerNavigator = () => {
           ),
         }}
       />
+
+      
       <Drawer.Screen
         name="Product List"
         component={ProductList}
@@ -193,7 +196,6 @@ const DrawerNavigator = () => {
             //   size={size}
             //   color={focused ? "black" : "gray"}
             // />
-
             <Image
               style={{ height: 30, width: 30, resizeMode: "contain" }}
               source={require("../../../assets/password.png")}
@@ -201,7 +203,6 @@ const DrawerNavigator = () => {
           ),
         }}
       />
-
       {/* <Drawer.Screen name="Order Collection" component={OrderCollection} /> */}
     </Drawer.Navigator>
   );

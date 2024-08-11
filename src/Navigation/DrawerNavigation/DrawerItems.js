@@ -24,7 +24,7 @@ const DrawerItems = (props) => {
   const { login, userDetails } = isLoggedIn;
 
 
-  
+
   const handleLogout = async () => {
     Alert.alert(
       "Logout",
@@ -55,7 +55,7 @@ const DrawerItems = (props) => {
 
 
   return (
-    <View style={{ flex: 1,}}>
+    <View style={{ flex: 1, }}>
       <DrawerContentScrollView {...props}>
         {/* custom drawer header */}
         <View
@@ -64,8 +64,7 @@ const DrawerItems = (props) => {
             backgroundColor: "#f3ffbd",
             marginTop: -4,
             padding: 10,
-            borderBottomColor:"gray"
-            
+            borderBottomColor: "gray"
             // borderColor: "#e9ecef",
           }}
         >
@@ -76,8 +75,8 @@ const DrawerItems = (props) => {
               height: 80,
               // margin: 10,
               resizeMode: "contain",
-              alignSelf:"center",
-              marginVertical:10
+              alignSelf: "center",
+              marginVertical: 10
               // alignSelf: "center",
             }}
           />
@@ -90,8 +89,6 @@ const DrawerItems = (props) => {
               {userDetails.Email}
             </Text> */}
           </View>
-
-
         </View>
         <View>
           <DrawerItemList {...props} />
@@ -102,9 +99,9 @@ const DrawerItems = (props) => {
         icon={({ color, size }) => (
           // <Icon name="logout" color={color} size={size} />
           <Image
-              style={{ height: 30, width: 30, resizeMode: "contain" }}
-              source={require("../../../assets/logouts.png")}
-            />
+            style={{ height: 30, width: 30, resizeMode: "contain" }}
+            source={require("../../../assets/logouts.png")}
+          />
         )}
         label="Log Out"
         onPress={handleLogout}
@@ -112,25 +109,22 @@ const DrawerItems = (props) => {
     </View>
   );
 };
-
 export default DrawerItems;
 
-
-
 const styles = StyleSheet.create({
- boldWhiteText: {
+  boldWhiteText: {
     fontWeight: "bold",
     color: "#323031",
     fontSize: 18,
-    textAlign:"center"
+    textAlign: "center"
     // marginLeft: 30,
   },
   grayText: {
     fontSize: 18,
-    textAlign:"center"
+    textAlign: "center"
     // marginLeft: 30,
   },
-  container:{
-    marginBottom:10,
+  container: {
+    marginBottom: 10,
   }
 });
